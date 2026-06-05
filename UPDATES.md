@@ -574,6 +574,31 @@
 
 - `f13fcdeaf3d9bcfe06775251cd9d84b98068243e`
 
+## 2026-06-04 22:31 - Guard GHCR Publish Owner
+
+### Changed
+
+- Updated the GHCR workflow to build on this repository but only publish when the repository owner is `adh1310`.
+- Added a workflow summary note when publishing is skipped on a non-canonical owner.
+- Documented the failed GHCR push result: `denied: not_found: owner not found`.
+- Updated README, AGENTS, and TASKS with the guarded publish behavior.
+
+### Why
+
+- The first pushed workflow run proved that `ghcr.io/adh1310/guessmoji` cannot be published from the current `hallveticapro` repository until the canonical owner is available.
+
+### Files Touched
+
+- `.github/workflows/docker-publish.yml`
+- `README.md`
+- `AGENTS.md`
+- `TASKS.md`
+- `UPDATES.md`
+
+### Commit
+
+- pending
+
 ## 2026-06-04 21:17 - Initialize Project Documentation
 
 ### Changed

@@ -1402,9 +1402,9 @@ git commit -m "chore: add environment templates"
 
 ## Task 20 — Add GitHub Actions Workflow for GHCR
 
-**Status:** Complete, pending live publish verification.
+**Status:** Complete with guarded publish; live publish verification remains pending owner confirmation.
 
-**Implementation note:** The workflow targets the required `ghcr.io/adh1310/guessmoji` image. Because the `adh1310` owner was not resolvable when creating the repository, live GHCR publishing may fail until the intended owner is confirmed or made available.
+**Implementation note:** The workflow targets the required `ghcr.io/adh1310/guessmoji` image. A pushed workflow run under `hallveticapro/guessmoji` failed with `failed to push ghcr.io/adh1310/guessmoji:latest: denied: not_found: owner not found`. The workflow now builds on non-canonical owners but skips the GHCR push unless `github.repository_owner == 'adh1310'`.
 
 Create:
 
@@ -1468,6 +1468,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Log in to GHCR
+        if: github.repository_owner == 'adh1310'
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -1484,11 +1485,16 @@ jobs:
             type=sha
             type=ref,event=tag
 
-      - name: Build and push
+      - name: Note skipped publish for non-canonical owner
+        if: github.repository_owner != 'adh1310'
+        run: |
+          echo "Skipping GHCR push because this repository owner is not adh1310." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Build and maybe push
         uses: docker/build-push-action@v6
         with:
           context: .
-          push: true
+          push: ${{ github.repository_owner == 'adh1310' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 ```
@@ -1617,7 +1623,7 @@ git commit -m "test: add puzzle utility tests"
 
 **Status:** Complete for local MVP verification; live GHCR publish verification remains blocked by the unresolved `adh1310` owner mismatch.
 
-**Implementation note:** On 2026-06-04, lint, typecheck, Vitest tests, production build, Docker image build, Docker Compose startup, `curl`, and an in-browser smoke suite against the Docker container passed. The smoke suite verified home, categories, all category routes, answer reveal/hide, next/previous, shuffle, restart, Random Mix metadata behavior, and fullscreen graceful handling. The GitHub Actions workflow exists, but live publishing to `ghcr.io/adh1310/guessmoji` cannot be fully verified until the intended GitHub/GHCR owner is confirmed.
+**Implementation note:** On 2026-06-04, lint, typecheck, Vitest tests, production build, Docker image build, Docker Compose startup, `curl`, and an in-browser smoke suite against the Docker container passed. The smoke suite verified home, categories, all category routes, answer reveal/hide, next/previous, shuffle, restart, Random Mix metadata behavior, and fullscreen graceful handling. The GitHub Actions workflow exists and builds the image, but live publishing to `ghcr.io/adh1310/guessmoji` cannot be fully verified until the intended GitHub/GHCR owner is confirmed.
 
 Before considering MVP complete, run:
 

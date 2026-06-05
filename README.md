@@ -24,7 +24,7 @@ Project target from `TASKS.md`:
 - App display name: `Guessmoji`
 - GHCR image target: `ghcr.io/adh1310/guessmoji`
 
-Note: during repository creation on 2026-06-04, GitHub returned a 404 for the `adh1310` owner. The repo was created under the authenticated account, `hallveticapro`, while the GHCR workflow still targets the required `ghcr.io/adh1310/guessmoji` image. Confirm the intended owner before live GHCR publishing can be verified.
+Note: during repository creation on 2026-06-04, GitHub returned a 404 for the `adh1310` owner. The repo was created under the authenticated account, `hallveticapro`, while the GHCR workflow still targets the required `ghcr.io/adh1310/guessmoji` image. The workflow builds on this repository but only publishes when running under the canonical `adh1310` owner.
 
 ## Current Categories
 
@@ -158,5 +158,5 @@ If the GHCR package is not visible yet, confirm that the GitHub Actions workflow
 
 - The home page, category selection page, core presentation game mode, keyboard shortcuts, fullscreen control, optional timer, and basic local preferences are implemented.
 - Docker, Docker Compose, and Unraid documentation are implemented and locally verified.
-- The canonical owner mismatch between `adh1310` and the authenticated GitHub account must be resolved before live GHCR publishing and public package visibility can be verified.
+- The canonical owner mismatch between `adh1310` and the authenticated GitHub account must be resolved before live GHCR publishing and public package visibility can be verified. The workflow intentionally skips the GHCR push outside the `adh1310` owner after a run failed with `owner not found`.
 - `npm` currently reports two moderate dependency audit findings from the scaffolded dependency tree; no runtime secrets are required or committed for the MVP.

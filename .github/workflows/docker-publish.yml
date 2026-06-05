@@ -27,6 +27,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Log in to GHCR
+        if: github.repository_owner == 'adh1310'
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -43,10 +44,16 @@ jobs:
             type=sha
             type=ref,event=tag
 
-      - name: Build and push
+      - name: Note skipped publish for non-canonical owner
+        if: github.repository_owner != 'adh1310'
+        run: |
+          echo "Skipping GHCR push because this repository owner is '${{ github.repository_owner }}', not 'adh1310'." >> "$GITHUB_STEP_SUMMARY"
+          echo "The image still builds with the required target name: ${{ env.IMAGE_NAME }}." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Build and maybe push
         uses: docker/build-push-action@v6
         with:
           context: .
-          push: true
+          push: ${{ github.repository_owner == 'adh1310' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

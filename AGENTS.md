@@ -29,7 +29,7 @@ The MVP must not require login, accounts, multiplayer, Redis, Postgres, or any d
 
 - Public repo created in this session: `https://github.com/hallveticapro/guessmoji`
 - Required image target from `TASKS.md`: `ghcr.io/adh1310/guessmoji`
-- Important note: `gh repo create adh1310/guessmoji` failed because GitHub returned 404 for owner `adh1310`. The GitHub Actions workflow still targets the required `ghcr.io/adh1310/guessmoji` image, so confirm the intended owner before final GHCR verification.
+- Important note: `gh repo create adh1310/guessmoji` failed because GitHub returned 404 for owner `adh1310`. The GitHub Actions workflow still targets the required `ghcr.io/adh1310/guessmoji` image, but skips the push unless `github.repository_owner == 'adh1310'` so this `hallveticapro` repo can keep CI green while still building the image.
 
 ## Folder Structure
 
@@ -202,4 +202,5 @@ Because a commit cannot include its own final hash in file contents, use `pendin
 
 - The required `adh1310` GitHub/GHCR owner was not resolvable from this environment, so live GHCR publishing/public package visibility still needs owner confirmation.
 - The public repository currently exists under `hallveticapro/guessmoji`, not `adh1310/guessmoji`.
+- A pushed workflow run failed with `failed to push ghcr.io/adh1310/guessmoji:latest: denied: not_found: owner not found`; the workflow is now guarded to build but skip publish outside the `adh1310` owner.
 - `npm` currently reports two moderate dependency audit findings from the scaffolded dependency tree.
