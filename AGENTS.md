@@ -160,6 +160,7 @@ Game mode conventions:
 - Keep answers hidden until teacher action.
 - Hide Random Mix puzzle category metadata until answer reveal.
 - Keep projector controls large, high-contrast, and keyboard accessible.
+- Store only safe local browser preferences such as last category and shuffle state. Do not add accounts or server persistence for MVP.
 
 ## Important Conventions
 

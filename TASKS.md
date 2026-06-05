@@ -1150,6 +1150,8 @@ git commit -m "feat: add fullscreen presentation support"
 
 ## Task 14 — Persist Basic Preferences Locally
 
+**Status:** Complete.
+
 Use localStorage for:
 
 - Last selected category.

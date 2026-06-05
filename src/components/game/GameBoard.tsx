@@ -13,6 +13,10 @@ type GameBoardProps = {
   revealCategoryOnlyAfterAnswer?: boolean;
 };
 
+const LAST_CATEGORY_SLUG_KEY = "guessmoji:lastCategorySlug";
+const LAST_CATEGORY_NAME_KEY = "guessmoji:lastCategoryName";
+const SHUFFLE_PREFERENCE_KEY = "guessmoji:shuffleOnStart";
+
 export function GameBoard({
   category,
   categories,
@@ -32,6 +36,11 @@ export function GameBoard({
   const currentPuzzle = puzzles[currentIndex];
   const answerCategoryName =
     categoryNamesById.get(currentPuzzle.categoryId) ?? category.name;
+
+  useEffect(() => {
+    saveLocalPreference(LAST_CATEGORY_SLUG_KEY, category.slug);
+    saveLocalPreference(LAST_CATEGORY_NAME_KEY, category.name);
+  }, [category.name, category.slug]);
 
   const toggleFullscreenMode = useCallback(async () => {
     try {
@@ -93,6 +102,7 @@ export function GameBoard({
 
       if (event.key.toLowerCase() === "s") {
         event.preventDefault();
+        saveLocalPreference(SHUFFLE_PREFERENCE_KEY, "true");
         setPuzzles((currentPuzzles) => getShuffledPuzzles(currentPuzzles));
         setCurrentIndex(0);
         setIsAnswerVisible(false);
@@ -101,6 +111,7 @@ export function GameBoard({
 
       if (event.key.toLowerCase() === "r") {
         event.preventDefault();
+        saveLocalPreference(SHUFFLE_PREFERENCE_KEY, "false");
         setPuzzles(initialPuzzles);
         setCurrentIndex(0);
         setIsAnswerVisible(false);
@@ -144,12 +155,14 @@ export function GameBoard({
   }
 
   function shufflePuzzles() {
+    saveLocalPreference(SHUFFLE_PREFERENCE_KEY, "true");
     setPuzzles((currentPuzzles) => getShuffledPuzzles(currentPuzzles));
     setCurrentIndex(0);
     setIsAnswerVisible(false);
   }
 
   function restartCategory() {
+    saveLocalPreference(SHUFFLE_PREFERENCE_KEY, "false");
     setPuzzles(initialPuzzles);
     setCurrentIndex(0);
     setIsAnswerVisible(false);
@@ -221,4 +234,12 @@ function isEditableTarget(target: EventTarget | null) {
   }
 
   return Boolean(target.closest("input, textarea, select, [contenteditable='true']"));
+}
+
+function saveLocalPreference(key: string, value: string) {
+  try {
+    window.localStorage.setItem(key, value);
+  } catch {
+    // Local storage can be unavailable in locked-down classroom browsers.
+  }
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { LastCategoryLink } from "@/components/categories/LastCategoryLink";
 import { getAllCategories, getPuzzlesByCategoryId } from "@/lib/puzzles";
 import type { Category, PuzzleDifficulty } from "@/types/puzzle";
 
@@ -34,6 +35,8 @@ export default function CategoriesPage() {
             ready.
           </p>
         </div>
+
+        <LastCategoryLink categories={categories} />
 
         <div className="mt-9 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {categories.map((category) => {

@@ -292,6 +292,33 @@
 
 ### Commit
 
+- `a4d6c337c38284b158f37c341b53a90747934438`
+
+## 2026-06-04 21:53 - Persist Teacher Preferences Locally
+
+### Changed
+
+- Stored the last played category in localStorage when a game starts.
+- Stored a safe shuffle preference flag when teachers shuffle or restart.
+- Added a client-side continue-last-category prompt on the category page.
+- Updated README, AGENTS, and TASKS notes for local preference behavior.
+
+### Why
+
+- Teachers should be able to return to the last category and keep lightweight preferences without login or a database.
+
+### Files Touched
+
+- `src/components/game/GameBoard.tsx`
+- `src/components/categories/LastCategoryLink.tsx`
+- `src/app/categories/page.tsx`
+- `README.md`
+- `AGENTS.md`
+- `UPDATES.md`
+- `TASKS.md`
+
+### Commit
+
 - pending
 
 ## 2026-06-04 21:17 - Initialize Project Documentation
