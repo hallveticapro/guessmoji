@@ -246,6 +246,28 @@
 
 ### Commit
 
+- `746959a90dc03d7e36a8edb295388b7cb04f54c9`
+
+## 2026-06-04 21:48 - Add Classroom Keyboard Shortcuts
+
+### Changed
+
+- Added keyboard controls for reveal/hide, next, previous, shuffle, restart, fullscreen toggle, and Escape-to-hide.
+- Ignored shortcuts while focus is inside editable fields.
+- Marked the keyboard shortcut task complete in `TASKS.md`.
+
+### Why
+
+- Keyboard shortcuts make projector and smartboard play faster for teachers.
+
+### Files Touched
+
+- `src/components/game/GameBoard.tsx`
+- `UPDATES.md`
+- `TASKS.md`
+
+### Commit
+
 - pending
 
 ## 2026-06-04 21:17 - Initialize Project Documentation

@@ -1098,6 +1098,8 @@ git commit -m "feat: build classroom game mode"
 
 ## Task 12 — Add Keyboard Shortcuts
 
+**Status:** Complete.
+
 Keyboard shortcuts:
 
 ```txt

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnswerReveal } from "@/components/game/AnswerReveal";
 import { GameControls } from "@/components/game/GameControls";
 import { ProgressIndicator } from "@/components/game/ProgressIndicator";
@@ -31,6 +31,66 @@ export function GameBoard({
   const currentPuzzle = puzzles[currentIndex];
   const answerCategoryName =
     categoryNamesById.get(currentPuzzle.categoryId) ?? category.name;
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (isEditableTarget(event.target)) {
+        return;
+      }
+
+      if (event.key === " ") {
+        event.preventDefault();
+        setIsAnswerVisible((isVisible) => !isVisible);
+        return;
+      }
+
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        setIsAnswerVisible(false);
+        setCurrentIndex((index) => Math.min(index + 1, puzzles.length - 1));
+        return;
+      }
+
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        setIsAnswerVisible(false);
+        setCurrentIndex((index) => Math.max(index - 1, 0));
+        return;
+      }
+
+      if (event.key.toLowerCase() === "s") {
+        event.preventDefault();
+        setPuzzles((currentPuzzles) => getShuffledPuzzles(currentPuzzles));
+        setCurrentIndex(0);
+        setIsAnswerVisible(false);
+        return;
+      }
+
+      if (event.key.toLowerCase() === "r") {
+        event.preventDefault();
+        setPuzzles(initialPuzzles);
+        setCurrentIndex(0);
+        setIsAnswerVisible(false);
+        return;
+      }
+
+      if (event.key.toLowerCase() === "f") {
+        event.preventDefault();
+        void toggleFullscreen();
+        return;
+      }
+
+      if (event.key === "Escape") {
+        setIsAnswerVisible(false);
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [initialPuzzles, puzzles.length]);
 
   function showAnswer() {
     setIsAnswerVisible(true);
@@ -118,4 +178,29 @@ function getShuffledPuzzles(puzzlesToShuffle: readonly Puzzle[]) {
   }
 
   return shuffled;
+}
+
+function isEditableTarget(target: EventTarget | null) {
+  if (!(target instanceof HTMLElement)) {
+    return false;
+  }
+
+  return Boolean(target.closest("input, textarea, select, [contenteditable='true']"));
+}
+
+async function toggleFullscreen() {
+  try {
+    if (!document.fullscreenEnabled) {
+      return;
+    }
+
+    if (document.fullscreenElement) {
+      await document.exitFullscreen();
+      return;
+    }
+
+    await document.documentElement.requestFullscreen();
+  } catch {
+    // Some browsers or classroom displays can deny fullscreen requests.
+  }
 }
