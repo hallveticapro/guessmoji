@@ -1351,6 +1351,8 @@ git commit -m "chore: add docker compose stack"
 
 ## Task 19 — Add Environment Files
 
+**Status:** Complete.
+
 Create:
 
 ```txt

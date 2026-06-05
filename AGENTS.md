@@ -169,6 +169,7 @@ Game mode conventions:
 - Keep the repository name lowercase: `guessmoji`.
 - Do not commit real secrets.
 - Use safe starter environment defaults only.
+- `.env` is intentionally committed with safe starter values for local/Unraid use. Future secret-bearing values must not be committed.
 - Prioritize the MVP game flow before advanced features.
 - Keep all default puzzles elementary-classroom appropriate.
 - Do not add login, accounts, a database, or multiplayer until the core app is stable.

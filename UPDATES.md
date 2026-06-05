@@ -421,6 +421,32 @@
 
 ### Commit
 
+- `45a21d536c6e3dbd112aed8afca6d8902e79e3b3`
+
+## 2026-06-04 22:07 - Add Environment Templates
+
+### Changed
+
+- Added `.env.example` with safe public defaults.
+- Added a starter `.env` with the same safe local defaults.
+- Updated README and AGENTS notes about environment files and secret handling.
+- Marked the environment file task complete in `TASKS.md`.
+
+### Why
+
+- Docker Compose and Unraid deployments need predictable defaults without committing real secrets.
+
+### Files Touched
+
+- `.env.example`
+- `.env`
+- `README.md`
+- `AGENTS.md`
+- `UPDATES.md`
+- `TASKS.md`
+
+### Commit
+
 - pending
 
 ## 2026-06-04 21:17 - Initialize Project Documentation

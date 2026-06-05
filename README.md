@@ -89,7 +89,7 @@ ghcr.io/adh1310/guessmoji
 
 ## Environment Variables
 
-The starter environment files are planned in Task 19. Expected safe defaults:
+The committed starter environment files contain safe local defaults only:
 
 ```env
 APP_PORT=3000
