@@ -202,5 +202,6 @@ Because a commit cannot include its own final hash in file contents, use `pendin
 
 ## Known Limitations
 
-- GHCR package publication and public visibility still need to be confirmed after the owner alignment workflow run completes.
+- The GHCR image is published and anonymously pullable at the configured package path as of 2026-06-05.
+- If the repository owner changes later, update `.github/workflows/docker-publish.yml`, `docker-compose.yml`, `TASKS.md`, and internal agent notes together. Keep `README.md` generic.
 - `npm` currently reports two moderate dependency audit findings from the scaffolded dependency tree.

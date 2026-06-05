@@ -1402,9 +1402,9 @@ git commit -m "chore: add environment templates"
 
 ## Task 20 — Add GitHub Actions Workflow for GHCR
 
-**Status:** Complete with guarded publish; live publish verification pending after owner alignment.
+**Status:** Complete.
 
-**Implementation note:** The workflow targets `ghcr.io/hallveticapro/guessmoji`. It builds on non-canonical owners but skips the GHCR push unless `github.repository_owner == 'hallveticapro'`.
+**Implementation note:** The workflow targets `ghcr.io/hallveticapro/guessmoji`. It builds on non-canonical owners but skips the GHCR push unless `github.repository_owner == 'hallveticapro'`. On 2026-06-05, the pushed workflow run completed successfully and an anonymous GHCR manifest request for `latest` returned HTTP 200.
 
 Create:
 
@@ -1621,9 +1621,9 @@ git commit -m "test: add puzzle utility tests"
 
 ## Task 24 — Final MVP Verification
 
-**Status:** Complete for local MVP verification; live GHCR publish verification pending after owner alignment.
+**Status:** Complete.
 
-**Implementation note:** On 2026-06-04, lint, typecheck, Vitest tests, production build, Docker image build, Docker Compose startup, `curl`, and an in-browser smoke suite against the Docker container passed. The smoke suite verified home, categories, all category routes, answer reveal/hide, next/previous, shuffle, restart, Random Mix metadata behavior, and fullscreen graceful handling. The GitHub Actions workflow exists and builds the image; live publishing to `ghcr.io/hallveticapro/guessmoji` still needs verification after the owner-alignment commit is pushed.
+**Implementation note:** On 2026-06-04, lint, typecheck, Vitest tests, production build, Docker image build, Docker Compose startup, `curl`, and an in-browser smoke suite against the Docker container passed. The smoke suite verified home, categories, all category routes, answer reveal/hide, next/previous, shuffle, restart, Random Mix metadata behavior, and fullscreen graceful handling. On 2026-06-05, the owner-aligned GitHub Actions workflow published the GHCR image and an anonymous manifest request for `latest` returned HTTP 200.
 
 Before considering MVP complete, run:
 

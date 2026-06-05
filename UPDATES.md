@@ -625,6 +625,29 @@
 
 - `053269f304e0a4aa26308861da9d1e93ffc0f731`
 
+## 2026-06-05 09:42 - Verify GHCR Publish
+
+### Changed
+
+- Marked GHCR publishing and final MVP verification complete in TASKS.
+- Updated AGENTS to note that the configured GHCR image is published and anonymously pullable.
+- Recorded that the owner-aligned GitHub Actions workflow completed successfully.
+- Verified anonymous GHCR manifest access for the `latest` image tag with HTTP 200.
+
+### Why
+
+- The MVP requires a public GHCR image, and the user clarified the canonical repository owner before final verification.
+
+### Files Touched
+
+- `AGENTS.md`
+- `TASKS.md`
+- `UPDATES.md`
+
+### Commit
+
+- pending
+
 ## 2026-06-04 21:17 - Initialize Project Documentation
 
 ### Changed
