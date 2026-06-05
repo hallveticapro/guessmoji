@@ -3,6 +3,7 @@ import Link from "next/link";
 type GameControlsProps = {
   canGoNext: boolean;
   canGoPrevious: boolean;
+  isFullscreen: boolean;
   isAnswerVisible: boolean;
   onHideAnswer: () => void;
   onNext: () => void;
@@ -10,11 +11,13 @@ type GameControlsProps = {
   onRestart: () => void;
   onRevealAnswer: () => void;
   onShuffle: () => void;
+  onToggleFullscreen: () => void;
 };
 
 export function GameControls({
   canGoNext,
   canGoPrevious,
+  isFullscreen,
   isAnswerVisible,
   onHideAnswer,
   onNext,
@@ -22,6 +25,7 @@ export function GameControls({
   onRestart,
   onRevealAnswer,
   onShuffle,
+  onToggleFullscreen,
 }: GameControlsProps) {
   return (
     <div className="rounded-lg border border-white/10 bg-white/10 p-4">
@@ -69,6 +73,14 @@ export function GameControls({
             Restart
           </button>
         </div>
+
+        <button
+          type="button"
+          onClick={onToggleFullscreen}
+          className="min-h-12 rounded-lg border border-white/20 px-4 py-3 text-base font-black text-white transition hover:bg-white/10 focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-sky-300"
+        >
+          {isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+        </button>
 
         <Link
           href="/categories"

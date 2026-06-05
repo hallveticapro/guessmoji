@@ -1125,6 +1125,8 @@ git commit -m "feat: add classroom keyboard shortcuts"
 
 ## Task 13 — Add Fullscreen Support
 
+**Status:** Complete.
+
 Add a fullscreen button for presentation mode.
 
 Requirements:

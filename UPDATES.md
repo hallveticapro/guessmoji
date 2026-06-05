@@ -268,6 +268,30 @@
 
 ### Commit
 
+- `8affab774cd8665ac1d80d88da0ba1eeaa26ab26`
+
+## 2026-06-04 21:51 - Add Fullscreen Presentation Support
+
+### Changed
+
+- Added a fullscreen control to the game controls.
+- Synced fullscreen state with the browser Fullscreen API.
+- Reused the same graceful fullscreen toggle for the F key and the button.
+- Marked the fullscreen support task complete in `TASKS.md`.
+
+### Why
+
+- Teachers need a quick presentation-friendly fullscreen option for projectors and smartboards.
+
+### Files Touched
+
+- `src/components/game/GameBoard.tsx`
+- `src/components/game/GameControls.tsx`
+- `UPDATES.md`
+- `TASKS.md`
+
+### Commit
+
 - pending
 
 ## 2026-06-04 21:17 - Initialize Project Documentation

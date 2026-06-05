@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AnswerReveal } from "@/components/game/AnswerReveal";
 import { GameControls } from "@/components/game/GameControls";
 import { ProgressIndicator } from "@/components/game/ProgressIndicator";
@@ -22,6 +22,7 @@ export function GameBoard({
   const [puzzles, setPuzzles] = useState(initialPuzzles);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnswerVisible, setIsAnswerVisible] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const categoryNamesById = useMemo(
     () => new Map(categories.map((item) => [item.id, item.name])),
@@ -31,6 +32,38 @@ export function GameBoard({
   const currentPuzzle = puzzles[currentIndex];
   const answerCategoryName =
     categoryNamesById.get(currentPuzzle.categoryId) ?? category.name;
+
+  const toggleFullscreenMode = useCallback(async () => {
+    try {
+      if (!document.fullscreenEnabled) {
+        return;
+      }
+
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+        return;
+      }
+
+      await document.documentElement.requestFullscreen();
+    } catch {
+      // Some browsers or classroom displays can deny fullscreen requests.
+    } finally {
+      setIsFullscreen(Boolean(document.fullscreenElement));
+    }
+  }, []);
+
+  useEffect(() => {
+    function syncFullscreenState() {
+      setIsFullscreen(Boolean(document.fullscreenElement));
+    }
+
+    syncFullscreenState();
+    document.addEventListener("fullscreenchange", syncFullscreenState);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", syncFullscreenState);
+    };
+  }, []);
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -76,7 +109,7 @@ export function GameBoard({
 
       if (event.key.toLowerCase() === "f") {
         event.preventDefault();
-        void toggleFullscreen();
+        void toggleFullscreenMode();
         return;
       }
 
@@ -90,7 +123,7 @@ export function GameBoard({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [initialPuzzles, puzzles.length]);
+  }, [initialPuzzles, puzzles.length, toggleFullscreenMode]);
 
   function showAnswer() {
     setIsAnswerVisible(true);
@@ -161,6 +194,8 @@ export function GameBoard({
               onRestart={restartCategory}
               onRevealAnswer={showAnswer}
               onShuffle={shufflePuzzles}
+              onToggleFullscreen={toggleFullscreenMode}
+              isFullscreen={isFullscreen}
             />
           </aside>
         </div>
@@ -186,21 +221,4 @@ function isEditableTarget(target: EventTarget | null) {
   }
 
   return Boolean(target.closest("input, textarea, select, [contenteditable='true']"));
-}
-
-async function toggleFullscreen() {
-  try {
-    if (!document.fullscreenEnabled) {
-      return;
-    }
-
-    if (document.fullscreenElement) {
-      await document.exitFullscreen();
-      return;
-    }
-
-    await document.documentElement.requestFullscreen();
-  } catch {
-    // Some browsers or classroom displays can deny fullscreen requests.
-  }
 }
