@@ -170,6 +170,29 @@
 
 ### Commit
 
+- `9711f34baa0139f1ab2c0fcd170cdf833b0dfb3d`
+
+## 2026-06-04 21:38 - Build Home Page
+
+### Changed
+
+- Expanded the home page with a brand-first Guessmoji hero, primary start action, and all-categories action.
+- Added a simple three-step teacher flow.
+- Added featured category preview cards with puzzle counts and play links.
+- Marked the home page task complete in `TASKS.md`.
+
+### Why
+
+- Teachers need a clear, classroom-friendly entry point before choosing categories or starting presentation mode.
+
+### Files Touched
+
+- `src/app/page.tsx`
+- `UPDATES.md`
+- `TASKS.md`
+
+### Commit
+
 - pending
 
 ## 2026-06-04 21:17 - Initialize Project Documentation

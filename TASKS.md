@@ -998,6 +998,8 @@ git commit -m "feat: add app shell and navigation"
 
 ## Task 9 — Build Home Page
 
+**Status:** Complete.
+
 Home page must include:
 
 - Hero section.
