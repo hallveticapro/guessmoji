@@ -319,6 +319,34 @@
 
 ### Commit
 
+- `df86892ed11a71abb4a63a10e0b0a921eb268d47`
+
+## 2026-06-04 21:57 - Add Optional Classroom Timer
+
+### Changed
+
+- Added timer controls for no timer, 30 seconds, 60 seconds, and 90 seconds.
+- Displayed remaining seconds in presentation mode when a timer is active.
+- Reset the timer on puzzle changes, shuffle, restart, and timer changes.
+- Stopped the timer when the teacher reveals the answer.
+- Persisted the selected timer duration as a safe local preference.
+- Updated README, AGENTS, and TASKS notes for timer behavior.
+
+### Why
+
+- Teachers may want a simple countdown for team guessing rounds without requiring accounts or server state.
+
+### Files Touched
+
+- `src/components/game/GameBoard.tsx`
+- `src/components/game/GameControls.tsx`
+- `README.md`
+- `AGENTS.md`
+- `UPDATES.md`
+- `TASKS.md`
+
+### Commit
+
 - pending
 
 ## 2026-06-04 21:17 - Initialize Project Documentation

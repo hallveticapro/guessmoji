@@ -16,6 +16,7 @@ type GameBoardProps = {
 const LAST_CATEGORY_SLUG_KEY = "guessmoji:lastCategorySlug";
 const LAST_CATEGORY_NAME_KEY = "guessmoji:lastCategoryName";
 const SHUFFLE_PREFERENCE_KEY = "guessmoji:shuffleOnStart";
+const TIMER_PREFERENCE_KEY = "guessmoji:timerSeconds";
 
 export function GameBoard({
   category,
@@ -27,6 +28,9 @@ export function GameBoard({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnswerVisible, setIsAnswerVisible] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [timerDuration, setTimerDuration] = useState(0);
+  const [timeRemaining, setTimeRemaining] = useState(0);
+  const [isTimerStopped, setIsTimerStopped] = useState(false);
 
   const categoryNamesById = useMemo(
     () => new Map(categories.map((item) => [item.id, item.name])),
@@ -41,6 +45,26 @@ export function GameBoard({
     saveLocalPreference(LAST_CATEGORY_SLUG_KEY, category.slug);
     saveLocalPreference(LAST_CATEGORY_NAME_KEY, category.name);
   }, [category.name, category.slug]);
+
+  const resetPuzzleState = useCallback(() => {
+    setIsAnswerVisible(false);
+    setIsTimerStopped(false);
+    setTimeRemaining(timerDuration);
+  }, [timerDuration]);
+
+  useEffect(() => {
+    if (timerDuration <= 0 || isTimerStopped || timeRemaining <= 0) {
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      setTimeRemaining((seconds) => Math.max(0, seconds - 1));
+    }, 1000);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [isTimerStopped, timeRemaining, timerDuration]);
 
   const toggleFullscreenMode = useCallback(async () => {
     try {
@@ -88,14 +112,14 @@ export function GameBoard({
 
       if (event.key === "ArrowRight") {
         event.preventDefault();
-        setIsAnswerVisible(false);
+        resetPuzzleState();
         setCurrentIndex((index) => Math.min(index + 1, puzzles.length - 1));
         return;
       }
 
       if (event.key === "ArrowLeft") {
         event.preventDefault();
-        setIsAnswerVisible(false);
+        resetPuzzleState();
         setCurrentIndex((index) => Math.max(index - 1, 0));
         return;
       }
@@ -105,7 +129,7 @@ export function GameBoard({
         saveLocalPreference(SHUFFLE_PREFERENCE_KEY, "true");
         setPuzzles((currentPuzzles) => getShuffledPuzzles(currentPuzzles));
         setCurrentIndex(0);
-        setIsAnswerVisible(false);
+        resetPuzzleState();
         return;
       }
 
@@ -114,7 +138,7 @@ export function GameBoard({
         saveLocalPreference(SHUFFLE_PREFERENCE_KEY, "false");
         setPuzzles(initialPuzzles);
         setCurrentIndex(0);
-        setIsAnswerVisible(false);
+        resetPuzzleState();
         return;
       }
 
@@ -134,10 +158,11 @@ export function GameBoard({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [initialPuzzles, puzzles.length, toggleFullscreenMode]);
+  }, [initialPuzzles, puzzles.length, resetPuzzleState, toggleFullscreenMode]);
 
   function showAnswer() {
     setIsAnswerVisible(true);
+    setIsTimerStopped(true);
   }
 
   function hideAnswer() {
@@ -146,26 +171,33 @@ export function GameBoard({
 
   function goToNextPuzzle() {
     setCurrentIndex((index) => Math.min(index + 1, puzzles.length - 1));
-    setIsAnswerVisible(false);
+    resetPuzzleState();
   }
 
   function goToPreviousPuzzle() {
     setCurrentIndex((index) => Math.max(index - 1, 0));
-    setIsAnswerVisible(false);
+    resetPuzzleState();
   }
 
   function shufflePuzzles() {
     saveLocalPreference(SHUFFLE_PREFERENCE_KEY, "true");
     setPuzzles((currentPuzzles) => getShuffledPuzzles(currentPuzzles));
     setCurrentIndex(0);
-    setIsAnswerVisible(false);
+    resetPuzzleState();
   }
 
   function restartCategory() {
     saveLocalPreference(SHUFFLE_PREFERENCE_KEY, "false");
     setPuzzles(initialPuzzles);
     setCurrentIndex(0);
-    setIsAnswerVisible(false);
+    resetPuzzleState();
+  }
+
+  function changeTimer(duration: number) {
+    saveLocalPreference(TIMER_PREFERENCE_KEY, String(duration));
+    setTimerDuration(duration);
+    setTimeRemaining(duration);
+    setIsTimerStopped(isAnswerVisible);
   }
 
   return (
@@ -180,7 +212,17 @@ export function GameBoard({
               Guess the answer
             </h1>
           </div>
-          <ProgressIndicator currentIndex={currentIndex} total={puzzles.length} />
+          <div className="flex flex-wrap gap-3">
+            <ProgressIndicator currentIndex={currentIndex} total={puzzles.length} />
+            {timerDuration > 0 && (
+              <p
+                className="inline-flex min-h-12 items-center justify-center rounded-full bg-amber-300 px-5 py-2 text-lg font-black text-slate-950"
+                aria-live="polite"
+              >
+                {timeRemaining}s
+              </p>
+            )}
+          </div>
         </div>
 
         <div className="grid flex-1 gap-5 xl:grid-cols-[1fr_24rem]">
@@ -209,6 +251,9 @@ export function GameBoard({
               onShuffle={shufflePuzzles}
               onToggleFullscreen={toggleFullscreenMode}
               isFullscreen={isFullscreen}
+              onTimerChange={changeTimer}
+              timerDuration={timerDuration}
+              timeRemaining={timeRemaining}
             />
           </aside>
         </div>

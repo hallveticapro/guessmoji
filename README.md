@@ -120,9 +120,6 @@ docker compose up -d
 
 ## Known Limitations
 
-- The web app is scaffolded but still shows the default generated home page.
-- The home page, category selection page, and core presentation game mode are implemented.
-- Keyboard shortcuts, fullscreen, and basic local preferences are implemented.
-- Timer, Docker, GHCR publishing, and Unraid docs are still in progress.
-- Docker and GHCR publishing are not implemented yet.
+- The home page, category selection page, core presentation game mode, keyboard shortcuts, fullscreen control, optional timer, and basic local preferences are implemented.
+- Docker, GHCR publishing, and Unraid docs are still in progress.
 - The canonical owner mismatch between `adh1310` and the authenticated GitHub account must be resolved before GHCR publishing can be verified.

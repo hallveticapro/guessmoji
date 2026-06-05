@@ -1173,6 +1173,8 @@ git commit -m "feat: persist teacher preferences locally"
 
 ## Task 15 — Add Optional Timer
 
+**Status:** Complete.
+
 Add a simple classroom timer.
 
 Requirements:

@@ -161,6 +161,7 @@ Game mode conventions:
 - Hide Random Mix puzzle category metadata until answer reveal.
 - Keep projector controls large, high-contrast, and keyboard accessible.
 - Store only safe local browser preferences such as last category and shuffle state. Do not add accounts or server persistence for MVP.
+- Timer choices are local-only and should stop when an answer is revealed.
 
 ## Important Conventions
 
