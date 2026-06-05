@@ -24,9 +24,9 @@ Project target from `TASKS.md`:
 
 Note: during repository creation on 2026-06-04, GitHub returned a 404 for the `adh1310` owner. The repo was created under the authenticated account, `hallveticapro`, so the GHCR owner target needs to be confirmed before the publishing workflow can be considered complete.
 
-## Planned Categories
+## Current Categories
 
-The MVP category list is:
+The scaffolded category catalog includes:
 
 - Disney Movies
 - Disney Princesses
@@ -39,7 +39,7 @@ The MVP category list is:
 - Animated Classics
 - Random Mix
 
-Additional classroom-safe packs are planned for holidays, animals, books, science, and math.
+Additional classroom-safe packs are planned for holidays, animals, books, science, and math after the core game is stable.
 
 ## Local Development
 

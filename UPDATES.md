@@ -66,6 +66,32 @@
 
 ### Commit
 
+- `63d775405f924c8baa842ac2acb26f1d151e429e`
+
+## 2026-06-04 21:23 - Add Seed Categories
+
+### Changed
+
+- Added the initial typed category catalog with the ten required MVP category slugs.
+- Removed the data directory placeholder.
+- Updated README and AGENTS data notes to reflect the seeded categories.
+- Marked the seed category task complete in `TASKS.md`.
+
+### Why
+
+- The category selection page, puzzle data, and Random Mix mode need a shared category source.
+
+### Files Touched
+
+- `src/data/categories.ts`
+- `src/data/.gitkeep`
+- `README.md`
+- `AGENTS.md`
+- `UPDATES.md`
+- `TASKS.md`
+
+### Commit
+
 - pending
 
 ## 2026-06-04 21:17 - Initialize Project Documentation

@@ -126,6 +126,7 @@ docker compose up -d --build
 The MVP data layer should be static TypeScript seed data. Expected types:
 
 - `src/types/puzzle.ts`
+- `src/data/categories.ts`
 - `PuzzleDifficulty`: `easy`, `medium`, `hard`
 - `Puzzle`: answer, emoji clue, category, difficulty, optional hint, explanation, fun fact, and tags
 - `Category`: id, name, slug, description, icon, theme, and grade band

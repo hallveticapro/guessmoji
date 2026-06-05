@@ -836,6 +836,8 @@ git commit -m "feat: add puzzle and category types"
 
 ## Task 5 — Add Seed Categories
 
+**Status:** Complete.
+
 Create:
 
 ```txt
