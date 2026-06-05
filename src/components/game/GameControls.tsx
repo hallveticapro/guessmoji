@@ -41,7 +41,10 @@ export function GameControls({
   timeRemaining,
 }: GameControlsProps) {
   return (
-    <div className="rounded-lg border border-white/10 bg-white/10 p-4">
+    <div
+      className="rounded-lg border border-white/10 bg-white/10 p-4"
+      data-print-hidden="true"
+    >
       <div className="grid gap-3">
         <button
           type="button"

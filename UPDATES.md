@@ -347,6 +347,32 @@
 
 ### Commit
 
+- `b2ded48b7c059e3553d66898dc37ec0df9994598`
+
+## 2026-06-04 22:02 - Polish Classroom Presentation UI
+
+### Changed
+
+- Added reduced-motion handling for transitions and animations.
+- Added print styles that hide controls, header, and footer for cleaner answer views.
+- Marked game controls as print-hidden.
+- Added selection styling and print-friendly game board color treatment.
+- Marked the classroom UI polish task complete in `TASKS.md`.
+
+### Why
+
+- Presentation mode should be comfortable on projectors and useful for screenshots or printed answer views.
+
+### Files Touched
+
+- `src/app/globals.css`
+- `src/components/game/GameBoard.tsx`
+- `src/components/game/GameControls.tsx`
+- `UPDATES.md`
+- `TASKS.md`
+
+### Commit
+
 - pending
 
 ## 2026-06-04 21:17 - Initialize Project Documentation

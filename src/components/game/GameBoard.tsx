@@ -201,7 +201,7 @@ export function GameBoard({
   }
 
   return (
-    <section className="flex flex-1 flex-col bg-slate-950 px-4 py-5 text-white sm:px-6 lg:px-8">
+    <section className="flex flex-1 flex-col bg-slate-950 px-4 py-5 text-white print:bg-white print:text-black sm:px-6 lg:px-8">
       <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-5">
         <div className="flex flex-col gap-4 rounded-lg border border-white/10 bg-white/10 p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
           <div>
@@ -226,7 +226,7 @@ export function GameBoard({
         </div>
 
         <div className="grid flex-1 gap-5 xl:grid-cols-[1fr_24rem]">
-          <div className="flex min-h-[28rem] flex-col items-center justify-center rounded-lg border border-white/10 bg-white p-6 text-slate-950 shadow-sm">
+          <div className="flex min-h-[28rem] flex-col items-center justify-center rounded-lg border border-white/10 bg-white p-6 text-slate-950 shadow-sm print:border-slate-300">
             <p className="text-center text-7xl leading-tight sm:text-8xl md:text-9xl lg:text-[9rem]">
               {currentPuzzle.emojis}
             </p>

@@ -1204,6 +1204,8 @@ git commit -m "feat: add optional classroom timer"
 
 ## Task 16 — Polish Classroom UI
 
+**Status:** Complete.
+
 Design goals:
 
 - Big emojis.
