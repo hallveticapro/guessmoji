@@ -373,6 +373,31 @@
 
 ### Commit
 
+- `93c9b41e03938a27531e602d692b56d0c2d5a455`
+
+## 2026-06-04 22:03 - Add Production Dockerfile
+
+### Changed
+
+- Added a multi-stage Dockerfile using Node 22 Alpine and a non-root runtime user.
+- Enabled Next.js standalone output for smaller production images.
+- Added a `.dockerignore` to keep local dependencies, build artifacts, and env files out of the build context.
+- Marked the Dockerfile task complete in `TASKS.md`.
+
+### Why
+
+- Guessmoji needs a production container image suitable for Unraid and GHCR publishing.
+
+### Files Touched
+
+- `Dockerfile`
+- `.dockerignore`
+- `next.config.ts`
+- `UPDATES.md`
+- `TASKS.md`
+
+### Commit
+
 - pending
 
 ## 2026-06-04 21:17 - Initialize Project Documentation

@@ -1236,6 +1236,8 @@ git commit -m "style: polish classroom presentation UI"
 
 ## Task 17 — Add Dockerfile
 
+**Status:** Complete.
+
 Create:
 
 ```txt
