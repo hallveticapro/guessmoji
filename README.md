@@ -11,7 +11,9 @@ Suggested classroom flow:
 
 ## Current Status
 
-This repository is in the core game mode checkpoint. The MVP is a Dockerized Next.js, React, TypeScript, and Tailwind CSS app with static seed puzzle data and no database.
+This repository is at the MVP verification checkpoint. Guessmoji is a Dockerized Next.js, React, TypeScript, and Tailwind CSS app with static seed puzzle data, no database, and a projector-friendly classroom game flow.
+
+Local MVP verification has passed with lint, typecheck, Vitest utility tests, production build, Docker image build, Docker Compose startup, `curl`, and an in-browser smoke test against the Docker container.
 
 Public repository created for this workspace:
 
@@ -22,11 +24,11 @@ Project target from `TASKS.md`:
 - App display name: `Guessmoji`
 - GHCR image target: `ghcr.io/adh1310/guessmoji`
 
-Note: during repository creation on 2026-06-04, GitHub returned a 404 for the `adh1310` owner. The repo was created under the authenticated account, `hallveticapro`, while the GHCR workflow still targets the required `ghcr.io/adh1310/guessmoji` image. Confirm the intended owner before publishing can be verified.
+Note: during repository creation on 2026-06-04, GitHub returned a 404 for the `adh1310` owner. The repo was created under the authenticated account, `hallveticapro`, while the GHCR workflow still targets the required `ghcr.io/adh1310/guessmoji` image. Confirm the intended owner before live GHCR publishing can be verified.
 
 ## Current Categories
 
-The scaffolded category catalog includes:
+The category catalog includes:
 
 - Disney Movies
 - Disney Princesses
@@ -62,7 +64,7 @@ http://localhost:3000
 
 ## Quality Checks
 
-After the Next.js scaffold is added, use:
+Use:
 
 ```bash
 npm run lint
@@ -84,7 +86,8 @@ docker compose up -d
 Build locally instead of pulling GHCR:
 
 ```bash
-docker build -t guessmoji:local .
+docker build -t ghcr.io/adh1310/guessmoji:latest .
+docker compose up -d
 ```
 
 The production image target is:
@@ -154,5 +157,6 @@ If the GHCR package is not visible yet, confirm that the GitHub Actions workflow
 ## Known Limitations
 
 - The home page, category selection page, core presentation game mode, keyboard shortcuts, fullscreen control, optional timer, and basic local preferences are implemented.
-- Docker, GHCR publishing, and Unraid docs are still in progress.
-- The canonical owner mismatch between `adh1310` and the authenticated GitHub account must be resolved before GHCR publishing can be verified.
+- Docker, Docker Compose, and Unraid documentation are implemented and locally verified.
+- The canonical owner mismatch between `adh1310` and the authenticated GitHub account must be resolved before live GHCR publishing and public package visibility can be verified.
+- `npm` currently reports two moderate dependency audit findings from the scaffolded dependency tree; no runtime secrets are required or committed for the MVP.

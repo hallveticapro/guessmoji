@@ -548,6 +548,30 @@
 
 ### Commit
 
+- `25c36c413f928ea5a2f376cb28739d435d23e09f`
+
+## 2026-06-04 22:22 - Verify MVP Build
+
+### Changed
+
+- Verified the Dockerized MVP with lint, typecheck, Vitest tests, production build, Docker image build, Docker Compose startup, `curl`, and browser smoke checks.
+- Confirmed the browser flow for home, category selection, every category route, answer reveal/hide, next/previous, shuffle, restart, Random Mix, and fullscreen graceful handling.
+- Updated README, AGENTS, and TASKS to reflect the implemented and locally verified MVP state.
+- Recorded that live GHCR publish verification remains blocked until the `adh1310` owner mismatch is resolved.
+
+### Why
+
+- Task 24 requires a final MVP verification pass before pushing the completed checkpoint.
+
+### Files Touched
+
+- `README.md`
+- `AGENTS.md`
+- `TASKS.md`
+- `UPDATES.md`
+
+### Commit
+
 - pending
 
 ## 2026-06-04 21:17 - Initialize Project Documentation

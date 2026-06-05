@@ -1615,6 +1615,10 @@ git commit -m "test: add puzzle utility tests"
 
 ## Task 24 — Final MVP Verification
 
+**Status:** Complete for local MVP verification; live GHCR publish verification remains blocked by the unresolved `adh1310` owner mismatch.
+
+**Implementation note:** On 2026-06-04, lint, typecheck, Vitest tests, production build, Docker image build, Docker Compose startup, `curl`, and an in-browser smoke suite against the Docker container passed. The smoke suite verified home, categories, all category routes, answer reveal/hide, next/previous, shuffle, restart, Random Mix metadata behavior, and fullscreen graceful handling. The GitHub Actions workflow exists, but live publishing to `ghcr.io/adh1310/guessmoji` cannot be fully verified until the intended GitHub/GHCR owner is confirmed.
+
 Before considering MVP complete, run:
 
 ```bash
@@ -1846,13 +1850,13 @@ Avoid:
 
 MVP is complete when:
 
-- Public GitHub repo exists at `adh1310/guessmoji`.
+- Public GitHub repo exists. Current repo: `hallveticapro/guessmoji`; requested canonical owner `adh1310` was not resolvable from this environment.
 - App name displays as **Guessmoji**.
 - App runs locally with `npm run dev`.
 - App builds with `npm run build`.
 - App runs in Docker.
 - Docker Compose stack works.
-- GHCR image publishes publicly.
+- GHCR image publishes publicly. Workflow is present for `ghcr.io/adh1310/guessmoji`, but live publish verification is pending owner confirmation.
 - README includes Unraid deployment instructions.
 - AGENTS.md exists and is accurate.
 - UPDATES.md has been maintained.

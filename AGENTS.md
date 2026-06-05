@@ -8,7 +8,7 @@ Guessmoji is a classroom emoji Pictionary game. Teachers select a themed categor
 
 ## Current Stack
 
-Current phase: Next.js app scaffold initialized.
+Current phase: MVP implemented and locally verified.
 
 Current MVP stack:
 
@@ -17,9 +17,6 @@ Current MVP stack:
 - TypeScript
 - Tailwind CSS
 - ESLint
-
-Planned additions:
-
 - Static local seed data
 - Vitest for utility tests
 - Docker
@@ -112,10 +109,10 @@ npm run build
 
 ### Docker
 
-Available after Docker tasks are complete:
-
 ```bash
-docker compose up -d --build
+docker build -t ghcr.io/adh1310/guessmoji:latest .
+docker compose up -d
+docker compose ps
 ```
 
 ## Build And Deployment Workflow
@@ -203,7 +200,6 @@ Because a commit cannot include its own final hash in file contents, use `pendin
 
 ## Known Limitations
 
-- The app scaffold is not created yet.
-- No puzzle data exists yet.
-- Docker and GHCR publishing are not implemented yet.
-- The required `adh1310` GitHub/GHCR owner was not resolvable from this environment.
+- The required `adh1310` GitHub/GHCR owner was not resolvable from this environment, so live GHCR publishing/public package visibility still needs owner confirmation.
+- The public repository currently exists under `hallveticapro/guessmoji`, not `adh1310/guessmoji`.
+- `npm` currently reports two moderate dependency audit findings from the scaffolded dependency tree.
