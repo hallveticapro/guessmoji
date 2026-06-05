@@ -117,6 +117,31 @@
 
 ### Commit
 
+- `6c42e767aeafa75d8601a2f0e9948f1a1ddd7f21`
+
+## 2026-06-04 21:32 - Add Puzzle Utility Functions
+
+### Changed
+
+- Added category lookup, puzzle lookup, category filtering, shuffle, and Random Mix utility functions.
+- Ensured Random Mix deduplicates by puzzle id and excludes the `random-mix` category id.
+- Removed the lib directory placeholder.
+- Updated AGENTS and TASKS notes for the utility layer.
+
+### Why
+
+- The UI needs safe, reusable data access before category and game pages are built.
+
+### Files Touched
+
+- `src/lib/puzzles.ts`
+- `src/lib/.gitkeep`
+- `AGENTS.md`
+- `UPDATES.md`
+- `TASKS.md`
+
+### Commit
+
 - pending
 
 ## 2026-06-04 21:17 - Initialize Project Documentation

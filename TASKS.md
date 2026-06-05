@@ -928,6 +928,8 @@ git commit -m "feat: add initial puzzle seed data"
 
 ## Task 7 — Puzzle Utilities
 
+**Status:** Complete.
+
 Create:
 
 ```txt
