@@ -789,6 +789,8 @@ git commit -m "docs: add agent project instructions"
 
 ## Task 4 — Add Puzzle and Category Types
 
+**Status:** Complete.
+
 Create:
 
 ```txt

@@ -42,6 +42,30 @@
 
 ### Commit
 
+- `a6ebef983b41e89b3eff57d8533e57d7aeba8073`
+
+## 2026-06-04 21:22 - Add Puzzle Types
+
+### Changed
+
+- Added shared TypeScript types for puzzle difficulty, puzzle entries, and categories.
+- Updated agent data model notes to point future work at `src/types/puzzle.ts`.
+- Marked the puzzle type task complete in `TASKS.md`.
+
+### Why
+
+- Categories, seed data, utilities, tests, and game UI need a stable model before implementation continues.
+
+### Files Touched
+
+- `src/types/puzzle.ts`
+- `src/types/.gitkeep`
+- `AGENTS.md`
+- `UPDATES.md`
+- `TASKS.md`
+
+### Commit
+
 - pending
 
 ## 2026-06-04 21:17 - Initialize Project Documentation
