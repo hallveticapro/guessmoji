@@ -472,6 +472,29 @@
 
 ### Commit
 
+- `ad02c77264312399c78d18de1de59768a9a33ad7`
+
+## 2026-06-04 22:10 - Add Unraid Deployment Instructions
+
+### Changed
+
+- Replaced placeholder Docker/Unraid README text with concrete compose deployment instructions.
+- Documented container port, host port, reverse proxy, Arcane, and update commands.
+- Added a note to verify GHCR package visibility after workflow publishing.
+- Marked the Unraid deployment docs task complete in `TASKS.md`.
+
+### Why
+
+- Teachers and self-hosters need clear instructions for running Guessmoji on Unraid.
+
+### Files Touched
+
+- `README.md`
+- `UPDATES.md`
+- `TASKS.md`
+
+### Commit
+
 - pending
 
 ## 2026-06-04 21:17 - Initialize Project Documentation

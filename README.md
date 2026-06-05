@@ -75,16 +75,29 @@ The scaffold currently provides `lint` and `build`. Typecheck and test scripts w
 
 ## Docker
 
-Docker support is planned for the MVP. The target local command will be:
+Run the compose stack with the published image:
 
 ```bash
-docker compose up -d --build
+docker compose up -d
 ```
 
-The production image target from `TASKS.md` is:
+Build locally instead of pulling GHCR:
+
+```bash
+docker build -t guessmoji:local .
+```
+
+The production image target is:
 
 ```txt
-ghcr.io/adh1310/guessmoji
+ghcr.io/adh1310/guessmoji:latest
+```
+
+To update the container after a new image is published:
+
+```bash
+docker compose pull
+docker compose up -d
 ```
 
 ## Environment Variables
@@ -101,22 +114,42 @@ No secrets are required for the MVP.
 
 ## Unraid Deployment
 
-Unraid deployment instructions will be finalized after the Dockerfile, compose stack, and GHCR workflow are in place.
+Guessmoji can run on Unraid as a single Docker Compose stack. No database, Redis, login service, or external storage is required for the MVP.
 
-Planned basics:
+### Docker Compose Stack
 
-- Run the app as a single web container.
-- Publish container port `3000`.
-- No database is required for the MVP.
-- The app can be proxied through NGINX Proxy Manager or a similar reverse proxy.
-- Arcane can run the compose stack directly once `docker-compose.yml` exists.
+Use this stack in Unraid, Arcane, or another compose manager:
 
-Update command after deployment:
+```yaml
+services:
+  guessmoji:
+    image: ghcr.io/adh1310/guessmoji:latest
+    container_name: guessmoji
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_APP_NAME: "Guessmoji"
+      NEXT_PUBLIC_APP_URL: "http://localhost:3000"
+```
+
+### Configuration
+
+- Container port: `3000`
+- Host port: choose any open Unraid port, commonly `3000`
+- `NEXT_PUBLIC_APP_URL`: set this to the URL teachers will use, such as `https://guessmoji.example.com`
+- Reverse proxy: NGINX Proxy Manager, SWAG, Traefik, or another Unraid-friendly proxy can forward to container port `3000`
+- Arcane: can run the compose stack directly
+
+### Updating
 
 ```bash
 docker compose pull
 docker compose up -d
 ```
+
+If the GHCR package is not visible yet, confirm that the GitHub Actions workflow has published successfully and that the package visibility is public.
 
 ## Known Limitations
 

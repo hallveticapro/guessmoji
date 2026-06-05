@@ -1508,6 +1508,8 @@ git commit -m "ci: publish docker image to ghcr"
 
 ## Task 21 — Add Unraid Deployment Docs
 
+**Status:** Complete.
+
 Update `README.md` with a section:
 
 ````md
