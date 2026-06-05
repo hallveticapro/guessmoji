@@ -48,7 +48,6 @@ export default async function PlayPage({ params }: PlayPageProps) {
       category={category}
       categories={getAllCategories()}
       initialPuzzles={puzzles}
-      revealCategoryOnlyAfterAnswer={category.id === "random-mix"}
     />
   );
 }
@@ -72,7 +71,7 @@ function MissingCategory({ slug }: { slug: string }) {
           No puzzle pack named {slug}
         </h1>
         <p className="mt-5 text-lg leading-8 text-slate-700">
-          Choose one of the classroom-ready categories and start a fresh game.
+          Choose one of the available categories and start a fresh game.
         </p>
         <Link
           href="/categories"

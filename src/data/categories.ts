@@ -1,11 +1,12 @@
 import type { Category } from "@/types/puzzle";
+import { expandedCategories } from "@/data/expandedPacks";
 
-export const categories = [
+const coreCategories = [
   {
     id: "disney-movies",
     name: "Disney Movies",
     slug: "disney-movies",
-    description: "Classic and modern Disney movie titles for familiar classroom guessing.",
+    description: "Classic and modern Disney movie titles for familiar guessing.",
     icon: "🏰",
     colorTheme: "sky",
     recommendedGradeBand: "2-6",
@@ -32,7 +33,7 @@ export const categories = [
     id: "marvel",
     name: "Marvel",
     slug: "marvel",
-    description: "Super heroes and teams with classroom-safe clues focused on names and powers.",
+    description: "Super heroes and teams with clues focused on names, powers, and symbols.",
     icon: "🦸",
     colorTheme: "red",
     recommendedGradeBand: "3-8",
@@ -50,7 +51,7 @@ export const categories = [
     id: "dreamworks",
     name: "DreamWorks",
     slug: "dreamworks",
-    description: "DreamWorks favorites with silly, high-energy clues kids can shout out.",
+    description: "DreamWorks favorites with silly, high-energy clue combinations.",
     icon: "🌙",
     colorTheme: "emerald",
     recommendedGradeBand: "2-6",
@@ -59,7 +60,7 @@ export const categories = [
     id: "video-game-movies",
     name: "Video Game Movies",
     slug: "video-game-movies",
-    description: "Movie and show clues inspired by classroom-friendly game worlds.",
+    description: "Movie and show clues inspired by game worlds and iconic characters.",
     icon: "🎮",
     colorTheme: "violet",
     recommendedGradeBand: "3-8",
@@ -68,7 +69,7 @@ export const categories = [
     id: "kid-tv-shows",
     name: "Kid TV Shows",
     slug: "kid-tv-shows",
-    description: "Popular kid-friendly TV shows from preschool picks to upper-elementary favorites.",
+    description: "Popular kid-friendly TV shows from gentle picks to animated adventures.",
     icon: "📺",
     colorTheme: "cyan",
     recommendedGradeBand: "K-6",
@@ -77,7 +78,7 @@ export const categories = [
     id: "animated-classics",
     name: "Animated Classics",
     slug: "animated-classics",
-    description: "Animated movies and characters that are widely recognizable and school-safe.",
+    description: "Animated movies and characters that are widely recognizable.",
     icon: "🎬",
     colorTheme: "orange",
     recommendedGradeBand: "2-6",
@@ -86,9 +87,17 @@ export const categories = [
     id: "random-mix",
     name: "Random Mix",
     slug: "random-mix",
-    description: "A shuffled cross-category set for quick games when teachers want variety.",
+    description: "A shuffled cross-category set for quick games when you want variety.",
     icon: "🎲",
     colorTheme: "slate",
     recommendedGradeBand: "K-8",
   },
+] satisfies Category[];
+
+const randomMixCategory = coreCategories.find((category) => category.id === "random-mix");
+
+export const categories = [
+  ...coreCategories.filter((category) => category.id !== "random-mix"),
+  ...expandedCategories,
+  ...(randomMixCategory ? [randomMixCategory] : []),
 ] satisfies Category[];

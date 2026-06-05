@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AnswerReveal } from "@/components/game/AnswerReveal";
 import { GameControls } from "@/components/game/GameControls";
@@ -10,7 +11,6 @@ type GameBoardProps = {
   category: Category;
   categories: Category[];
   initialPuzzles: Puzzle[];
-  revealCategoryOnlyAfterAnswer?: boolean;
 };
 
 const LAST_CATEGORY_SLUG_KEY = "guessmoji:lastCategorySlug";
@@ -22,12 +22,14 @@ export function GameBoard({
   category,
   categories,
   initialPuzzles,
-  revealCategoryOnlyAfterAnswer = false,
 }: GameBoardProps) {
   const [puzzles, setPuzzles] = useState(initialPuzzles);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnswerVisible, setIsAnswerVisible] = useState(false);
+  const [isHintVisible, setIsHintVisible] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isComplete, setIsComplete] = useState(false);
   const [timerDuration, setTimerDuration] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [isTimerStopped, setIsTimerStopped] = useState(false);
@@ -40,14 +42,33 @@ export function GameBoard({
   const currentPuzzle = puzzles[currentIndex];
   const answerCategoryName =
     categoryNamesById.get(currentPuzzle.categoryId) ?? category.name;
+  const isLastPuzzle = currentIndex >= puzzles.length - 1;
 
   useEffect(() => {
     saveLocalPreference(LAST_CATEGORY_SLUG_KEY, category.slug);
     saveLocalPreference(LAST_CATEGORY_NAME_KEY, category.name);
   }, [category.name, category.slug]);
 
+  useEffect(() => {
+    const frameId = window.requestAnimationFrame(() => {
+      const savedDuration = getSavedTimerDuration();
+
+      if (savedDuration > 0) {
+        setTimerDuration(savedDuration);
+        setTimeRemaining(savedDuration);
+        setIsTimerStopped(false);
+      }
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+    };
+  }, []);
+
   const resetPuzzleState = useCallback(() => {
     setIsAnswerVisible(false);
+    setIsHintVisible(false);
+    setIsSettingsOpen(false);
     setIsTimerStopped(false);
     setTimeRemaining(timerDuration);
   }, [timerDuration]);
@@ -79,7 +100,7 @@ export function GameBoard({
 
       await document.documentElement.requestFullscreen();
     } catch {
-      // Some browsers or classroom displays can deny fullscreen requests.
+      // Some browsers or displays can deny fullscreen requests.
     } finally {
       setIsFullscreen(Boolean(document.fullscreenElement));
     }
@@ -98,58 +119,144 @@ export function GameBoard({
     };
   }, []);
 
+  const showAnswer = useCallback(() => {
+    setIsAnswerVisible(true);
+    setIsHintVisible(false);
+    setIsTimerStopped(true);
+  }, []);
+
+  const toggleHint = useCallback(() => {
+    if (isAnswerVisible) {
+      return;
+    }
+
+    setIsHintVisible((isVisible) => !isVisible);
+  }, [isAnswerVisible]);
+
+  const completeCategory = useCallback(() => {
+    setIsComplete(true);
+    setIsAnswerVisible(false);
+    setIsHintVisible(false);
+    setIsSettingsOpen(false);
+    setIsTimerStopped(true);
+  }, []);
+
+  const goToNextPuzzle = useCallback(() => {
+    if (isLastPuzzle) {
+      completeCategory();
+      return;
+    }
+
+    setCurrentIndex((index) => Math.min(index + 1, puzzles.length - 1));
+    setIsComplete(false);
+    resetPuzzleState();
+  }, [completeCategory, isLastPuzzle, puzzles.length, resetPuzzleState]);
+
+  const goToPreviousPuzzle = useCallback(() => {
+    setCurrentIndex((index) => Math.max(index - 1, 0));
+    setIsComplete(false);
+    resetPuzzleState();
+  }, [resetPuzzleState]);
+
+  const shufflePuzzles = useCallback(() => {
+    saveLocalPreference(SHUFFLE_PREFERENCE_KEY, "true");
+    setPuzzles((currentPuzzles) => getShuffledPuzzles(currentPuzzles));
+    setCurrentIndex(0);
+    setIsComplete(false);
+    resetPuzzleState();
+  }, [resetPuzzleState]);
+
+  const restartCategory = useCallback(() => {
+    saveLocalPreference(SHUFFLE_PREFERENCE_KEY, "false");
+    setPuzzles(initialPuzzles);
+    setCurrentIndex(0);
+    setIsComplete(false);
+    resetPuzzleState();
+  }, [initialPuzzles, resetPuzzleState]);
+
+  const changeTimer = useCallback(
+    (duration: number) => {
+      const safeDuration = Math.min(999, Math.max(0, duration));
+
+      saveLocalPreference(TIMER_PREFERENCE_KEY, String(safeDuration));
+      setTimerDuration(safeDuration);
+      setTimeRemaining(safeDuration);
+      setIsTimerStopped(isAnswerVisible || isComplete || safeDuration === 0);
+    },
+    [isAnswerVisible, isComplete],
+  );
+
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (isEditableTarget(event.target)) {
         return;
       }
 
+      if (event.key === "Escape") {
+        event.preventDefault();
+        if (isSettingsOpen) {
+          setIsSettingsOpen(false);
+          return;
+        }
+
+        setIsHintVisible(false);
+        setIsAnswerVisible(false);
+        return;
+      }
+
+      if (isComplete) {
+        return;
+      }
+
       if (event.key === " ") {
         event.preventDefault();
-        setIsAnswerVisible((isVisible) => !isVisible);
+        if (isAnswerVisible) {
+          goToNextPuzzle();
+          return;
+        }
+
+        showAnswer();
         return;
       }
 
       if (event.key === "ArrowRight") {
         event.preventDefault();
-        resetPuzzleState();
-        setCurrentIndex((index) => Math.min(index + 1, puzzles.length - 1));
+        if (isAnswerVisible) {
+          goToNextPuzzle();
+          return;
+        }
+
+        showAnswer();
         return;
       }
 
       if (event.key === "ArrowLeft") {
         event.preventDefault();
-        resetPuzzleState();
-        setCurrentIndex((index) => Math.max(index - 1, 0));
+        goToPreviousPuzzle();
+        return;
+      }
+
+      if (event.key.toLowerCase() === "h") {
+        event.preventDefault();
+        toggleHint();
         return;
       }
 
       if (event.key.toLowerCase() === "s") {
         event.preventDefault();
-        saveLocalPreference(SHUFFLE_PREFERENCE_KEY, "true");
-        setPuzzles((currentPuzzles) => getShuffledPuzzles(currentPuzzles));
-        setCurrentIndex(0);
-        resetPuzzleState();
+        shufflePuzzles();
         return;
       }
 
       if (event.key.toLowerCase() === "r") {
         event.preventDefault();
-        saveLocalPreference(SHUFFLE_PREFERENCE_KEY, "false");
-        setPuzzles(initialPuzzles);
-        setCurrentIndex(0);
-        resetPuzzleState();
+        restartCategory();
         return;
       }
 
       if (event.key.toLowerCase() === "f") {
         event.preventDefault();
         void toggleFullscreenMode();
-        return;
-      }
-
-      if (event.key === "Escape") {
-        setIsAnswerVisible(false);
       }
     }
 
@@ -158,61 +265,65 @@ export function GameBoard({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [initialPuzzles, puzzles.length, resetPuzzleState, toggleFullscreenMode]);
+  }, [
+    goToNextPuzzle,
+    goToPreviousPuzzle,
+    isAnswerVisible,
+    isComplete,
+    isSettingsOpen,
+    restartCategory,
+    showAnswer,
+    shufflePuzzles,
+    toggleFullscreenMode,
+    toggleHint,
+  ]);
 
-  function showAnswer() {
-    setIsAnswerVisible(true);
-    setIsTimerStopped(true);
-  }
-
-  function hideAnswer() {
-    setIsAnswerVisible(false);
-  }
-
-  function goToNextPuzzle() {
-    setCurrentIndex((index) => Math.min(index + 1, puzzles.length - 1));
-    resetPuzzleState();
-  }
-
-  function goToPreviousPuzzle() {
-    setCurrentIndex((index) => Math.max(index - 1, 0));
-    resetPuzzleState();
-  }
-
-  function shufflePuzzles() {
-    saveLocalPreference(SHUFFLE_PREFERENCE_KEY, "true");
-    setPuzzles((currentPuzzles) => getShuffledPuzzles(currentPuzzles));
-    setCurrentIndex(0);
-    resetPuzzleState();
-  }
-
-  function restartCategory() {
-    saveLocalPreference(SHUFFLE_PREFERENCE_KEY, "false");
-    setPuzzles(initialPuzzles);
-    setCurrentIndex(0);
-    resetPuzzleState();
-  }
-
-  function changeTimer(duration: number) {
-    saveLocalPreference(TIMER_PREFERENCE_KEY, String(duration));
-    setTimerDuration(duration);
-    setTimeRemaining(duration);
-    setIsTimerStopped(isAnswerVisible);
+  if (isComplete) {
+    return (
+      <section className="flex flex-1 items-center bg-slate-950 px-5 py-12 text-white sm:px-6 lg:px-8">
+        <div className="mx-auto w-full max-w-3xl rounded-lg bg-white p-7 text-center text-slate-950 shadow-sm">
+          <p className="text-sm font-black uppercase tracking-normal text-sky-700">
+            Category complete
+          </p>
+          <h1 className="mt-3 text-4xl font-black tracking-normal sm:text-5xl">
+            You finished {category.name}
+          </h1>
+          <p className="mt-4 text-lg font-medium leading-8 text-slate-700">
+            {puzzles.length} Guessmoji cards played.
+          </p>
+          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+            <button
+              type="button"
+              onClick={restartCategory}
+              className="inline-flex min-h-14 items-center justify-center rounded-full bg-amber-300 px-7 py-3 text-lg font-black text-slate-950 transition hover:bg-amber-200 focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-amber-300"
+            >
+              Play Again
+            </button>
+            <Link
+              href="/categories"
+              className="inline-flex min-h-14 items-center justify-center rounded-full bg-slate-950 px-7 py-3 text-lg font-black text-white transition hover:bg-slate-800 focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-sky-500"
+            >
+              Return to Categories
+            </Link>
+          </div>
+        </div>
+      </section>
+    );
   }
 
   return (
     <section className="flex flex-1 flex-col bg-slate-950 px-4 py-5 text-white print:bg-white print:text-black sm:px-6 lg:px-8">
       <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-5">
-        <div className="flex flex-col gap-4 rounded-lg border border-white/10 bg-white/10 p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-sm font-black uppercase tracking-normal text-amber-200">
               {category.name}
             </p>
             <h1 className="mt-1 text-2xl font-black tracking-normal sm:text-3xl">
-              Guess the answer
+              {isAnswerVisible ? "Answer revealed" : "Guess the answer"}
             </h1>
           </div>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap items-center gap-3" data-print-hidden="true">
             <ProgressIndicator currentIndex={currentIndex} total={puzzles.length} />
             {timerDuration > 0 && (
               <p
@@ -222,41 +333,52 @@ export function GameBoard({
                 {timeRemaining}s
               </p>
             )}
+            <button
+              type="button"
+              onClick={() => setIsSettingsOpen(true)}
+              className="grid size-12 place-items-center rounded-full border border-white/30 bg-white/10 text-2xl text-white transition hover:bg-white/20 focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-sky-300"
+              aria-label="Open game settings"
+            >
+              ⚙
+            </button>
           </div>
         </div>
 
-        <div className="grid flex-1 gap-5 xl:grid-cols-[1fr_24rem]">
-          <div className="flex min-h-[28rem] flex-col items-center justify-center rounded-lg border border-white/10 bg-white p-6 text-slate-950 shadow-sm print:border-slate-300">
+        <div className="flex flex-1 flex-col justify-center gap-5">
+          <div className="flex min-h-[22rem] flex-col items-center justify-center rounded-lg border border-white/10 bg-white p-6 text-slate-950 shadow-sm print:border-slate-300 sm:min-h-[28rem]">
             <p className="text-center text-7xl leading-tight sm:text-8xl md:text-9xl lg:text-[9rem]">
               {currentPuzzle.emojis}
             </p>
           </div>
 
-          <aside className="flex flex-col gap-4">
-            <AnswerReveal
-              categoryName={answerCategoryName}
-              isAnswerVisible={isAnswerVisible}
-              puzzle={currentPuzzle}
-              revealCategoryOnlyAfterAnswer={revealCategoryOnlyAfterAnswer}
-            />
-            <GameControls
-              canGoNext={currentIndex < puzzles.length - 1}
-              canGoPrevious={currentIndex > 0}
-              isAnswerVisible={isAnswerVisible}
-              onHideAnswer={hideAnswer}
-              onNext={goToNextPuzzle}
-              onPrevious={goToPreviousPuzzle}
-              onRestart={restartCategory}
-              onRevealAnswer={showAnswer}
-              onShuffle={shufflePuzzles}
-              onToggleFullscreen={toggleFullscreenMode}
-              isFullscreen={isFullscreen}
-              onTimerChange={changeTimer}
-              timerDuration={timerDuration}
-              timeRemaining={timeRemaining}
-            />
-          </aside>
+          <AnswerReveal
+            categoryName={answerCategoryName}
+            isAnswerVisible={isAnswerVisible}
+            isHintVisible={isHintVisible}
+            puzzle={currentPuzzle}
+          />
         </div>
+
+        <GameControls
+          canGoPrevious={currentIndex > 0}
+          hasHint={Boolean(currentPuzzle.hint)}
+          isAnswerVisible={isAnswerVisible}
+          isFullscreen={isFullscreen}
+          isHintVisible={isHintVisible}
+          isSettingsOpen={isSettingsOpen}
+          nextLabel={isLastPuzzle ? "Finish" : "Next"}
+          onCloseSettings={() => setIsSettingsOpen(false)}
+          onHint={toggleHint}
+          onNext={goToNextPuzzle}
+          onPrevious={goToPreviousPuzzle}
+          onRestart={restartCategory}
+          onRevealAnswer={showAnswer}
+          onShuffle={shufflePuzzles}
+          onTimerChange={changeTimer}
+          onToggleFullscreen={toggleFullscreenMode}
+          timerDuration={timerDuration}
+          timeRemaining={timeRemaining}
+        />
       </div>
     </section>
   );
@@ -285,6 +407,29 @@ function saveLocalPreference(key: string, value: string) {
   try {
     window.localStorage.setItem(key, value);
   } catch {
-    // Local storage can be unavailable in locked-down classroom browsers.
+    // Local storage can be unavailable in locked-down browsers.
   }
+}
+
+function readLocalPreference(key: string) {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  try {
+    return window.localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function getSavedTimerDuration() {
+  const savedTimer = readLocalPreference(TIMER_PREFERENCE_KEY);
+  const savedDuration = savedTimer ? Number.parseInt(savedTimer, 10) : 0;
+
+  if (Number.isNaN(savedDuration) || savedDuration <= 0) {
+    return 0;
+  }
+
+  return Math.min(999, savedDuration);
 }

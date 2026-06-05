@@ -4,9 +4,21 @@
 
 ## Project Summary
 
-Build a classroom-friendly web app called **Guessmoji**.
+Build a group-friendly web app called **Guessmoji**.
 
-Guessmoji is an emoji-based Pictionary / guessing game for classroom use. A teacher selects a category, displays emoji clues one at a time, lets students guess the answer, then reveals the correct answer.
+Guessmoji is an emoji-based Pictionary / guessing game. A host selects a category, displays emoji clues one at a time, lets players guess the answer, then reveals the correct answer.
+
+## Current Scope Update
+
+As of 2026-06-05:
+
+- Public-facing app copy should describe general group play instead of only classroom use.
+- The app should remain safe, readable, and useful for classroom environments, but it should not sound classroom-exclusive.
+- The README must remain neutral and generic, with no personal usernames, profile links, or owner-specific deployment values.
+- The current live app URL is `https://guessmoji.mrhallsclass.com/`.
+- The current content target is 60 total categories and 600 playable puzzles.
+- Game play should center on the emoji card, with Hint and Reveal actions before answer reveal and a Next/Finish action after reveal.
+- Timer controls should live in a settings dialog behind a gear button.
 
 The app should support many themed categories, including:
 
@@ -1660,6 +1672,96 @@ git add .
 git commit -m "chore: verify mvp build"
 git push origin main
 ```
+
+---
+
+## Task 25 — Expand Category And Puzzle Catalog
+
+**Status:** Complete.
+
+**Implementation note:** Added 50 additional themed categories with 10 cards each, bringing the app to 60 total categories including Random Mix and 600 playable puzzles. Added puzzle `details` support and ensured every puzzle has hint, details, and fun fact reveal content through explicit generated data or safe fallbacks.
+
+Required:
+
+- Add about 50 additional categories.
+- Keep every new category at 10 or more emoji cards.
+- Keep default content broadly friendly and safe.
+- Preserve Random Mix as a derived mode.
+- Add tests that protect category count, per-category puzzle count, and reveal metadata.
+
+---
+
+## Task 26 — Simplify Game Flow
+
+**Status:** Complete.
+
+**Implementation note:** Reworked the play screen around a single large emoji card, centered Hint and Reveal actions before answer reveal, a Next/Finish action after answer reveal, and a category completion screen with Play Again and Return to Categories actions.
+
+Required:
+
+- Hint must be available before answer reveal.
+- Answer reveal should show answer, category, difficulty, details, explanation, and fun fact.
+- Next should appear after reveal.
+- End of category should show a completion state.
+- Keep Random Mix category metadata hidden until answer reveal.
+
+---
+
+## Task 27 — Move Timer To Settings
+
+**Status:** Complete.
+
+**Implementation note:** Replaced fixed timer presets with a manual timer input in a settings dialog behind a gear button. The timer remains local-only and stops when an answer is revealed.
+
+Required:
+
+- Add a settings gear on the play screen.
+- Move secondary controls into settings.
+- Support manual timer seconds.
+- Preserve fullscreen, previous, shuffle, restart, and back-to-categories access.
+
+---
+
+## Task 28 — Add App Information Modal
+
+**Status:** Complete.
+
+**Implementation note:** Added a header information button that opens an About Guessmoji modal with live site, repository, social, and support links.
+
+Required:
+
+- Add a visible information icon/button.
+- Use an accessible modal dialog.
+- Include app-specific information and requested links.
+
+---
+
+## Task 29 — Make Public Site Copy General Purpose
+
+**Status:** Complete.
+
+**Implementation note:** Updated visible app copy to describe general players, groups, and categories instead of classroom-only use. Puzzle content remains friendly and safe for broad audiences.
+
+Required:
+
+- Remove classroom-only wording from visible site copy.
+- Keep the tone playful, readable, and shared-screen friendly.
+- Preserve safe defaults.
+
+---
+
+## Task 30 — Reorganize README
+
+**Status:** Complete.
+
+**Implementation note:** Reworked README with a Table of Contents, horizontal section dividers, updated status, current category list, Docker/Unraid instructions, and neutral placeholder deployment values.
+
+Required:
+
+- Add a ToC.
+- Separate major sections clearly.
+- Keep README neutral/generic.
+- Do not include personal usernames, profile links, or owner-specific deployment values.
 
 ---
 

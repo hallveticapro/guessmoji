@@ -2,13 +2,15 @@
 
 ## App Overview
 
-Guessmoji is a classroom emoji Pictionary game. Teachers select a themed category, display large emoji clues, let students guess, and reveal answers on a projector or smartboard.
+Guessmoji is a group-friendly emoji Pictionary game. A host selects a themed category, displays large emoji clues, lets players guess, and reveals answers on a shared screen.
 
 `TASKS.md` is the authoritative project plan. Keep it current as work is completed or adjusted.
 
 ## Current Stack
 
 Current phase: MVP implemented and locally verified.
+
+Current live URL: `https://guessmoji.mrhallsclass.com/`
 
 Current MVP stack:
 
@@ -32,6 +34,7 @@ The MVP must not require login, accounts, multiplayer, Redis, Postgres, or any d
 - User clarified on 2026-06-05 that the canonical repository should be `hallveticapro/guessmoji`.
 - The public README must stay neutral/generic and should not mention personal usernames, profile URLs, or owner-specific deployment values.
 - The GitHub Actions workflow publishes to `ghcr.io/hallveticapro/guessmoji` when running in the canonical repository; forks/non-canonical owners build without publishing.
+- The public README intentionally uses placeholder owner/image values and should not include the live URL or social/profile links.
 
 ## Folder Structure
 
@@ -135,30 +138,33 @@ The MVP data layer should be static TypeScript seed data. Expected types:
 - `src/data/puzzles.ts`
 - `src/lib/puzzles.ts`
 - `PuzzleDifficulty`: `easy`, `medium`, `hard`
-- `Puzzle`: answer, emoji clue, category, difficulty, optional hint, explanation, fun fact, and tags
+- `Puzzle`: answer, emoji clue, category, difficulty, optional hint, details, explanation, fun fact, and tags
 - `Category`: id, name, slug, description, icon, theme, and grade band
 
-Random Mix should pull from multiple classroom-safe categories and avoid duplicates.
+Random Mix should pull from multiple safe categories and avoid duplicates.
 
-The current seed set includes 100 puzzles. Keep new default puzzles elementary-classroom safe, broadly recognizable, and free of mature or horror content unless a future opt-in pack is explicitly added.
+The current seed set includes 600 puzzles across 60 categories, including Random Mix. Keep new default puzzles broadly friendly, recognizable, and free of mature or horror content unless a future opt-in pack is explicitly added.
 
 ## Design Language
 
-Guessmoji should feel like a classroom game show plus a clean teacher tool:
+Guessmoji should feel like a friendly shared-screen game show plus a clean host tool:
 
 - Big emoji clues
 - High contrast
 - Large readable controls
-- Projector-friendly spacing
+- Shared-screen friendly spacing
 - Simple navigation
 - Friendly, bright, and not visually chaotic
-- Responsive across desktop, Chromebook, tablet, phone, and smartboard
+- Responsive across desktop, Chromebook, tablet, phone, projector, and smartboard
 
 Game mode conventions:
 
-- Keep answers hidden until teacher action.
+- Keep answers hidden until host action.
+- Hint is a separate pre-reveal action and should be available before the answer is revealed.
+- The main play screen should emphasize one large emoji card and centered Hint/Reveal/Next actions.
+- Secondary controls belong in the settings dialog behind the gear button when practical.
 - Hide Random Mix puzzle category metadata until answer reveal.
-- Keep projector controls large, high-contrast, and keyboard accessible.
+- Keep shared-screen controls large, high-contrast, and keyboard accessible.
 - Store only safe local browser preferences such as last category and shuffle state. Do not add accounts or server persistence for MVP.
 - Timer choices are local-only and should stop when an answer is revealed.
 
@@ -170,7 +176,7 @@ Game mode conventions:
 - Use safe starter environment defaults only.
 - `.env` is intentionally committed with safe starter values for local/Unraid use. Future secret-bearing values must not be committed.
 - Prioritize the MVP game flow before advanced features.
-- Keep all default puzzles elementary-classroom appropriate.
+- Keep all default puzzles broadly friendly and safe.
 - Do not add login, accounts, a database, or multiplayer until the core app is stable.
 - Prefer established project patterns over new abstractions.
 

@@ -3,8 +3,8 @@ import type { Puzzle } from "@/types/puzzle";
 type AnswerRevealProps = {
   categoryName: string;
   isAnswerVisible: boolean;
+  isHintVisible: boolean;
   puzzle: Puzzle;
-  revealCategoryOnlyAfterAnswer?: boolean;
 };
 
 const difficultyLabels = {
@@ -16,50 +16,54 @@ const difficultyLabels = {
 export function AnswerReveal({
   categoryName,
   isAnswerVisible,
+  isHintVisible,
   puzzle,
-  revealCategoryOnlyAfterAnswer = false,
 }: AnswerRevealProps) {
-  if (!isAnswerVisible) {
+  if (!isAnswerVisible && isHintVisible && puzzle.hint) {
     return (
-      <div className="rounded-lg border border-white/10 bg-white/10 p-5">
-        <p className="text-sm font-black uppercase tracking-normal text-sky-200">
-          Answer hidden
+      <div className="mx-auto w-full max-w-4xl rounded-lg border border-sky-200 bg-sky-50 px-5 py-4 text-slate-950 shadow-sm">
+        <p className="text-sm font-black uppercase tracking-normal text-sky-800">
+          Hint
         </p>
-        <p className="mt-3 text-lg leading-7 text-white/80">
-          Give the class time to guess, then reveal when ready.
+        <p className="mt-2 text-lg font-bold leading-7 text-slate-800">
+          {puzzle.hint}
         </p>
       </div>
     );
   }
 
+  if (!isAnswerVisible) {
+    return null;
+  }
+
   return (
-    <div className="rounded-lg border border-amber-200 bg-amber-100 p-5 text-slate-950 shadow-sm">
+    <div className="mx-auto w-full max-w-5xl rounded-lg border border-amber-200 bg-amber-100 p-5 text-slate-950 shadow-sm">
       <p className="text-sm font-black uppercase tracking-normal text-amber-900">
         Answer
       </p>
-      <h2 className="mt-2 text-3xl font-black tracking-normal">{puzzle.answer}</h2>
+      <h2 className="mt-2 text-4xl font-black tracking-normal sm:text-5xl">
+        {puzzle.answer}
+      </h2>
 
-      <dl className="mt-5 grid gap-3 text-base">
+      <dl className="mt-5 grid gap-x-6 gap-y-3 text-base sm:grid-cols-3">
+        <div>
+          <dt className="font-black text-slate-700">Category</dt>
+          <dd>{categoryName}</dd>
+        </div>
         <div>
           <dt className="font-black text-slate-700">Difficulty</dt>
           <dd>{difficultyLabels[puzzle.difficulty]}</dd>
         </div>
-        {(!revealCategoryOnlyAfterAnswer || isAnswerVisible) && (
+        {puzzle.details && (
           <div>
-            <dt className="font-black text-slate-700">Category</dt>
-            <dd>{categoryName}</dd>
+            <dt className="font-black text-slate-700">Details</dt>
+            <dd>{puzzle.details}</dd>
           </div>
         )}
       </dl>
 
-      {puzzle.hint && (
-        <p className="mt-5 rounded-lg bg-white/70 p-3 text-base leading-7">
-          <span className="font-black">Hint:</span> {puzzle.hint}
-        </p>
-      )}
-
       {puzzle.explanation && (
-        <p className="mt-3 text-base leading-7 text-slate-700">
+        <p className="mt-5 text-base leading-7 text-slate-700">
           {puzzle.explanation}
         </p>
       )}

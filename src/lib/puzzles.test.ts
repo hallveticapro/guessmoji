@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { categories } from "@/data/categories";
 import { puzzles } from "@/data/puzzles";
 import {
   getCategoryBySlug,
@@ -9,6 +10,30 @@ import {
 } from "@/lib/puzzles";
 
 describe("puzzle utilities", () => {
+  it("includes the expanded category catalog", () => {
+    expect(categories.length).toBeGreaterThanOrEqual(60);
+  });
+
+  it("keeps every playable category at ten or more puzzles", () => {
+    const playableCategories = categories.filter(
+      (category) => category.id !== "random-mix",
+    );
+
+    expect(
+      playableCategories.every(
+        (category) => getPuzzlesByCategoryId(category.id).length >= 10,
+      ),
+    ).toBe(true);
+  });
+
+  it("includes hint, details, and fun fact fields for reveal content", () => {
+    expect(
+      puzzles.every(
+        (puzzle) => puzzle.hint && puzzle.details && puzzle.funFact,
+      ),
+    ).toBe(true);
+  });
+
   it("looks up a category by slug", () => {
     expect(getCategoryBySlug("pixar")?.name).toBe("Pixar");
   });
@@ -38,7 +63,7 @@ describe("puzzle utilities", () => {
   });
 
   it("caps random mix at the available unique puzzle count", () => {
-    expect(getRandomMix(500)).toHaveLength(puzzles.length);
+    expect(getRandomMix(puzzles.length + 100)).toHaveLength(puzzles.length);
   });
 
   it("shuffles without losing or adding puzzles", () => {

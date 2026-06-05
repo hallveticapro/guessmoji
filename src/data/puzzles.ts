@@ -1,6 +1,8 @@
 import type { Puzzle } from "@/types/puzzle";
+import { categories } from "@/data/categories";
+import { expandedPuzzles } from "@/data/expandedPacks";
 
-export const puzzles = [
+const corePuzzles = [
   { id: "lion-king", answer: "The Lion King", emojis: "🦁👑🌅🐗🐦", categoryId: "disney-movies", difficulty: "easy", hint: "A young animal prince learns to take his place.", explanation: "Lion plus crown points to The Lion King.", tags: ["disney", "animals", "classic"] },
   { id: "frozen", answer: "Frozen", emojis: "❄️👭⛄🏰🎶", categoryId: "disney-movies", difficulty: "easy", hint: "Two sisters, ice magic, and a cheerful snow friend.", explanation: "Snow, sisters, and a snowman all point to Frozen.", tags: ["disney", "winter", "music"] },
   { id: "moana-movie", answer: "Moana", emojis: "🌊🚣‍♀️🐓🌺🪝", categoryId: "disney-movies", difficulty: "easy", hint: "An ocean adventure with a brave wayfinder.", explanation: "Ocean, canoe, rooster, and hook point to Moana.", tags: ["disney", "ocean", "adventure"] },
@@ -49,7 +51,7 @@ export const puzzles = [
 
   { id: "luke-skywalker", answer: "Luke Skywalker", emojis: "🌌⚔️👨‍🌾⭐🚀", categoryId: "star-wars", difficulty: "medium", hint: "A farm boy becomes a space hero.", explanation: "Galaxy, glowing sword, farm, star, and rocket point to Luke Skywalker.", tags: ["star-wars", "hero"] },
   { id: "darth-vader", answer: "Darth Vader", emojis: "🌌🖤😷⚔️👨‍👦", categoryId: "star-wars", difficulty: "easy", hint: "A famous dark-suited character with a deep breathing sound.", explanation: "Dark mask and space sword point to Darth Vader.", tags: ["star-wars", "villain"] },
-  { id: "yoda", answer: "Yoda", emojis: "👽🧘‍♂️⚔️🌿📚", categoryId: "star-wars", difficulty: "easy", hint: "A tiny wise teacher with unusual sentence order.", explanation: "Small alien teacher and glowing sword point to Yoda.", tags: ["star-wars", "teacher"] },
+  { id: "yoda", answer: "Yoda", emojis: "👽🧘‍♂️⚔️🌿📚", categoryId: "star-wars", difficulty: "easy", hint: "A tiny wise mentor with unusual sentence order.", explanation: "Small alien mentor and glowing sword point to Yoda.", tags: ["star-wars", "mentor"] },
   { id: "princess-leia", answer: "Princess Leia", emojis: "👸🌌🤍📡🛸", categoryId: "star-wars", difficulty: "medium", hint: "A brave princess and leader in space.", explanation: "Princess, galaxy, message, and ship point to Princess Leia.", tags: ["star-wars", "hero"] },
   { id: "mandalorian", answer: "The Mandalorian", emojis: "🪖🌌🚀🤠🛡️", categoryId: "star-wars", difficulty: "medium", hint: "A helmeted space traveler protects a special child.", explanation: "Helmet, galaxy, rocket, and armor point to The Mandalorian.", tags: ["star-wars", "space"] },
   { id: "grogu", answer: "Grogu", emojis: "👶👽🥣🌌💚", categoryId: "star-wars", difficulty: "easy", hint: "A small green child with big ears.", explanation: "Baby alien, bowl, galaxy, and green color point to Grogu.", tags: ["star-wars", "character"] },
@@ -88,7 +90,7 @@ export const puzzles = [
   { id: "peppa-pig", answer: "Peppa Pig", emojis: "🐷🌧️👢👨‍👩‍👧‍👦🐽", categoryId: "kid-tv-shows", difficulty: "easy", hint: "A pig family loves muddy puddles.", explanation: "Pig, rain, boots, family, and snout point to Peppa Pig.", tags: ["tv", "preschool"] },
   { id: "phineas-and-ferb", answer: "Phineas and Ferb", emojis: "👦👦🔧🏖️🦆", categoryId: "kid-tv-shows", difficulty: "medium", hint: "Two brothers build wild projects during summer.", explanation: "Two boys, tools, summer, and a secret-agent pet point to Phineas and Ferb.", tags: ["tv", "inventions"] },
   { id: "avatar-last-airbender", answer: "Avatar: The Last Airbender", emojis: "💨💧🔥🪨🧑‍🦲", categoryId: "kid-tv-shows", difficulty: "medium", hint: "A young hero learns to master four elements.", explanation: "Air, water, fire, earth, and a bald young hero point to Avatar.", tags: ["tv", "adventure"] },
-  { id: "magic-school-bus", answer: "The Magic School Bus", emojis: "🚌🔬🌋🪐👩‍🏫", categoryId: "kid-tv-shows", difficulty: "easy", hint: "A teacher takes students on impossible science field trips.", explanation: "Bus, science, volcano, planet, and teacher point to The Magic School Bus.", tags: ["tv", "science"] },
+  { id: "magic-school-bus", answer: "The Magic School Bus", emojis: "🚌🔬🌋🪐👩‍🏫", categoryId: "kid-tv-shows", difficulty: "easy", hint: "A science bus takes impossible field trips.", explanation: "Bus, science, volcano, and planet point to The Magic School Bus.", tags: ["tv", "science"] },
   { id: "teen-titans-go", answer: "Teen Titans Go!", emojis: "🦸‍♂️🦸‍♀️🏢🍕😂", categoryId: "kid-tv-shows", difficulty: "medium", hint: "A funny team of young superheroes.", explanation: "Young heroes, tower, pizza, and comedy point to Teen Titans Go!", tags: ["tv", "superheroes"] },
 
   { id: "snow-white", answer: "Snow White and the Seven Dwarfs", emojis: "🍎👸❄️⛏️7️⃣", categoryId: "animated-classics", difficulty: "easy", hint: "A princess, an apple, and seven tiny friends.", explanation: "Apple, princess, snow clue, pickaxe, and seven point to Snow White.", tags: ["animated", "classic"] },
@@ -110,3 +112,19 @@ export const puzzles = [
   { id: "lorax", answer: "The Lorax", emojis: "🌳🧡👨‍🦰🧔🌱", categoryId: "animated-classics", difficulty: "medium", hint: "A small orange character speaks for the trees.", explanation: "Trees, orange color, mustache, and sprout point to The Lorax.", tags: ["animated", "books", "nature"] },
   { id: "ice-age", answer: "Ice Age", emojis: "🧊🦣🦥🐅🥜", categoryId: "animated-classics", difficulty: "easy", hint: "Prehistoric animal friends travel through a frozen world.", explanation: "Ice, mammoth, sloth, saber-toothed cat, and acorn point to Ice Age.", tags: ["animated", "animals"] },
 ] satisfies Puzzle[];
+
+const categoryNamesById = new Map(categories.map((category) => [category.id, category.name]));
+const allPuzzles: Puzzle[] = [...corePuzzles, ...expandedPuzzles];
+
+export const puzzles = allPuzzles.map(
+  (puzzle) =>
+    ({
+      ...puzzle,
+      details:
+        puzzle.details ??
+        `Pack: ${categoryNamesById.get(puzzle.categoryId) ?? "Guessmoji"} | Difficulty: ${puzzle.difficulty}`,
+      funFact:
+        puzzle.funFact ??
+        `${puzzle.answer} appears in the ${categoryNamesById.get(puzzle.categoryId) ?? "Guessmoji"} pack because its emoji clues are quick to recognize.`,
+    }) satisfies Puzzle,
+);

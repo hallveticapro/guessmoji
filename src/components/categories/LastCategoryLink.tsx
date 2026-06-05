@@ -39,7 +39,7 @@ export function LastCategoryLink({ categories }: LastCategoryLinkProps) {
           id: savedSlug,
           name: savedName,
           slug: savedSlug,
-          description: "Continue the last classroom game.",
+          description: "Continue the last game.",
         } satisfies Category;
       }
     } catch {

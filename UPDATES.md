@@ -1,5 +1,48 @@
 # UPDATES.md
 
+## 2026-06-05 10:20 - Expand Catalog And Simplify Play Flow
+
+### Changed
+
+- Added 50 new themed categories and 500 generated puzzle cards.
+- Added puzzle reveal details and ensured every puzzle has hint, details, and fun fact content.
+- Reworked the play screen around one large emoji card, pre-reveal Hint/Reveal buttons, post-reveal Next/Finish, and category completion actions.
+- Moved timer and secondary game controls into a settings dialog behind a gear button.
+- Added a site information modal with live site, repository, social, and support links.
+- Removed classroom-only wording from visible app copy.
+- Reorganized README with a Table of Contents, section dividers, expanded status, category list, and neutral deployment placeholders.
+- Updated TASKS and AGENTS notes for the expanded catalog, general-purpose site framing, and current game-flow conventions.
+
+### Why
+
+- The app needed a broader content catalog, clearer group-play framing, a better hint/reveal flow, and more organized public documentation.
+
+### Files Touched
+
+- `README.md`
+- `TASKS.md`
+- `AGENTS.md`
+- `UPDATES.md`
+- `src/app/categories/page.tsx`
+- `src/app/layout.tsx`
+- `src/app/page.tsx`
+- `src/app/play/[categorySlug]/page.tsx`
+- `src/components/categories/LastCategoryLink.tsx`
+- `src/components/game/AnswerReveal.tsx`
+- `src/components/game/GameBoard.tsx`
+- `src/components/game/GameControls.tsx`
+- `src/components/layout/AppShell.tsx`
+- `src/components/layout/InfoModal.tsx`
+- `src/data/categories.ts`
+- `src/data/expandedPacks.ts`
+- `src/data/puzzles.ts`
+- `src/lib/puzzles.test.ts`
+- `src/types/puzzle.ts`
+
+### Commit
+
+- `pending`
+
 ## 2026-06-04 21:20 - Scaffold Next.js App
 
 ### Changed

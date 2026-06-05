@@ -41,13 +41,13 @@ export default function Home() {
 
         <div className="relative mx-auto flex min-h-[58svh] w-full max-w-5xl flex-col items-center justify-center py-10 text-center">
           <p className="text-sm font-black uppercase tracking-normal text-sky-800">
-            Classroom emoji guessing game
+            Emoji guessing game
           </p>
           <h1 className="mt-4 text-6xl font-black tracking-normal text-slate-950 sm:text-7xl lg:text-8xl">
             Guessmoji
           </h1>
           <p className="mt-6 max-w-3xl text-xl font-medium leading-8 text-slate-800 sm:text-2xl sm:leading-10">
-            Turn movie titles, characters, shows, and classroom topics into a fast,
+            Turn movie titles, characters, shows, and everyday topics into a fast,
             funny emoji guessing game.
           </p>
           <div className="mt-9 flex w-full max-w-xl flex-col gap-3 sm:flex-row sm:justify-center">
@@ -71,7 +71,7 @@ export default function Home() {
         <div className="mx-auto grid w-full max-w-7xl gap-5 text-center md:grid-cols-3">
           {[
             ["1", "Show the emoji clue"],
-            ["2", "Students make their guesses"],
+            ["2", "Players make their guesses"],
             ["3", "Reveal the answer and keep playing"],
           ].map(([step, label]) => (
             <div key={step} className="border-t-4 border-sky-500 px-4 py-5">

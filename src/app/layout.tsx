@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     default: "Guessmoji",
     template: "%s | Guessmoji",
   },
-  description: "A classroom emoji Pictionary game with themed guessing categories.",
+  description: "An emoji Pictionary game with themed guessing categories.",
 };
 
 export default function RootLayout({

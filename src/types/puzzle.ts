@@ -7,6 +7,7 @@ export type Puzzle = {
   categoryId: string;
   difficulty: PuzzleDifficulty;
   hint?: string;
+  details?: string;
   explanation?: string;
   funFact?: string;
   tags?: string[];

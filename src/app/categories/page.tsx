@@ -14,7 +14,7 @@ const difficultyLabels: Record<PuzzleDifficulty, string> = {
 
 export const metadata: Metadata = {
   title: "Categories",
-  description: "Choose a Guessmoji category for a classroom emoji guessing game.",
+  description: "Choose a Guessmoji category for an emoji guessing game.",
 };
 
 export default function CategoriesPage() {
@@ -28,10 +28,10 @@ export default function CategoriesPage() {
             Choose a category
           </p>
           <h1 className="mt-3 text-4xl font-black tracking-normal text-slate-950 sm:text-5xl">
-            Emoji puzzles ready for the projector
+            Emoji puzzles ready to play
           </h1>
           <p className="mt-5 text-lg leading-8 text-slate-700">
-            Pick a theme, start the game, and reveal answers only when the class is
+            Pick a theme, start the game, and reveal answers only when everyone is
             ready.
           </p>
         </div>
@@ -69,9 +69,6 @@ export default function CategoriesPage() {
                 </p>
 
                 <div className="mt-5 flex flex-wrap gap-2">
-                  <span className="rounded-full bg-slate-100 px-3 py-1 text-sm font-bold text-slate-700">
-                    Grades {category.recommendedGradeBand}
-                  </span>
                   <span className="rounded-full bg-sky-100 px-3 py-1 text-sm font-bold text-sky-800">
                     {difficultyLabel}
                   </span>

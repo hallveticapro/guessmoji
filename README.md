@@ -1,25 +1,62 @@
 # Guessmoji
 
-Guessmoji is a classroom-friendly emoji Pictionary game for teachers. A teacher chooses a themed category, projects a large emoji clue, lets students guess, then reveals the answer.
+Guessmoji is a fast emoji Pictionary game. Pick a themed category, show a large emoji clue, let players guess, then reveal the answer, hint, details, and fun fact.
 
-Suggested classroom flow:
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Current Status](#current-status)
+- [Category Catalog](#category-catalog)
+- [Puzzle Data](#puzzle-data)
+- [Local Development](#local-development)
+- [Quality Checks](#quality-checks)
+- [Docker](#docker)
+- [Environment Variables](#environment-variables)
+- [Unraid Deployment](#unraid-deployment)
+- [Updating](#updating)
+- [Known Limitations](#known-limitations)
+
+---
+
+## Overview
+
+Guessmoji is built for quick group play on a shared screen. The app uses static puzzle data, so the MVP runs without login, accounts, multiplayer, Redis, Postgres, or any database.
+
+Basic flow:
 
 1. Pick a category.
-2. Show the emoji clue on a projector or smartboard.
-3. Let students guess out loud, on paper, or in teams.
-4. Reveal the answer and move to the next puzzle.
+2. Show the emoji clue.
+3. Use the Hint button if players need a nudge.
+4. Reveal the answer.
+5. Move to the next card until the category is complete.
+
+---
 
 ## Current Status
 
-This repository is at the MVP verification checkpoint. Guessmoji is a Dockerized Next.js, React, TypeScript, and Tailwind CSS app with static seed puzzle data, no database, and a projector-friendly classroom game flow.
+The MVP is implemented as a Dockerized Next.js, React, TypeScript, and Tailwind CSS app.
 
-Local MVP verification has passed with lint, typecheck, Vitest utility tests, production build, Docker image build, Docker Compose startup, `curl`, and an in-browser smoke test against the Docker container.
+Implemented:
 
-The app display name is `Guessmoji`. The Docker image is published through GitHub Container Registry; replace `<owner>` in the examples below with the GitHub user or organization that owns your package.
+- Home page and category browser
+- Play screen with large emoji clues
+- Hint, reveal, next, previous, shuffle, restart, fullscreen, and timer controls
+- Completion screen with play-again and return-to-categories actions
+- Static seed data with themed categories
+- Random Mix mode
+- Local browser preferences for last category, shuffle preference, and timer seconds
+- Utility tests for puzzle/category behavior
+- Dockerfile and Docker Compose setup
+- GitHub Actions workflow for GHCR image publishing
+- Unraid-friendly deployment notes
 
-## Current Categories
+---
 
-The category catalog includes:
+## Category Catalog
+
+Current categories:
 
 - Disney Movies
 - Disney Princesses
@@ -30,17 +67,81 @@ The category catalog includes:
 - Video Game Movies
 - Kid TV Shows
 - Animated Classics
+- Animals
+- Ocean Animals
+- Dinosaurs
+- Birds
+- Insects and Bugs
+- Fruit
+- Vegetables
+- Desserts
+- Snacks
+- Breakfast
+- Sports
+- Outdoor Games
+- Board Games
+- Card and Party Games
+- Video Games
+- Arcade Classics
+- Pokemon
+- Minecraft
+- Science
+- Space
+- Weather
+- Math
+- Books and Stories
+- Fairy Tales
+- Myths and Legends
+- World Landmarks
+- U.S. Landmarks
+- World Geography
+- Vehicles
+- Construction Machines
+- Jobs
+- Musical Instruments
+- Music Genres
+- Art Supplies
+- School Supplies
+- Camping
+- National Parks
+- Holidays
+- Halloween
+- Winter Holidays
+- Summer Fun
+- Beach Day
+- Amusement Park
+- Around the House
+- Kitchen Tools
+- Literal Phrases
+- Idioms
+- Emotions
+- Robots
+- Plants
 - Random Mix
 
-Additional classroom-safe packs are planned for holidays, animals, books, science, and math after the core game is stable.
+---
 
-## Current Puzzle Data
+## Puzzle Data
 
-The MVP seed data currently includes 100 classroom-appropriate puzzles across the playable themed categories. Random Mix will derive a shuffled set from these puzzles rather than storing duplicate Random Mix entries.
+The seed data currently includes 600 playable puzzles. Each non-random category includes at least 10 cards. Random Mix derives a shuffled set from the wider puzzle pool instead of storing duplicate entries.
+
+Each puzzle can include:
+
+- Answer
+- Emoji clue
+- Category
+- Difficulty
+- Hint
+- Details
+- Explanation
+- Fun fact
+- Tags
+
+---
 
 ## Local Development
 
-Run the local development server:
+Install dependencies and start the development server:
 
 ```bash
 npm install
@@ -53,9 +154,11 @@ Then open:
 http://localhost:3000
 ```
 
+---
+
 ## Quality Checks
 
-Use:
+Run the standard checks:
 
 ```bash
 npm run lint
@@ -64,11 +167,11 @@ npm run test
 npm run build
 ```
 
-Tests currently cover puzzle/category utilities.
+---
 
 ## Docker
 
-Run the compose stack with the published image:
+Run the compose stack with a published GHCR image:
 
 ```bash
 docker compose up -d
@@ -81,22 +184,17 @@ docker build -t ghcr.io/<owner>/guessmoji:latest .
 docker compose up -d
 ```
 
-The production image format is:
+Published image format:
 
 ```txt
 ghcr.io/<owner>/guessmoji:latest
 ```
 
-To update the container after a new image is published:
-
-```bash
-docker compose pull
-docker compose up -d
-```
+---
 
 ## Environment Variables
 
-The committed starter environment files contain safe local defaults only:
+The starter environment files use safe public defaults:
 
 ```env
 APP_PORT=3000
@@ -106,13 +204,13 @@ NEXT_PUBLIC_APP_URL="http://localhost:3000"
 
 No secrets are required for the MVP.
 
+---
+
 ## Unraid Deployment
 
-Guessmoji can run on Unraid as a single Docker Compose stack. No database, Redis, login service, or external storage is required for the MVP.
+Guessmoji can run on Unraid as a single Docker Compose stack. No database, cache, login service, or external storage is required.
 
-### Docker Compose Stack
-
-Use this stack in Unraid, Arcane, or another compose manager:
+Example stack:
 
 ```yaml
 services:
@@ -125,29 +223,35 @@ services:
     environment:
       NODE_ENV: production
       NEXT_PUBLIC_APP_NAME: "Guessmoji"
-      NEXT_PUBLIC_APP_URL: "http://localhost:3000"
+      NEXT_PUBLIC_APP_URL: "https://guessmoji.example.com"
 ```
 
-### Configuration
+Configuration notes:
 
 - Container port: `3000`
-- Host port: choose any open Unraid port, commonly `3000`
-- `NEXT_PUBLIC_APP_URL`: set this to the URL teachers will use, such as `https://guessmoji.example.com`
-- Reverse proxy: NGINX Proxy Manager, SWAG, Traefik, or another Unraid-friendly proxy can forward to container port `3000`
-- Arcane: can run the compose stack directly
+- Host port: choose any open Unraid port
+- `NEXT_PUBLIC_APP_URL`: set this to the public URL for your deployment
+- Reverse proxy: NGINX Proxy Manager, SWAG, Traefik, or another proxy can forward to container port `3000`
+- Compose managers such as Arcane can run the stack directly
 
-### Updating
+---
+
+## Updating
+
+Pull the latest image and restart:
 
 ```bash
 docker compose pull
 docker compose up -d
 ```
 
-If the GHCR package is not visible yet, confirm that the GitHub Actions workflow has published successfully and that the package visibility is public.
+If a GHCR package is unavailable, confirm that the publishing workflow succeeded and that package visibility is public.
+
+---
 
 ## Known Limitations
 
-- The home page, category selection page, core presentation game mode, keyboard shortcuts, fullscreen control, optional timer, and basic local preferences are implemented.
-- Docker, Docker Compose, and Unraid documentation are implemented and locally verified.
-- If the GHCR package is not visible publicly, check the workflow result and package visibility settings in GitHub.
-- `npm` currently reports two moderate dependency audit findings from the scaffolded dependency tree; no runtime secrets are required or committed for the MVP.
+- Puzzle packs are static seed data in the MVP.
+- Custom pack creation, import/export, saved games, accounts, and multiplayer are not implemented.
+- Random Mix is generated at runtime from existing puzzle data.
+- `npm audit` currently reports two moderate dependency findings from the scaffolded dependency tree.
