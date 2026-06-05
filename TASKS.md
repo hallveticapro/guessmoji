@@ -1026,6 +1026,8 @@ git commit -m "feat: build home page"
 
 ## Task 10 — Build Category Selection Page
 
+**Status:** Complete.
+
 Create:
 
 ```txt

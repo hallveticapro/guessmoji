@@ -193,6 +193,29 @@
 
 ### Commit
 
+- `e9c4222dcb690d2fd6df1b7913742dbb8acdb9db`
+
+## 2026-06-04 21:41 - Build Category Selection Page
+
+### Changed
+
+- Added the `/categories` route with responsive category cards.
+- Displayed category name, description, icon, puzzle count, grade band, difficulty label, and start link.
+- Included Random Mix as a 20-puzzle session drawn from the wider puzzle pool.
+- Marked the category selection task complete in `TASKS.md`.
+
+### Why
+
+- Teachers need a clear category picker before starting classroom presentation mode.
+
+### Files Touched
+
+- `src/app/categories/page.tsx`
+- `UPDATES.md`
+- `TASKS.md`
+
+### Commit
+
 - pending
 
 ## 2026-06-04 21:17 - Initialize Project Documentation
