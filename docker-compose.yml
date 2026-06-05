@@ -1,6 +1,6 @@
 services:
   guessmoji:
-    image: ghcr.io/adh1310/guessmoji:latest
+    image: ghcr.io/hallveticapro/guessmoji:latest
     container_name: guessmoji
     restart: unless-stopped
     ports:

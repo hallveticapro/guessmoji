@@ -15,16 +15,7 @@ This repository is at the MVP verification checkpoint. Guessmoji is a Dockerized
 
 Local MVP verification has passed with lint, typecheck, Vitest utility tests, production build, Docker image build, Docker Compose startup, `curl`, and an in-browser smoke test against the Docker container.
 
-Public repository created for this workspace:
-
-- [hallveticapro/guessmoji](https://github.com/hallveticapro/guessmoji)
-
-Project target from `TASKS.md`:
-
-- App display name: `Guessmoji`
-- GHCR image target: `ghcr.io/adh1310/guessmoji`
-
-Note: during repository creation on 2026-06-04, GitHub returned a 404 for the `adh1310` owner. The repo was created under the authenticated account, `hallveticapro`, while the GHCR workflow still targets the required `ghcr.io/adh1310/guessmoji` image. The workflow builds on this repository but only publishes when running under the canonical `adh1310` owner.
+The app display name is `Guessmoji`. The Docker image is published through GitHub Container Registry; replace `<owner>` in the examples below with the GitHub user or organization that owns your package.
 
 ## Current Categories
 
@@ -86,14 +77,14 @@ docker compose up -d
 Build locally instead of pulling GHCR:
 
 ```bash
-docker build -t ghcr.io/adh1310/guessmoji:latest .
+docker build -t ghcr.io/<owner>/guessmoji:latest .
 docker compose up -d
 ```
 
-The production image target is:
+The production image format is:
 
 ```txt
-ghcr.io/adh1310/guessmoji:latest
+ghcr.io/<owner>/guessmoji:latest
 ```
 
 To update the container after a new image is published:
@@ -126,7 +117,7 @@ Use this stack in Unraid, Arcane, or another compose manager:
 ```yaml
 services:
   guessmoji:
-    image: ghcr.io/adh1310/guessmoji:latest
+    image: ghcr.io/<owner>/guessmoji:latest
     container_name: guessmoji
     restart: unless-stopped
     ports:
@@ -158,5 +149,5 @@ If the GHCR package is not visible yet, confirm that the GitHub Actions workflow
 
 - The home page, category selection page, core presentation game mode, keyboard shortcuts, fullscreen control, optional timer, and basic local preferences are implemented.
 - Docker, Docker Compose, and Unraid documentation are implemented and locally verified.
-- The canonical owner mismatch between `adh1310` and the authenticated GitHub account must be resolved before live GHCR publishing and public package visibility can be verified. The workflow intentionally skips the GHCR push outside the `adh1310` owner after a run failed with `owner not found`.
+- If the GHCR package is not visible publicly, check the workflow result and package visibility settings in GitHub.
 - `npm` currently reports two moderate dependency audit findings from the scaffolded dependency tree; no runtime secrets are required or committed for the MVP.

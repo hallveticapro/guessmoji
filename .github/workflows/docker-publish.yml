@@ -13,7 +13,7 @@ permissions:
   packages: write
 
 env:
-  IMAGE_NAME: ghcr.io/adh1310/guessmoji
+  IMAGE_NAME: ghcr.io/hallveticapro/guessmoji
 
 jobs:
   build-and-push:
@@ -27,7 +27,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Log in to GHCR
-        if: github.repository_owner == 'adh1310'
+        if: github.repository_owner == 'hallveticapro'
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -45,15 +45,15 @@ jobs:
             type=ref,event=tag
 
       - name: Note skipped publish for non-canonical owner
-        if: github.repository_owner != 'adh1310'
+        if: github.repository_owner != 'hallveticapro'
         run: |
-          echo "Skipping GHCR push because this repository owner is '${{ github.repository_owner }}', not 'adh1310'." >> "$GITHUB_STEP_SUMMARY"
+          echo "Skipping GHCR push because this repository owner is '${{ github.repository_owner }}', not 'hallveticapro'." >> "$GITHUB_STEP_SUMMARY"
           echo "The image still builds with the required target name: ${{ env.IMAGE_NAME }}." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Build and maybe push
         uses: docker/build-push-action@v6
         with:
           context: .
-          push: ${{ github.repository_owner == 'adh1310' }}
+          push: ${{ github.repository_owner == 'hallveticapro' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

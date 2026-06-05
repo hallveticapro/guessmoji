@@ -599,6 +599,32 @@
 
 - `5638e78e5d3e55d8dcbce1604ce5d2288f7e59df`
 
+## 2026-06-05 00:00 - Align Canonical Repository Owner
+
+### Changed
+
+- Updated current repository and GHCR references to use `hallveticapro/guessmoji` and `ghcr.io/hallveticapro/guessmoji`.
+- Updated the GitHub Actions workflow and Docker Compose image target for the clarified owner.
+- Made the public README neutral and generic by removing owner-specific repository URLs, usernames, and deployment values.
+- Updated AGENTS and TASKS with the clarified owner and README neutrality convention.
+
+### Why
+
+- The user clarified that the repository should be `hallveticapro/guessmoji` and that the README should not expose personal owner details.
+
+### Files Touched
+
+- `.github/workflows/docker-publish.yml`
+- `docker-compose.yml`
+- `README.md`
+- `AGENTS.md`
+- `TASKS.md`
+- `UPDATES.md`
+
+### Commit
+
+- pending
+
 ## 2026-06-04 21:17 - Initialize Project Documentation
 
 ### Changed

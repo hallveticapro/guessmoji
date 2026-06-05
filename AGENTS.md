@@ -28,8 +28,10 @@ The MVP must not require login, accounts, multiplayer, Redis, Postgres, or any d
 ## Repository
 
 - Public repo created in this session: `https://github.com/hallveticapro/guessmoji`
-- Required image target from `TASKS.md`: `ghcr.io/adh1310/guessmoji`
-- Important note: `gh repo create adh1310/guessmoji` failed because GitHub returned 404 for owner `adh1310`. The GitHub Actions workflow still targets the required `ghcr.io/adh1310/guessmoji` image, but skips the push unless `github.repository_owner == 'adh1310'` so this `hallveticapro` repo can keep CI green while still building the image.
+- Required image target from `TASKS.md`: `ghcr.io/hallveticapro/guessmoji`
+- User clarified on 2026-06-05 that the canonical repository should be `hallveticapro/guessmoji`.
+- The public README must stay neutral/generic and should not mention personal usernames, profile URLs, or owner-specific deployment values.
+- The GitHub Actions workflow publishes to `ghcr.io/hallveticapro/guessmoji` when running in the canonical repository; forks/non-canonical owners build without publishing.
 
 ## Folder Structure
 
@@ -110,7 +112,7 @@ npm run build
 ### Docker
 
 ```bash
-docker build -t ghcr.io/adh1310/guessmoji:latest .
+docker build -t ghcr.io/hallveticapro/guessmoji:latest .
 docker compose up -d
 docker compose ps
 ```
@@ -200,7 +202,5 @@ Because a commit cannot include its own final hash in file contents, use `pendin
 
 ## Known Limitations
 
-- The required `adh1310` GitHub/GHCR owner was not resolvable from this environment, so live GHCR publishing/public package visibility still needs owner confirmation.
-- The public repository currently exists under `hallveticapro/guessmoji`, not `adh1310/guessmoji`.
-- A pushed workflow run failed with `failed to push ghcr.io/adh1310/guessmoji:latest: denied: not_found: owner not found`; the workflow is now guarded to build but skip publish outside the `adh1310` owner.
+- GHCR package publication and public visibility still need to be confirmed after the owner alignment workflow run completes.
 - `npm` currently reports two moderate dependency audit findings from the scaffolded dependency tree.

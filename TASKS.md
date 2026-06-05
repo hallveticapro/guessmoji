@@ -58,7 +58,7 @@ Repo naming rules:
 The production Docker image should publish to:
 
 ```txt
-ghcr.io/adh1310/guessmoji
+ghcr.io/hallveticapro/guessmoji
 ```
 
 ---
@@ -609,9 +609,9 @@ Do not build until custom packs exist.
 
 ## Task 1 — Create Public GitHub Repository
 
-**Status:** Complete, with owner note.
+**Status:** Complete.
 
-**Implementation note:** On 2026-06-04 at 21:17 EDT, `gh repo create adh1310/guessmoji` failed because GitHub returned `HTTP 404: Not Found` for owner `adh1310`. The public repository was created under the authenticated GitHub account instead: `https://github.com/hallveticapro/guessmoji`. Confirm whether the final GHCR target should remain `ghcr.io/adh1310/guessmoji` or move to the authenticated owner before final publishing verification.
+**Implementation note:** The user clarified on 2026-06-05 that the canonical public repository should be `hallveticapro/guessmoji`. The public README should remain neutral and avoid owner-specific personal details.
 
 Create the public GitHub repository:
 
@@ -622,7 +622,7 @@ gh repo create guessmoji --public --description "A classroom emoji Pictionary ga
 If the repo already exists, clone it:
 
 ```bash
-gh repo clone adh1310/guessmoji
+gh repo clone hallveticapro/guessmoji
 ```
 
 Then enter the project directory:
@@ -1318,7 +1318,7 @@ Minimum web-only version:
 ```yaml
 services:
   guessmoji:
-    image: ghcr.io/adh1310/guessmoji:latest
+    image: ghcr.io/hallveticapro/guessmoji:latest
     container_name: guessmoji
     restart: unless-stopped
     ports:
@@ -1402,9 +1402,9 @@ git commit -m "chore: add environment templates"
 
 ## Task 20 — Add GitHub Actions Workflow for GHCR
 
-**Status:** Complete with guarded publish; live publish verification remains pending owner confirmation.
+**Status:** Complete with guarded publish; live publish verification pending after owner alignment.
 
-**Implementation note:** The workflow targets the required `ghcr.io/adh1310/guessmoji` image. A pushed workflow run under `hallveticapro/guessmoji` failed with `failed to push ghcr.io/adh1310/guessmoji:latest: denied: not_found: owner not found`. The workflow now builds on non-canonical owners but skips the GHCR push unless `github.repository_owner == 'adh1310'`.
+**Implementation note:** The workflow targets `ghcr.io/hallveticapro/guessmoji`. It builds on non-canonical owners but skips the GHCR push unless `github.repository_owner == 'hallveticapro'`.
 
 Create:
 
@@ -1419,7 +1419,7 @@ Requirements:
 - Image name:
 
 ```txt
-ghcr.io/adh1310/guessmoji
+ghcr.io/hallveticapro/guessmoji
 ```
 
 Tags:
@@ -1454,7 +1454,7 @@ permissions:
   packages: write
 
 env:
-  IMAGE_NAME: ghcr.io/adh1310/guessmoji
+  IMAGE_NAME: ghcr.io/hallveticapro/guessmoji
 
 jobs:
   build-and-push:
@@ -1468,7 +1468,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Log in to GHCR
-        if: github.repository_owner == 'adh1310'
+        if: github.repository_owner == 'hallveticapro'
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -1486,15 +1486,15 @@ jobs:
             type=ref,event=tag
 
       - name: Note skipped publish for non-canonical owner
-        if: github.repository_owner != 'adh1310'
+        if: github.repository_owner != 'hallveticapro'
         run: |
-          echo "Skipping GHCR push because this repository owner is not adh1310." >> "$GITHUB_STEP_SUMMARY"
+          echo "Skipping GHCR push because this repository owner is not hallveticapro." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Build and maybe push
         uses: docker/build-push-action@v6
         with:
           context: .
-          push: ${{ github.repository_owner == 'adh1310' }}
+          push: ${{ github.repository_owner == 'hallveticapro' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 ```
@@ -1528,7 +1528,7 @@ Use this stack:
 \```yaml
 services:
 guessmoji:
-image: ghcr.io/adh1310/guessmoji:latest
+image: ghcr.io/hallveticapro/guessmoji:latest
 container_name: guessmoji
 restart: unless-stopped
 ports: - "3000:3000"
@@ -1621,9 +1621,9 @@ git commit -m "test: add puzzle utility tests"
 
 ## Task 24 — Final MVP Verification
 
-**Status:** Complete for local MVP verification; live GHCR publish verification remains blocked by the unresolved `adh1310` owner mismatch.
+**Status:** Complete for local MVP verification; live GHCR publish verification pending after owner alignment.
 
-**Implementation note:** On 2026-06-04, lint, typecheck, Vitest tests, production build, Docker image build, Docker Compose startup, `curl`, and an in-browser smoke suite against the Docker container passed. The smoke suite verified home, categories, all category routes, answer reveal/hide, next/previous, shuffle, restart, Random Mix metadata behavior, and fullscreen graceful handling. The GitHub Actions workflow exists and builds the image, but live publishing to `ghcr.io/adh1310/guessmoji` cannot be fully verified until the intended GitHub/GHCR owner is confirmed.
+**Implementation note:** On 2026-06-04, lint, typecheck, Vitest tests, production build, Docker image build, Docker Compose startup, `curl`, and an in-browser smoke suite against the Docker container passed. The smoke suite verified home, categories, all category routes, answer reveal/hide, next/previous, shuffle, restart, Random Mix metadata behavior, and fullscreen graceful handling. The GitHub Actions workflow exists and builds the image; live publishing to `ghcr.io/hallveticapro/guessmoji` still needs verification after the owner-alignment commit is pushed.
 
 Before considering MVP complete, run:
 
@@ -1856,13 +1856,13 @@ Avoid:
 
 MVP is complete when:
 
-- Public GitHub repo exists. Current repo: `hallveticapro/guessmoji`; requested canonical owner `adh1310` was not resolvable from this environment.
+- Public GitHub repo exists at `hallveticapro/guessmoji`.
 - App name displays as **Guessmoji**.
 - App runs locally with `npm run dev`.
 - App builds with `npm run build`.
 - App runs in Docker.
 - Docker Compose stack works.
-- GHCR image publishes publicly. Workflow is present for `ghcr.io/adh1310/guessmoji`, but live publish verification is pending owner confirmation.
+- GHCR image publishes publicly at `ghcr.io/hallveticapro/guessmoji`.
 - README includes Unraid deployment instructions.
 - AGENTS.md exists and is accurate.
 - UPDATES.md has been maintained.
