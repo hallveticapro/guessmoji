@@ -1560,6 +1560,10 @@ git commit -m "docs: add unraid deployment instructions"
 
 ## Task 22 — Add Lint, Typecheck, Build Scripts
 
+**Status:** Complete.
+
+**Implementation note:** Next.js 16 scaffold uses `eslint` directly for linting, so `npm run lint` remains `eslint` instead of `next lint`.
+
 Ensure `package.json` has appropriate scripts:
 
 ```json

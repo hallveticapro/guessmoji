@@ -100,6 +100,8 @@ npm run typecheck
 
 ### Tests
 
+Available after the Vitest setup task:
+
 ```bash
 npm run test
 ```

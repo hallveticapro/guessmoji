@@ -67,11 +67,10 @@ After the Next.js scaffold is added, use:
 ```bash
 npm run lint
 npm run typecheck
-npm run test
 npm run build
 ```
 
-The scaffold currently provides `lint` and `build`. Typecheck and test scripts will be added during the quality and test tasks.
+Test scripts will be added during the utility test task.
 
 ## Docker
 

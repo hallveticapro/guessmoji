@@ -495,6 +495,30 @@
 
 ### Commit
 
+- `d57525c81a4ae4a62d71bac53cb8efbc6f25af02`
+
+## 2026-06-04 22:12 - Add Quality Check Scripts
+
+### Changed
+
+- Added `npm run typecheck` as a first-class package script.
+- Updated README and AGENTS command notes for current quality scripts.
+- Marked the quality scripts task complete in `TASKS.md`.
+
+### Why
+
+- The project workflow expects consistent lint, typecheck, and build commands before major commits.
+
+### Files Touched
+
+- `package.json`
+- `README.md`
+- `AGENTS.md`
+- `UPDATES.md`
+- `TASKS.md`
+
+### Commit
+
 - pending
 
 ## 2026-06-04 21:17 - Initialize Project Documentation
