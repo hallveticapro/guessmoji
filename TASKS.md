@@ -1591,6 +1591,8 @@ git commit -m "chore: add quality check scripts"
 
 ## Task 23 — Add Tests
 
+**Status:** Complete.
+
 Set up Vitest for utilities.
 
 Test:

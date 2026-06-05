@@ -519,6 +519,35 @@
 
 ### Commit
 
+- `627e576e4c0d6c8174a95d11cd07188631c94cb1`
+
+## 2026-06-04 22:14 - Add Puzzle Utility Tests
+
+### Changed
+
+- Installed Vitest.
+- Added Vitest configuration for the `@/*` import alias.
+- Added utility tests for category lookup, invalid slug handling, category puzzle filtering, puzzle lookup, Random Mix, and shuffling.
+- Added `npm run test` and updated README/AGENTS command notes.
+- Marked the test task complete in `TASKS.md`.
+
+### Why
+
+- The shared puzzle utilities drive core app behavior and need fast regression coverage.
+
+### Files Touched
+
+- `package.json`
+- `package-lock.json`
+- `vitest.config.ts`
+- `src/lib/puzzles.test.ts`
+- `README.md`
+- `AGENTS.md`
+- `UPDATES.md`
+- `TASKS.md`
+
+### Commit
+
 - pending
 
 ## 2026-06-04 21:17 - Initialize Project Documentation

@@ -67,10 +67,11 @@ After the Next.js scaffold is added, use:
 ```bash
 npm run lint
 npm run typecheck
+npm run test
 npm run build
 ```
 
-Test scripts will be added during the utility test task.
+Tests currently cover puzzle/category utilities.
 
 ## Docker
 
