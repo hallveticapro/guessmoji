@@ -1402,6 +1402,10 @@ git commit -m "chore: add environment templates"
 
 ## Task 20 — Add GitHub Actions Workflow for GHCR
 
+**Status:** Complete, pending live publish verification.
+
+**Implementation note:** The workflow targets the required `ghcr.io/adh1310/guessmoji` image. Because the `adh1310` owner was not resolvable when creating the repository, live GHCR publishing may fail until the intended owner is confirmed or made available.
+
 Create:
 
 ```txt

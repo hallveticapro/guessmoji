@@ -32,7 +32,7 @@ The MVP must not require login, accounts, multiplayer, Redis, Postgres, or any d
 
 - Public repo created in this session: `https://github.com/hallveticapro/guessmoji`
 - Required image target from `TASKS.md`: `ghcr.io/adh1310/guessmoji`
-- Important note: `gh repo create adh1310/guessmoji` failed because GitHub returned 404 for owner `adh1310`. Confirm the intended owner before final GHCR verification.
+- Important note: `gh repo create adh1310/guessmoji` failed because GitHub returned 404 for owner `adh1310`. The GitHub Actions workflow still targets the required `ghcr.io/adh1310/guessmoji` image, so confirm the intended owner before final GHCR verification.
 
 ## Folder Structure
 

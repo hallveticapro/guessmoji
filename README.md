@@ -22,7 +22,7 @@ Project target from `TASKS.md`:
 - App display name: `Guessmoji`
 - GHCR image target: `ghcr.io/adh1310/guessmoji`
 
-Note: during repository creation on 2026-06-04, GitHub returned a 404 for the `adh1310` owner. The repo was created under the authenticated account, `hallveticapro`, so the GHCR owner target needs to be confirmed before the publishing workflow can be considered complete.
+Note: during repository creation on 2026-06-04, GitHub returned a 404 for the `adh1310` owner. The repo was created under the authenticated account, `hallveticapro`, while the GHCR workflow still targets the required `ghcr.io/adh1310/guessmoji` image. Confirm the intended owner before publishing can be verified.
 
 ## Current Categories
 

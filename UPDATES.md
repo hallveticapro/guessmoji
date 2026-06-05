@@ -447,6 +447,31 @@
 
 ### Commit
 
+- `f946b0ce3a6ca86e6a258ea02c57b039b9a580b1`
+
+## 2026-06-04 22:08 - Add GHCR Publishing Workflow
+
+### Changed
+
+- Added a GitHub Actions workflow to build and publish Docker images to GHCR.
+- Configured latest, SHA, and semantic version tag metadata.
+- Kept the image target set to the required `ghcr.io/adh1310/guessmoji` value.
+- Updated README, AGENTS, and TASKS notes about the GHCR owner verification risk.
+
+### Why
+
+- The project needs automated container publishing for Unraid deployment and public image distribution.
+
+### Files Touched
+
+- `.github/workflows/docker-publish.yml`
+- `README.md`
+- `AGENTS.md`
+- `UPDATES.md`
+- `TASKS.md`
+
+### Commit
+
 - pending
 
 ## 2026-06-04 21:17 - Initialize Project Documentation
