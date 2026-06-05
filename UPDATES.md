@@ -216,6 +216,36 @@
 
 ### Commit
 
+- `4f16350fea850eb3db184c93a06665fddf280e7e`
+
+## 2026-06-04 21:44 - Build Classroom Game Mode
+
+### Changed
+
+- Added `/play/[categorySlug]` with graceful missing and empty category states.
+- Added client-side game board state for reveal, hide, next, previous, shuffle, and restart.
+- Added answer reveal, teacher controls, and progress indicator components.
+- Kept Random Mix category metadata hidden until the answer reveal.
+- Marked the classroom game mode task complete in `TASKS.md`.
+
+### Why
+
+- The MVP depends on a projector-friendly play screen where teachers can run the core emoji guessing flow.
+
+### Files Touched
+
+- `src/app/play/[categorySlug]/page.tsx`
+- `src/components/game/GameBoard.tsx`
+- `src/components/game/GameControls.tsx`
+- `src/components/game/AnswerReveal.tsx`
+- `src/components/game/ProgressIndicator.tsx`
+- `README.md`
+- `AGENTS.md`
+- `UPDATES.md`
+- `TASKS.md`
+
+### Commit
+
 - pending
 
 ## 2026-06-04 21:17 - Initialize Project Documentation

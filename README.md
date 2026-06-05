@@ -11,7 +11,7 @@ Suggested classroom flow:
 
 ## Current Status
 
-This repository is in the seed data checkpoint. The MVP is a Dockerized Next.js, React, TypeScript, and Tailwind CSS app with static seed puzzle data and no database.
+This repository is in the core game mode checkpoint. The MVP is a Dockerized Next.js, React, TypeScript, and Tailwind CSS app with static seed puzzle data and no database.
 
 Public repository created for this workspace:
 
@@ -121,6 +121,7 @@ docker compose up -d
 ## Known Limitations
 
 - The web app is scaffolded but still shows the default generated home page.
-- The app has seed puzzle data, but utility functions and UI screens are still in progress.
+- The home page, category selection page, and core presentation game mode are implemented.
+- Keyboard shortcuts, fullscreen, local preferences, Docker, GHCR publishing, and Unraid docs are still in progress.
 - Docker and GHCR publishing are not implemented yet.
 - The canonical owner mismatch between `adh1310` and the authenticated GitHub account must be resolved before GHCR publishing can be verified.

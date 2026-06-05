@@ -71,6 +71,12 @@ src/
   types/
 ```
 
+Current routes:
+
+- `/`
+- `/categories`
+- `/play/[categorySlug]`
+
 ## Commands
 
 ### Development
@@ -148,6 +154,12 @@ Guessmoji should feel like a classroom game show plus a clean teacher tool:
 - Simple navigation
 - Friendly, bright, and not visually chaotic
 - Responsive across desktop, Chromebook, tablet, phone, and smartboard
+
+Game mode conventions:
+
+- Keep answers hidden until teacher action.
+- Hide Random Mix puzzle category metadata until answer reveal.
+- Keep projector controls large, high-contrast, and keyboard accessible.
 
 ## Important Conventions
 
