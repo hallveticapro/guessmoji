@@ -11,7 +11,7 @@ Suggested classroom flow:
 
 ## Current Status
 
-This repository is in the app scaffold checkpoint. The MVP is a Dockerized Next.js, React, TypeScript, and Tailwind CSS app with static seed puzzle data and no database.
+This repository is in the seed data checkpoint. The MVP is a Dockerized Next.js, React, TypeScript, and Tailwind CSS app with static seed puzzle data and no database.
 
 Public repository created for this workspace:
 
@@ -40,6 +40,10 @@ The scaffolded category catalog includes:
 - Random Mix
 
 Additional classroom-safe packs are planned for holidays, animals, books, science, and math after the core game is stable.
+
+## Current Puzzle Data
+
+The MVP seed data currently includes 100 classroom-appropriate puzzles across the playable themed categories. Random Mix will derive a shuffled set from these puzzles rather than storing duplicate Random Mix entries.
 
 ## Local Development
 
@@ -117,6 +121,6 @@ docker compose up -d
 ## Known Limitations
 
 - The web app is scaffolded but still shows the default generated home page.
-- Puzzle seed data has not been added yet.
+- The app has seed puzzle data, but utility functions and UI screens are still in progress.
 - Docker and GHCR publishing are not implemented yet.
 - The canonical owner mismatch between `adh1310` and the authenticated GitHub account must be resolved before GHCR publishing can be verified.

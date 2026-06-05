@@ -92,6 +92,31 @@
 
 ### Commit
 
+- `2e2e2fa69d8c27da75dc9e811fc7159680ddcdab`
+
+## 2026-06-04 21:25 - Add Initial Puzzle Seed Data
+
+### Changed
+
+- Added 100 typed classroom-safe emoji puzzles across the initial playable categories.
+- Kept Random Mix as a derived mode instead of duplicating puzzle entries under `random-mix`.
+- Updated README and AGENTS notes with current puzzle data status.
+- Marked the seed puzzle task complete in `TASKS.md`.
+
+### Why
+
+- The MVP requires at least 100 classroom-appropriate puzzles before the game flow can be meaningfully built and tested.
+
+### Files Touched
+
+- `src/data/puzzles.ts`
+- `README.md`
+- `AGENTS.md`
+- `UPDATES.md`
+- `TASKS.md`
+
+### Commit
+
 - pending
 
 ## 2026-06-04 21:17 - Initialize Project Documentation

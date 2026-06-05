@@ -879,6 +879,10 @@ git commit -m "feat: add seed categories"
 
 ## Task 6 — Add Seed Puzzles
 
+**Status:** Complete.
+
+**Implementation note:** Added 100 puzzles across the nine content categories. Random Mix is intentionally derived from the full puzzle pool by utility functions instead of storing duplicate `random-mix` puzzle rows.
+
 Create:
 
 ```txt

@@ -127,11 +127,14 @@ The MVP data layer should be static TypeScript seed data. Expected types:
 
 - `src/types/puzzle.ts`
 - `src/data/categories.ts`
+- `src/data/puzzles.ts`
 - `PuzzleDifficulty`: `easy`, `medium`, `hard`
 - `Puzzle`: answer, emoji clue, category, difficulty, optional hint, explanation, fun fact, and tags
 - `Category`: id, name, slug, description, icon, theme, and grade band
 
 Random Mix should pull from multiple classroom-safe categories and avoid duplicates.
+
+The current seed set includes 100 puzzles. Keep new default puzzles elementary-classroom safe, broadly recognizable, and free of mature or horror content unless a future opt-in pack is explicitly added.
 
 ## Design Language
 
