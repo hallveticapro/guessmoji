@@ -142,6 +142,34 @@
 
 ### Commit
 
+- `e75bc6799483b8541b63c8dcaec8a3c3f143dc05`
+
+## 2026-06-04 21:34 - Add App Shell And Navigation
+
+### Changed
+
+- Added a reusable app shell with header, footer, title link, and category navigation.
+- Updated site metadata for Guessmoji.
+- Replaced the generated Next.js starter page with a simple Guessmoji entry screen.
+- Removed the components directory placeholder.
+- Marked the app shell task complete in `TASKS.md`.
+
+### Why
+
+- The app needs stable navigation and layout before home, category, and play screens are expanded.
+
+### Files Touched
+
+- `src/components/layout/AppShell.tsx`
+- `src/components/.gitkeep`
+- `src/app/layout.tsx`
+- `src/app/page.tsx`
+- `src/app/globals.css`
+- `UPDATES.md`
+- `TASKS.md`
+
+### Commit
+
 - pending
 
 ## 2026-06-04 21:17 - Initialize Project Documentation

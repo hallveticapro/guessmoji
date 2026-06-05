@@ -967,6 +967,8 @@ git commit -m "feat: add puzzle utility functions"
 
 ## Task 8 — Build App Shell
 
+**Status:** Complete.
+
 Create a polished app shell.
 
 Include:
