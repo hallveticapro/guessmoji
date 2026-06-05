@@ -655,6 +655,10 @@ git push origin main
 
 ## Task 2 — Scaffold Next.js App
 
+**Status:** Complete.
+
+**Implementation note:** The official `create-next-app@latest` generator was run in `/tmp/guessmoji-scaffold`, then generated app files were copied into this repository while preserving the existing project documentation.
+
 Create a Next.js TypeScript app.
 
 Recommended command:

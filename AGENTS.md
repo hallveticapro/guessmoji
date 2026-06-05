@@ -8,14 +8,18 @@ Guessmoji is a classroom emoji Pictionary game. Teachers select a themed categor
 
 ## Current Stack
 
-Current phase: repository and documentation initialized.
+Current phase: Next.js app scaffold initialized.
 
-Planned MVP stack:
+Current MVP stack:
 
 - Next.js App Router
 - React
 - TypeScript
 - Tailwind CSS
+- ESLint
+
+Planned additions:
+
 - Static local seed data
 - Vitest for utility tests
 - Docker
@@ -39,10 +43,23 @@ Current:
 ├── AGENTS.md
 ├── README.md
 ├── TASKS.md
-└── UPDATES.md
+├── UPDATES.md
+├── eslint.config.mjs
+├── next.config.ts
+├── package.json
+├── postcss.config.mjs
+├── public/
+├── src/
+│   ├── app/
+│   ├── components/
+│   ├── data/
+│   ├── lib/
+│   ├── styles/
+│   └── types/
+└── tsconfig.json
 ```
 
-Planned after scaffold:
+Expected source layout:
 
 ```txt
 src/
@@ -57,8 +74,6 @@ src/
 ## Commands
 
 ### Development
-
-Available after the Next.js scaffold:
 
 ```bash
 npm install

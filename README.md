@@ -11,7 +11,7 @@ Suggested classroom flow:
 
 ## Current Status
 
-This repository is in the initial documentation checkpoint. The planned MVP is a Dockerized Next.js, React, TypeScript, and Tailwind CSS app with static seed puzzle data and no database.
+This repository is in the app scaffold checkpoint. The MVP is a Dockerized Next.js, React, TypeScript, and Tailwind CSS app with static seed puzzle data and no database.
 
 Public repository created for this workspace:
 
@@ -43,7 +43,7 @@ Additional classroom-safe packs are planned for holidays, animals, books, scienc
 
 ## Local Development
 
-The app scaffold is pending. Once Task 2 is complete, local development will use:
+Run the local development server:
 
 ```bash
 npm install
@@ -67,7 +67,7 @@ npm run test
 npm run build
 ```
 
-Some commands may be added as the stack is scaffolded.
+The scaffold currently provides `lint` and `build`. Typecheck and test scripts will be added during the quality and test tasks.
 
 ## Docker
 
@@ -116,7 +116,7 @@ docker compose up -d
 
 ## Known Limitations
 
-- The web app has not been scaffolded yet.
+- The web app is scaffolded but still shows the default generated home page.
 - Puzzle seed data has not been added yet.
 - Docker and GHCR publishing are not implemented yet.
 - The canonical owner mismatch between `adh1310` and the authenticated GitHub account must be resolved before GHCR publishing can be verified.

@@ -1,5 +1,12 @@
 # dependencies
 node_modules/
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 
 # next.js
 .next/
@@ -24,6 +31,13 @@ pnpm-debug.log*
 .env*.local
 
 # safe starter .env is intentionally allowed by TASKS.md once created
+
+# vercel
+.vercel/
+
+# typescript and generated next files
+*.tsbuildinfo
+next-env.d.ts
 
 # misc
 .DS_Store
