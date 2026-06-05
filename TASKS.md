@@ -1305,6 +1305,8 @@ git commit -m "chore: add production dockerfile"
 
 ## Task 18 — Add docker-compose.yml
 
+**Status:** Complete.
+
 Create:
 
 ```txt

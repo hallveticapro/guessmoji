@@ -398,6 +398,29 @@
 
 ### Commit
 
+- `9a7266cb25ce9b7fc2cec4c0f84fe177612effe9`
+
+## 2026-06-04 22:05 - Add Docker Compose Stack
+
+### Changed
+
+- Added a web-only `docker-compose.yml` for running Guessmoji from GHCR.
+- Included safe environment defaults and port mapping through `APP_PORT`.
+- Added commented local-build instructions.
+- Marked the Docker Compose task complete in `TASKS.md`.
+
+### Why
+
+- Unraid and local Docker deployments need a simple compose stack for the MVP.
+
+### Files Touched
+
+- `docker-compose.yml`
+- `UPDATES.md`
+- `TASKS.md`
+
+### Commit
+
 - pending
 
 ## 2026-06-04 21:17 - Initialize Project Documentation
