@@ -191,6 +191,7 @@ Game mode conventions:
 - Keep answers hidden until host action.
 - Hint is a separate pre-reveal action and should be available before the answer is revealed.
 - The main play screen should emphasize one large emoji card and centered Hint/Reveal/Next actions.
+- Emoji clues should stay on one line on smaller screens and shrink to fit instead of wrapping.
 - Secondary controls belong in the settings dialog behind the gear button when practical.
 - Hide Random Mix puzzle category metadata until answer reveal.
 - Keep shared-screen controls large, high-contrast, and keyboard accessible.

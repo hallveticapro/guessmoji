@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AnswerReveal } from "@/components/game/AnswerReveal";
+import { EmojiClue } from "@/components/game/EmojiClue";
 import { GameControls } from "@/components/game/GameControls";
 import { ProgressIndicator } from "@/components/game/ProgressIndicator";
 import type { Category, Puzzle } from "@/types/puzzle";
@@ -343,9 +344,7 @@ export function GameBoard({
 
         <div className="flex flex-1 flex-col justify-center gap-5">
           <div className="flex min-h-[22rem] flex-col items-center justify-center rounded-[1.35rem] border-2 border-[#d5e4df] bg-white/90 p-6 text-[#17324d] shadow-[0_8px_0_rgba(23,50,77,0.08)] print:border-slate-300 sm:min-h-[28rem]">
-            <p className="text-center text-7xl leading-tight sm:text-8xl md:text-9xl lg:text-[9rem]">
-              {currentPuzzle.emojis}
-            </p>
+            <EmojiClue emojis={currentPuzzle.emojis} />
           </div>
 
           <AnswerReveal

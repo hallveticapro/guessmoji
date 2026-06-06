@@ -1,5 +1,29 @@
 # UPDATES.md
 
+## 2026-06-06 12:39 - Fit Emoji Clues On Small Screens
+
+### Changed
+
+- Added a fitted emoji clue component that keeps puzzle emoji strings on one line.
+- Replaced the static responsive emoji text in the game board with the fitted clue component.
+- Documented that emoji clues should shrink to fit instead of wrapping on smaller screens.
+
+### Why
+
+- Long emoji clues should remain readable as a single clue on phones and narrow displays rather than wrapping into multiple rows.
+
+### Files Touched
+
+- `AGENTS.md`
+- `TASKS.md`
+- `UPDATES.md`
+- `src/components/game/EmojiClue.tsx`
+- `src/components/game/GameBoard.tsx`
+
+### Commit
+
+- `pending`
+
 ## 2026-06-06 11:45 - Round Favicons And Shuffle Category Starts
 
 ### Changed

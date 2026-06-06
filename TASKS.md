@@ -28,6 +28,7 @@ As of 2026-06-06:
 - The About modal should use the embed banner first, followed by about, support, social, and copyright sections.
 - Reveal metadata for default puzzles should use specific, researched details and fun facts instead of generic fallback copy.
 - Category play should start in a fresh shuffled order every time, with the Shuffle button kept for an on-demand reshuffle.
+- Emoji clues should shrink to fit on smaller screens instead of wrapping onto multiple lines.
 
 The app should support many themed categories, including:
 
