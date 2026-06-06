@@ -6,6 +6,7 @@ import {
   getCategoryBySlug,
   getPuzzlesByCategoryId,
   getRandomMix,
+  getRandomizedPuzzles,
 } from "@/lib/puzzles";
 import type { Category, Puzzle } from "@/types/puzzle";
 
@@ -57,7 +58,7 @@ function getPlayablePuzzles(category: Category): Puzzle[] {
     return getRandomMix(20);
   }
 
-  return getPuzzlesByCategoryId(category.id);
+  return getRandomizedPuzzles(getPuzzlesByCategoryId(category.id));
 }
 
 function MissingCategory({ slug }: { slug: string }) {

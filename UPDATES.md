@@ -1,5 +1,37 @@
 # UPDATES.md
 
+## 2026-06-06 11:45 - Round Favicons And Shuffle Category Starts
+
+### Changed
+
+- Regenerated browser favicon PNGs, web app icons, Apple touch icon, ICO, and SVG favicon with rounded corners.
+- Updated category play so non-random categories receive a fresh shuffled puzzle order each time the play route starts.
+- Updated restart behavior to start a new shuffled order instead of restoring the original seed order.
+- Removed references to a stored shuffle preference from current README, TASKS, and AGENTS notes.
+
+### Why
+
+- Browser-facing icons should match the rounded visual style, and category play should feel fresh every time instead of always starting from the same first card.
+
+### Files Touched
+
+- `README.md`
+- `TASKS.md`
+- `AGENTS.md`
+- `UPDATES.md`
+- `public/apple-touch-icon.png`
+- `public/favicon-96x96.png`
+- `public/favicon.ico`
+- `public/favicon.svg`
+- `public/web-app-manifest-192x192.png`
+- `public/web-app-manifest-512x512.png`
+- `src/app/play/[categorySlug]/page.tsx`
+- `src/components/game/GameBoard.tsx`
+
+### Commit
+
+- `pending`
+
 ## 2026-06-06 11:24 - Refresh Branding, Board Style, And README
 
 ### Changed

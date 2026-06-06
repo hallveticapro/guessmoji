@@ -194,7 +194,8 @@ Game mode conventions:
 - Secondary controls belong in the settings dialog behind the gear button when practical.
 - Hide Random Mix puzzle category metadata until answer reveal.
 - Keep shared-screen controls large, high-contrast, and keyboard accessible.
-- Store only safe local browser preferences such as last category and shuffle state. Do not add accounts or server persistence for MVP.
+- Store only safe local browser preferences such as last category and timer length. Do not add accounts or server persistence for MVP.
+- Shuffle cards automatically each time a category starts, and keep the Shuffle button available for an on-demand reshuffle.
 - Timer choices are local-only and should stop when an answer is revealed.
 
 ## Important Conventions

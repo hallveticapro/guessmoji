@@ -15,7 +15,6 @@ type GameBoardProps = {
 
 const LAST_CATEGORY_SLUG_KEY = "guessmoji:lastCategorySlug";
 const LAST_CATEGORY_NAME_KEY = "guessmoji:lastCategoryName";
-const SHUFFLE_PREFERENCE_KEY = "guessmoji:shuffleOnStart";
 const TIMER_PREFERENCE_KEY = "guessmoji:timerSeconds";
 
 export function GameBoard({
@@ -159,7 +158,6 @@ export function GameBoard({
   }, [resetPuzzleState]);
 
   const shufflePuzzles = useCallback(() => {
-    saveLocalPreference(SHUFFLE_PREFERENCE_KEY, "true");
     setPuzzles((currentPuzzles) => getShuffledPuzzles(currentPuzzles));
     setCurrentIndex(0);
     setIsComplete(false);
@@ -167,8 +165,7 @@ export function GameBoard({
   }, [resetPuzzleState]);
 
   const restartCategory = useCallback(() => {
-    saveLocalPreference(SHUFFLE_PREFERENCE_KEY, "false");
-    setPuzzles(initialPuzzles);
+    setPuzzles(getShuffledPuzzles(initialPuzzles));
     setCurrentIndex(0);
     setIsComplete(false);
     resetPuzzleState();

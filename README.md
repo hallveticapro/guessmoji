@@ -54,7 +54,8 @@ rounds, projector use, smartboards, Chromebooks, tablets, and phones.
   controls.
 - Settings dialog for secondary controls.
 - Completion screen with replay and category navigation.
-- Local browser preferences for last category, shuffle state, and timer length.
+- Fresh shuffled card order each time a category starts, plus on-demand reshuffle.
+- Local browser preferences for last category and timer length.
 - Static TypeScript seed data with no database requirement.
 - Open Graph, Twitter, Discord, and Facebook-friendly preview image.
 - Dockerfile, Docker Compose, and GitHub Actions workflow for GHCR publishing.

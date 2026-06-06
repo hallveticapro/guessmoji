@@ -27,6 +27,7 @@ As of 2026-06-06:
 - The play screen should avoid a black gameboard and use the warm, friendly shared-screen card style established in the current UI.
 - The About modal should use the embed banner first, followed by about, support, social, and copyright sections.
 - Reveal metadata for default puzzles should use specific, researched details and fun facts instead of generic fallback copy.
+- Category play should start in a fresh shuffled order every time, with the Shuffle button kept for an on-demand reshuffle.
 
 The app should support many themed categories, including:
 
@@ -1172,10 +1173,11 @@ git commit -m "feat: add fullscreen presentation support"
 
 **Status:** Complete.
 
+**Implementation note:** The app currently stores last category and timer preference locally. Shuffle is no longer stored as a preference because every category play starts in a fresh shuffled order.
+
 Use localStorage for:
 
 - Last selected category.
-- Shuffle preference if added.
 - Timer preference if added later.
 
 Do not require login.
