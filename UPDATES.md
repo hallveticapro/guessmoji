@@ -1,5 +1,52 @@
 # UPDATES.md
 
+## 2026-06-06 11:24 - Refresh Branding, Board Style, And README
+
+### Changed
+
+- Optimized and moved the Guessmoji logo, favicon master, embed image, favicon bundle, and web manifest into public asset locations.
+- Wired favicon, Apple touch icon, manifest, Open Graph, and Twitter metadata to the new assets.
+- Restyled the app shell, home logo, gameboard, answer reveal, progress indicator, and host controls with a warm shared-screen card style.
+- Rebuilt the About modal with the embed banner, game description, support callout, social icon buttons, and requested copyright copy.
+- Added explicit details and fun facts for the original 100 entertainment puzzles and added a test that blocks generic fallback reveal facts.
+- Replaced the README with a neutral/generic deployment guide that uses placeholder repository, image, and public URL values.
+- Updated TASKS and AGENTS notes for current assets, design direction, puzzle metadata expectations, and README rules.
+
+### Why
+
+- The app needed polished public branding, a warmer gameboard style, more specific reveal metadata, and a README that is useful for public readers without including personal deployment details.
+
+### Files Touched
+
+- `README.md`
+- `TASKS.md`
+- `AGENTS.md`
+- `UPDATES.md`
+- `public/assets/guessmoji-logo.png`
+- `public/assets/guessmoji-favicon-master.png`
+- `public/assets/guessmoji-embed.png`
+- `public/apple-touch-icon.png`
+- `public/favicon-96x96.png`
+- `public/favicon.ico`
+- `public/favicon.svg`
+- `public/site.webmanifest`
+- `public/web-app-manifest-192x192.png`
+- `public/web-app-manifest-512x512.png`
+- `src/app/layout.tsx`
+- `src/app/page.tsx`
+- `src/components/game/AnswerReveal.tsx`
+- `src/components/game/GameBoard.tsx`
+- `src/components/game/GameControls.tsx`
+- `src/components/game/ProgressIndicator.tsx`
+- `src/components/layout/AppShell.tsx`
+- `src/components/layout/InfoModal.tsx`
+- `src/data/puzzles.ts`
+- `src/lib/puzzles.test.ts`
+
+### Commit
+
+- `61494da18ab2f052f6a41fa6c16c4648ed758293`
+
 ## 2026-06-05 10:20 - Expand Catalog And Simplify Play Flow
 
 ### Changed

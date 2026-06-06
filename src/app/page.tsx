@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getAllCategories, getPuzzlesByCategoryId } from "@/lib/puzzles";
 
 const featuredCategorySlugs = [
@@ -40,6 +41,14 @@ export default function Home() {
         <div className="absolute inset-0 bg-white/60" aria-hidden="true" />
 
         <div className="relative mx-auto flex min-h-[58svh] w-full max-w-5xl flex-col items-center justify-center py-10 text-center">
+          <Image
+            src="/assets/guessmoji-logo.png"
+            alt=""
+            width={1254}
+            height={1254}
+            priority
+            className="mb-5 size-28 rounded-[1.7rem] border-2 border-[#d5e4df] bg-white object-cover shadow-[0_7px_0_rgba(23,50,77,0.08)]"
+          />
           <p className="text-sm font-black uppercase tracking-normal text-sky-800">
             Emoji guessing game
           </p>

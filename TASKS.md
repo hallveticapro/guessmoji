@@ -20,6 +20,14 @@ As of 2026-06-05:
 - Game play should center on the emoji card, with Hint and Reveal actions before answer reveal and a Next/Finish action after reveal.
 - Timer controls should live in a settings dialog behind a gear button.
 
+As of 2026-06-06:
+
+- App branding assets are stored in `public/assets`, with favicon and web manifest files in `public/`.
+- Public README content must stay neutral/generic and use placeholder owner, image, and deployment values.
+- The play screen should avoid a black gameboard and use the warm, friendly shared-screen card style established in the current UI.
+- The About modal should use the embed banner first, followed by about, support, social, and copyright sections.
+- Reveal metadata for default puzzles should use specific, researched details and fun facts instead of generic fallback copy.
+
 The app should support many themed categories, including:
 
 - Disney Movies
@@ -1762,6 +1770,83 @@ Required:
 - Separate major sections clearly.
 - Keep README neutral/generic.
 - Do not include personal usernames, profile links, or owner-specific deployment values.
+
+---
+
+## Task 31 — Process Brand Assets And Social Metadata
+
+**Status:** Complete.
+
+**Implementation note:** Optimized the provided logo, favicon master, and embed image with ImageMagick because Squoosh CLI was unavailable locally. Moved optimized app images into `public/assets`, extracted favicon files into `public/`, removed the source zip, updated the web manifest colors, and wired the favicon, Apple touch icon, Open Graph, and Twitter metadata in the root layout.
+
+Required:
+
+- Use `guessmoji_logo.png` as the main site logo.
+- Use `guessmoji_favicon.png` as the favicon master.
+- Use `guessmoji_embed.png` for social embeds.
+- Extract and link the favicon bundle files.
+- Delete the processed zip/source files after moving assets into the app.
+
+---
+
+## Task 32 — Warm Gameboard Restyle
+
+**Status:** Complete.
+
+**Implementation note:** Replaced the black play surface with a warm cream and mint presentation board, softened the emoji clue card, restyled progress, timer, answer reveal, and control surfaces, and kept the play flow centered on the large clue card and host actions.
+
+Required:
+
+- Remove the black background from the gameboard.
+- Keep the emoji clue visually dominant.
+- Use bright, friendly, projector-readable contrast.
+- Keep secondary controls behind the settings gear where practical.
+
+---
+
+## Task 33 — Improve Original Puzzle Reveal Metadata
+
+**Status:** Complete.
+
+**Implementation note:** Added explicit details and fun facts for the original 100 entertainment puzzles and added a regression test that fails if generic fallback reveal facts are exposed.
+
+Required:
+
+- Improve generic details and fun facts for preexisting cards.
+- Keep reveal metadata classroom-friendly and broadly recognizable.
+- Preserve the 600-puzzle seed set.
+- Add or update tests to guard against generic fallback reveal copy.
+
+---
+
+## Task 34 — Restyle About Modal
+
+**Status:** Complete.
+
+**Implementation note:** Rebuilt the About modal with the embed banner first, an About section, a support cost callout, social link buttons with icons and handles, and the requested copyright copy.
+
+Required:
+
+- Show the embed banner as the first section.
+- Explain what Guessmoji is.
+- Include a support section with the requested Buy Me A Coffee call to action.
+- Include social buttons with icons.
+- Include the requested unofficial fan-made notice and copyright text.
+
+---
+
+## Task 35 — Refresh README With Neutral Deployment Guide
+
+**Status:** Complete.
+
+**Implementation note:** Replaced the README with a more complete guide modeled after the reference app structure while keeping all public deployment, image, and repository owner references generic.
+
+Required:
+
+- Use the embed banner in the README.
+- Keep the README neutral/generic.
+- Do not mention personal usernames, profile links, live URLs, or owner-specific deployment values.
+- Include local development, checks, Docker, GHCR, reverse proxy, Unraid, social preview, troubleshooting, and security notes.
 
 ---
 

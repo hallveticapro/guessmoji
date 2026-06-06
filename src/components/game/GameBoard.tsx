@@ -280,28 +280,28 @@ export function GameBoard({
 
   if (isComplete) {
     return (
-      <section className="flex flex-1 items-center bg-slate-950 px-5 py-12 text-white sm:px-6 lg:px-8">
-        <div className="mx-auto w-full max-w-3xl rounded-lg bg-white p-7 text-center text-slate-950 shadow-sm">
-          <p className="text-sm font-black uppercase tracking-normal text-sky-700">
+      <section className="flex flex-1 items-center bg-[radial-gradient(circle_at_top_right,rgba(255,202,66,0.28),transparent_24rem),linear-gradient(145deg,#fffaf0,#eef8f2)] px-5 py-12 text-[#17324d] sm:px-6 lg:px-8">
+        <div className="mx-auto w-full max-w-3xl rounded-[1.35rem] border-2 border-[#d5e4df] bg-white/90 p-7 text-center shadow-[0_8px_0_rgba(23,50,77,0.08)]">
+          <p className="text-sm font-black uppercase tracking-normal text-[#00778d]">
             Category complete
           </p>
           <h1 className="mt-3 text-4xl font-black tracking-normal sm:text-5xl">
             You finished {category.name}
           </h1>
-          <p className="mt-4 text-lg font-medium leading-8 text-slate-700">
+          <p className="mt-4 text-lg font-medium leading-8 text-[#435762]">
             {puzzles.length} Guessmoji cards played.
           </p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <button
               type="button"
               onClick={restartCategory}
-              className="inline-flex min-h-14 items-center justify-center rounded-full bg-amber-300 px-7 py-3 text-lg font-black text-slate-950 transition hover:bg-amber-200 focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-amber-300"
+              className="inline-flex min-h-14 items-center justify-center rounded-full border-2 border-transparent bg-[#ffca42] px-7 py-3 text-lg font-black text-[#17324d] shadow-[0_5px_0_#d79800] transition hover:-translate-y-0.5 focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-[#f0cf74]"
             >
               Play Again
             </button>
             <Link
               href="/categories"
-              className="inline-flex min-h-14 items-center justify-center rounded-full bg-slate-950 px-7 py-3 text-lg font-black text-white transition hover:bg-slate-800 focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-sky-500"
+              className="inline-flex min-h-14 items-center justify-center rounded-full border-2 border-transparent bg-[#17324d] px-7 py-3 text-lg font-black text-white shadow-[0_5px_0_rgba(23,50,77,0.25)] transition hover:-translate-y-0.5 focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-[#8bc9c3]"
             >
               Return to Categories
             </Link>
@@ -312,11 +312,11 @@ export function GameBoard({
   }
 
   return (
-    <section className="flex flex-1 flex-col bg-slate-950 px-4 py-5 text-white print:bg-white print:text-black sm:px-6 lg:px-8">
+    <section className="flex flex-1 flex-col bg-[radial-gradient(circle_at_top_right,rgba(255,202,66,0.28),transparent_24rem),linear-gradient(145deg,#fffaf0,#eef8f2)] px-4 py-5 text-[#17324d] print:bg-white print:text-black sm:px-6 lg:px-8">
       <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-5">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm font-black uppercase tracking-normal text-amber-200">
+            <p className="text-sm font-black uppercase tracking-normal text-[#00778d]">
               {category.name}
             </p>
             <h1 className="mt-1 text-2xl font-black tracking-normal sm:text-3xl">
@@ -327,7 +327,7 @@ export function GameBoard({
             <ProgressIndicator currentIndex={currentIndex} total={puzzles.length} />
             {timerDuration > 0 && (
               <p
-                className="inline-flex min-h-12 items-center justify-center rounded-full bg-amber-300 px-5 py-2 text-lg font-black text-slate-950"
+                className="inline-flex min-h-12 items-center justify-center rounded-full border-2 border-[#f0cf74] bg-[#fff6d8] px-5 py-2 text-lg font-black text-[#17324d] shadow-[0_3px_0_#f0cf74]"
                 aria-live="polite"
               >
                 {timeRemaining}s
@@ -336,7 +336,7 @@ export function GameBoard({
             <button
               type="button"
               onClick={() => setIsSettingsOpen(true)}
-              className="grid size-12 place-items-center rounded-full border border-white/30 bg-white/10 text-2xl text-white transition hover:bg-white/20 focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-sky-300"
+              className="grid size-12 place-items-center rounded-full border-2 border-[#8bc9c3] bg-[#e1f5ef] text-2xl text-[#17324d] shadow-[0_3px_0_#a7d7d1] transition hover:-translate-y-0.5 focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-[#8bc9c3]"
               aria-label="Open game settings"
             >
               ⚙
@@ -345,7 +345,7 @@ export function GameBoard({
         </div>
 
         <div className="flex flex-1 flex-col justify-center gap-5">
-          <div className="flex min-h-[22rem] flex-col items-center justify-center rounded-lg border border-white/10 bg-white p-6 text-slate-950 shadow-sm print:border-slate-300 sm:min-h-[28rem]">
+          <div className="flex min-h-[22rem] flex-col items-center justify-center rounded-[1.35rem] border-2 border-[#d5e4df] bg-white/90 p-6 text-[#17324d] shadow-[0_8px_0_rgba(23,50,77,0.08)] print:border-slate-300 sm:min-h-[28rem]">
             <p className="text-center text-7xl leading-tight sm:text-8xl md:text-9xl lg:text-[9rem]">
               {currentPuzzle.emojis}
             </p>

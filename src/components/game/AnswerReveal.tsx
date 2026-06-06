@@ -21,11 +21,11 @@ export function AnswerReveal({
 }: AnswerRevealProps) {
   if (!isAnswerVisible && isHintVisible && puzzle.hint) {
     return (
-      <div className="mx-auto w-full max-w-4xl rounded-lg border border-sky-200 bg-sky-50 px-5 py-4 text-slate-950 shadow-sm">
-        <p className="text-sm font-black uppercase tracking-normal text-sky-800">
+      <div className="mx-auto w-full max-w-4xl rounded-[1.1rem] border-2 border-[#8bc9c3] bg-[#e1f5ef] px-5 py-4 text-[#17324d] shadow-[0_5px_0_rgba(23,50,77,0.08)]">
+        <p className="text-sm font-black uppercase tracking-normal text-[#00778d]">
           Hint
         </p>
-        <p className="mt-2 text-lg font-bold leading-7 text-slate-800">
+        <p className="mt-2 text-lg font-bold leading-7 text-[#17324d]">
           {puzzle.hint}
         </p>
       </div>
@@ -37,8 +37,8 @@ export function AnswerReveal({
   }
 
   return (
-    <div className="mx-auto w-full max-w-5xl rounded-lg border border-amber-200 bg-amber-100 p-5 text-slate-950 shadow-sm">
-      <p className="text-sm font-black uppercase tracking-normal text-amber-900">
+    <div className="mx-auto w-full max-w-5xl rounded-[1.15rem] border-2 border-[#f0cf74] bg-[#fff6d8] p-5 text-[#17324d] shadow-[0_6px_0_rgba(23,50,77,0.08)]">
+      <p className="text-sm font-black uppercase tracking-normal text-[#8a6500]">
         Answer
       </p>
       <h2 className="mt-2 text-4xl font-black tracking-normal sm:text-5xl">
@@ -63,13 +63,13 @@ export function AnswerReveal({
       </dl>
 
       {puzzle.explanation && (
-        <p className="mt-5 text-base leading-7 text-slate-700">
+        <p className="mt-5 text-base leading-7 text-[#435762]">
           {puzzle.explanation}
         </p>
       )}
 
       {puzzle.funFact && (
-        <p className="mt-3 text-base leading-7 text-slate-700">
+        <p className="mt-3 text-base leading-7 text-[#435762]">
           <span className="font-black">Fun fact:</span> {puzzle.funFact}
         </p>
       )}

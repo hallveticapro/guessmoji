@@ -35,6 +35,7 @@ The MVP must not require login, accounts, multiplayer, Redis, Postgres, or any d
 - The public README must stay neutral/generic and should not mention personal usernames, profile URLs, or owner-specific deployment values.
 - The GitHub Actions workflow publishes to `ghcr.io/hallveticapro/guessmoji` when running in the canonical repository; forks/non-canonical owners build without publishing.
 - The public README intentionally uses placeholder owner/image values and should not include the live URL or social/profile links.
+- Public README examples should use placeholders such as `<github-owner>` and `https://guessmoji.example.com`.
 
 ## Folder Structure
 
@@ -46,11 +47,18 @@ Current:
 ├── README.md
 ├── TASKS.md
 ├── UPDATES.md
+├── docker-compose.yml
 ├── eslint.config.mjs
 ├── next.config.ts
 ├── package.json
 ├── postcss.config.mjs
 ├── public/
+│   ├── assets/
+│   ├── apple-touch-icon.png
+│   ├── favicon.ico
+│   ├── favicon.svg
+│   ├── favicon-96x96.png
+│   └── site.webmanifest
 ├── src/
 │   ├── app/
 │   ├── components/
@@ -145,6 +153,19 @@ Random Mix should pull from multiple safe categories and avoid duplicates.
 
 The current seed set includes 600 puzzles across 60 categories, including Random Mix. Keep new default puzzles broadly friendly, recognizable, and free of mature or horror content unless a future opt-in pack is explicitly added.
 
+The original 100 entertainment puzzles have explicit reveal `details` and `funFact` metadata in `src/data/puzzles.ts`. Do not ship generic fallback reveal copy such as pack labels or vague "emoji clues are quick to recognize" facts for default puzzles.
+
+## Brand And Public Assets
+
+Current public assets:
+
+- Main logo: `public/assets/guessmoji-logo.png`
+- Social/embed image: `public/assets/guessmoji-embed.png`
+- Favicon master copy: `public/assets/guessmoji-favicon-master.png`
+- Favicons and manifest: `public/favicon-96x96.png`, `public/favicon.svg`, `public/favicon.ico`, `public/apple-touch-icon.png`, `public/site.webmanifest`
+
+Root layout metadata should keep the favicon, Apple touch icon, manifest, Open Graph, and Twitter image entries wired to these files.
+
 ## Design Language
 
 Guessmoji should feel like a friendly shared-screen game show plus a clean host tool:
@@ -156,6 +177,14 @@ Guessmoji should feel like a friendly shared-screen game show plus a clean host 
 - Simple navigation
 - Friendly, bright, and not visually chaotic
 - Responsive across desktop, Chromebook, tablet, phone, projector, and smartboard
+
+Current visual direction:
+
+- Warm cream/mint shared-screen background instead of a black gameboard.
+- White game cards with soft teal borders and gentle pressed shadows.
+- Yellow primary actions and teal secondary controls.
+- The logo should be visible in the app shell and home hero.
+- About modal should start with the embed banner, then show About, support, social, and copyright sections.
 
 Game mode conventions:
 

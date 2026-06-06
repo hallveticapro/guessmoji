@@ -34,6 +34,13 @@ describe("puzzle utilities", () => {
     ).toBe(true);
   });
 
+  it("does not expose generic fallback reveal facts", () => {
+    expect(
+      puzzles.some((puzzle) => puzzle.funFact?.includes("emoji clues are quick to recognize")),
+    ).toBe(false);
+    expect(puzzles.some((puzzle) => puzzle.details?.startsWith("Pack:"))).toBe(false);
+  });
+
   it("looks up a category by slug", () => {
     expect(getCategoryBySlug("pixar")?.name).toBe("Pixar");
   });
