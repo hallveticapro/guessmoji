@@ -1,5 +1,33 @@
 # UPDATES.md
 
+## 2026-06-07 14:39 - Add Card Clue Audit Plan
+
+### Changed
+
+- Replaced the completed code-review remediation `PLAN.md` with a new full-card clue audit plan.
+- Added requirements to review every shipped card, build an answer emoji banlist, add direct-answer leak tests, create `CLUE_AUDIT.md`, and verify all categories.
+- Updated `TASKS.md` and `AGENTS.md` with the new no-direct-answer-emoji card convention.
+
+### Why
+
+- Some puzzle clues give away the answer by including the answer's own emoji, such as `Whale` using `🐋`. The project needs a concrete all-category audit plan before editing hundreds of cards.
+
+### Evidence
+
+- Inspected current data sources: core cards in `src/data/puzzles.ts` and expanded pack cards in `src/data/expandedPacks.ts`.
+- Confirmed the new plan explicitly covers known risky examples: `Whale`, `Fox`, `Elephant`, `Giraffe`, fruit answers, vegetable answers, and all categories in the shipped catalog.
+
+### Files Touched
+
+- `AGENTS.md`
+- `PLAN.md`
+- `TASKS.md`
+- `UPDATES.md`
+
+### Commit
+
+- `pending`
+
 ## 2026-06-07 14:13 - Add Literal Component Evidence
 
 ### Changed

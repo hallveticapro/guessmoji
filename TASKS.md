@@ -36,6 +36,8 @@ As of 2026-06-07:
 
 - The first review remediation batch addressed host keyboard controls, settings modal focus management, static play route generation, public URL metadata validation, puzzle data integrity tests, generic reveal fallback removal, category metadata usage, favicon source cleanup, runtime logo sizing, and several redundancy removals.
 - `PLAN.md` now records final status for every code-review remediation row. The only deferred item is the known upstream Next/PostCSS moderate audit finding because the available npm fix would force a breaking downgrade.
+- A new `PLAN.md` now covers the full card clue audit. Every shipped puzzle card must be reviewed so emoji clues do not include the direct answer emoji or an overly literal answer substitute.
+- The clue audit should create `CLUE_AUDIT.md`, an answer emoji banlist, and automated leak tests before editing large batches of cards.
 
 The app should support many themed categories, including:
 
@@ -439,6 +441,10 @@ export type Category = {
   recommendedGradeBand?: string;
 };
 ```
+
+Clue audit rule:
+
+- Do not use the answer's own emoji in a clue when the answer has a direct emoji representation. For example, `Whale` should not use `🐋`, `Fox` should not use `🦊`, `Elephant` should not use `🐘`, `Giraffe` should not use `🦒`, and `Apple` should not use `🍎` or `🍏`.
 
 ---
 

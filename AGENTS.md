@@ -168,6 +168,10 @@ The current seed set includes 600 puzzles across 60 categories, including Random
 
 The original 100 entertainment puzzles have explicit reveal `details` and `funFact` metadata in `src/data/puzzles.ts`. Do not ship generic fallback reveal copy such as pack labels or vague "emoji clues are quick to recognize" facts for default puzzles.
 
+Current active plan: `PLAN.md` is now the full card clue audit plan. Review all shipped puzzle cards and ensure emoji clues do not include the answer's direct emoji or an overly literal answer substitute. Examples: `Whale` must not use `🐋`, `Fox` must not use `🦊`, `Elephant` must not use `🐘`, `Giraffe` must not use `🦒`, and direct fruit/vegetable answers should not use their matching produce emoji.
+
+Future card additions should update the answer emoji banlist planned in `src/data/answerEmojiBanlist.ts` whenever the answer has a direct emoji representation.
+
 ## Brand And Public Assets
 
 Current public assets:
