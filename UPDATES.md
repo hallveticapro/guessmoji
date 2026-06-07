@@ -1,5 +1,51 @@
 # UPDATES.md
 
+## 2026-06-07 09:47 - Capture Phase 0 Baseline Evidence
+
+### Changed
+
+- Recorded the Phase 0 baseline command gate required by `PLAN.md`.
+- Added the reusable manual browser smoke checklist for future gameplay and UI verification.
+
+### Why
+
+- `PLAN.md` requires objective evidence before implementation phases begin, and future manual smoke checks need a named checklist to reference.
+
+### Evidence
+
+- `npm run lint`: passed.
+- `npm run typecheck`: passed.
+- `npm run test`: passed, 1 test file passed and 11 tests passed.
+- `npm run build`: passed; Next.js built successfully.
+- `npm audit --audit-level=moderate`: blocked by known upstream Next/PostCSS audit finding, 2 moderate vulnerabilities via `postcss <8.5.10`; the offered `npm audit fix --force` would install `next@9.3.3`, a breaking downgrade, so no forced fix was applied.
+
+### Manual Browser Smoke Checklist
+
+- Home loads.
+- Categories load.
+- Random Mix starts.
+- One non-random category starts.
+- Hint toggles.
+- Answer reveals.
+- Answer hides.
+- Next advances.
+- Previous moves back.
+- Shuffle changes order.
+- Restart resets progress.
+- Settings opens.
+- Settings traps focus.
+- Timer applies.
+- Fullscreen toggles or reports unsupported.
+- Emoji clue stays one line at mobile width.
+
+### Files Touched
+
+- `UPDATES.md`
+
+### Commit
+
+- `pending`
+
 ## 2026-06-07 09:46 - Remove Out-Of-Scope Clue Audit Note
 
 ### Changed
