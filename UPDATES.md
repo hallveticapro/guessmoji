@@ -1,5 +1,239 @@
 # UPDATES.md
 
+## 2026-06-07 19:25 - Complete Card Clue Audit Evidence
+
+### Changed
+
+- Added `CLUE_AUDIT.md` with baseline inventory, a 60-row category review matrix, 189 direct-emoji candidate rows, 189 changed puzzle ids, changed clue details, allowed-exception policy, and final source consistency snapshot.
+- Added `src/data/answerEmojiBanlist.ts` and `src/lib/clue-audit.ts` so direct-answer emoji clues are detected with deterministic answer normalization.
+- Added `src/lib/clue-audit.test.ts` covering normalization, required regression bans, synthetic leak detection, full shipped-puzzle leak detection, known animal/food fixes, and audit-log/source consistency.
+- Removed direct-answer emoji from 189 shipped puzzle clues while keeping category context, hints, reveal details, and fun facts intact.
+- Updated `TASKS.md` and `AGENTS.md` so future card additions must update the banlist and run clue-audit tests.
+
+### Why
+
+- Guessmoji cards should not give away answers by showing the answer's own emoji, especially for animals, ocean animals, fruits, vegetables, tools, vehicles, and other one-to-one pictorial answers. The audit evidence makes the cleanup reviewable and hard to regress.
+
+### Evidence
+
+- Baseline before clue edits: `npm run lint` passed, `npm run typecheck` passed, `npm run test` passed with 8 test files and 43 tests, and `npm run build` passed.
+- Baseline source counts: 60 categories, 59 non-random categories, 600 shipped puzzles, and Random Mix session count 20.
+- Initial direct-answer leak suite found 195 forbidden emoji hits across 189 puzzle cards; after cleanup, `npm run test -- --reporter verbose src/lib/clue-audit.test.ts` passed with 12 tests and zero shipped-puzzle leaks.
+- Final local gate: `npm run lint` passed, `npm run typecheck` passed, `npm run test` passed with 9 test files and 55 tests, and `npm run build` passed.
+- `npm audit --audit-level=moderate` still reports 2 moderate findings through Next's bundled `postcss <8.5.10`; the available fix would force `next@9.3.3`, so no forced fix was applied.
+- Source consistency check reported 60 audit rows, 0 missing category ids, 600 reviewed non-random cards, 0 unreviewed rows, and 0 direct-answer emoji leaks.
+- README neutrality check `rg "hallveticapro|mrhallsclass|guessmoji\.mrhallsclass|ghcr.io/hallveticapro" README.md` returned no matches.
+- Browser smoke on `http://localhost:3013` using temporary Playwright: categories page loaded; changed Ocean Animals clue `🌊💨🎶` for `Whale` was visible with the answer hidden before reveal; reveal showed `Whale`; changed Fruit clue `🌳🥧` for `Apple` was visible at 390px width, stayed one-line, answer was hidden before reveal, reveal showed `Apple`, and console errors were empty.
+- No allowed exceptions were added.
+
+### Changed Puzzle IDs
+
+- `spider-man`
+- `ant-man`
+- `one-hundred-one-dalmatians`
+- `animals-cat`
+- `animals-dog`
+- `animals-elephant`
+- `animals-giraffe`
+- `animals-penguin`
+- `animals-kangaroo`
+- `animals-tiger`
+- `animals-panda`
+- `animals-fox`
+- `animals-sloth`
+- `ocean-animals-shark`
+- `ocean-animals-dolphin`
+- `ocean-animals-octopus`
+- `ocean-animals-sea-turtle`
+- `ocean-animals-jellyfish`
+- `ocean-animals-whale`
+- `ocean-animals-seahorse`
+- `ocean-animals-crab`
+- `ocean-animals-starfish`
+- `ocean-animals-clownfish`
+- `birds-owl`
+- `birds-eagle`
+- `birds-parrot`
+- `birds-flamingo`
+- `birds-peacock`
+- `birds-hummingbird`
+- `birds-penguin`
+- `birds-swan`
+- `birds-robin`
+- `bugs-butterfly`
+- `bugs-bee`
+- `bugs-ladybug`
+- `bugs-ant`
+- `bugs-dragonfly`
+- `bugs-grasshopper`
+- `bugs-firefly`
+- `bugs-mosquito`
+- `bugs-caterpillar`
+- `bugs-spider`
+- `fruit-apple`
+- `fruit-banana`
+- `fruit-strawberry`
+- `fruit-watermelon`
+- `fruit-pineapple`
+- `fruit-grapes`
+- `fruit-orange`
+- `fruit-mango`
+- `fruit-kiwi`
+- `fruit-cherry`
+- `vegetables-carrot`
+- `vegetables-broccoli`
+- `vegetables-corn`
+- `vegetables-potato`
+- `vegetables-tomato`
+- `vegetables-cucumber`
+- `vegetables-pumpkin`
+- `vegetables-onion`
+- `vegetables-lettuce`
+- `desserts-ice-cream`
+- `desserts-cupcake`
+- `desserts-chocolate-chip-cookie`
+- `desserts-donut`
+- `desserts-cheesecake`
+- `desserts-apple-pie`
+- `desserts-popsicle`
+- `desserts-milkshake`
+- `snacks-popcorn`
+- `snacks-pretzel`
+- `breakfast-pancakes`
+- `breakfast-waffles`
+- `breakfast-toast`
+- `breakfast-bagel`
+- `breakfast-omelet`
+- `sports-basketball`
+- `sports-baseball`
+- `sports-football`
+- `sports-tennis`
+- `sports-swimming`
+- `sports-hockey`
+- `sports-volleyball`
+- `sports-golf`
+- `arcade-classics-frogger`
+- `minecraft-bee-nest`
+- `science-microscope`
+- `science-magnet`
+- `space-moon`
+- `space-comet`
+- `space-astronaut`
+- `space-rocket`
+- `space-black-hole`
+- `space-telescope`
+- `weather-rain`
+- `weather-snow`
+- `weather-rainbow`
+- `weather-tornado`
+- `weather-fog`
+- `weather-wind`
+- `weather-cloud`
+- `books-dog-man`
+- `myths-dragon`
+- `myths-unicorn`
+- `vehicles-car`
+- `vehicles-bus`
+- `vehicles-train`
+- `vehicles-airplane`
+- `vehicles-boat`
+- `vehicles-bicycle`
+- `vehicles-motorcycle`
+- `vehicles-helicopter`
+- `vehicles-submarine`
+- `vehicles-scooter`
+- `construction-crane`
+- `construction-bulldozer`
+- `construction-hard-hat`
+- `jobs-firefighter`
+- `jobs-astronaut`
+- `music-instruments-guitar`
+- `music-instruments-piano`
+- `music-instruments-drums`
+- `music-instruments-violin`
+- `music-instruments-trumpet`
+- `music-instruments-flute`
+- `music-instruments-saxophone`
+- `music-instruments-harp`
+- `music-instruments-tambourine`
+- `music-instruments-accordion`
+- `art-supplies-paintbrush`
+- `art-supplies-crayons`
+- `art-supplies-markers`
+- `art-supplies-glue`
+- `art-supplies-palette`
+- `art-supplies-sketchbook`
+- `school-supplies-pencil`
+- `school-supplies-backpack`
+- `school-supplies-notebook`
+- `school-supplies-eraser`
+- `school-supplies-ruler`
+- `school-supplies-glue-stick`
+- `school-supplies-calculator`
+- `school-supplies-binder`
+- `school-supplies-lunchbox`
+- `camping-tent`
+- `camping-campfire`
+- `camping-flashlight`
+- `camping-compass`
+- `camping-canoe`
+- `camping-binoculars`
+- `national-parks-glacier`
+- `holidays-halloween`
+- `holidays-christmas`
+- `holidays-hanukkah`
+- `halloween-jack-o-lantern`
+- `halloween-ghost`
+- `halloween-witch`
+- `halloween-vampire`
+- `halloween-black-cat`
+- `winter-holidays-christmas-tree`
+- `winter-holidays-snowman`
+- `winter-holidays-menorah`
+- `winter-holidays-ice-skating`
+- `summer-fun-fireworks`
+- `beach-day-seashell`
+- `amusement-park-ferris-wheel`
+- `around-the-house-sofa`
+- `around-the-house-bed`
+- `around-the-house-lamp`
+- `around-the-house-washing-machine`
+- `around-the-house-refrigerator`
+- `around-the-house-doorbell`
+- `kitchen-tools-measuring-cup`
+- `kitchen-tools-blender`
+- `kitchen-tools-colander`
+- `kitchen-tools-can-opener`
+- `emotions-angry`
+- `emotions-surprised`
+- `robots-robot`
+- `robots-drone`
+- `robots-rover`
+- `robots-ai-assistant`
+- `robots-robot-dog`
+- `plants-sunflower`
+- `plants-cactus`
+- `plants-rose`
+- `plants-mushroom`
+- `plants-palm-tree`
+- `plants-pumpkin-vine`
+
+### Files Touched
+
+- `AGENTS.md`
+- `CLUE_AUDIT.md`
+- `TASKS.md`
+- `UPDATES.md`
+- `src/data/answerEmojiBanlist.ts`
+- `src/data/expandedPacks.ts`
+- `src/data/puzzles.ts`
+- `src/lib/clue-audit.test.ts`
+- `src/lib/clue-audit.ts`
+
+### Commit
+
+- `pending`
+
 ## 2026-06-07 14:50 - Add Measurable Clue Audit Acceptance
 
 ### Changed

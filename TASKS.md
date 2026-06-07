@@ -39,6 +39,7 @@ As of 2026-06-07:
 - A new `PLAN.md` now covers the full card clue audit. Every shipped puzzle card must be reviewed so emoji clues do not include the direct answer emoji or an overly literal answer substitute.
 - The clue audit should create `CLUE_AUDIT.md`, an answer emoji banlist, and automated leak tests before editing large batches of cards.
 - The clue audit plan is split into 19 measurable action items; every item must keep concrete acceptance evidence before it can be marked complete.
+- `CLUE_AUDIT.md`, `src/data/answerEmojiBanlist.ts`, and `src/lib/clue-audit.test.ts` now provide the durable audit evidence. Future card packs must update the banlist when a new answer has a direct emoji representation and must pass the clue-audit tests before commit.
 
 The app should support many themed categories, including:
 
