@@ -44,6 +44,7 @@ Current:
 ```txt
 .
 ├── AGENTS.md
+├── CODE_REVIEW.md
 ├── README.md
 ├── TASKS.md
 ├── UPDATES.md

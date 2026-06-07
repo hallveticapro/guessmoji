@@ -1,5 +1,27 @@
 # UPDATES.md
 
+## 2026-06-06 22:15 - Add Comprehensive Code Review Report
+
+### Changed
+
+- Added a prioritized code review report covering correctness, UX, redundancy, refactoring, performance, security, and maintainability findings.
+- Recorded the review backlog location in TASKS and the top-level project map in AGENTS.
+
+### Why
+
+- The project needed a durable, actionable review artifact that future cleanup work can follow without redoing the full codebase audit.
+
+### Files Touched
+
+- `AGENTS.md`
+- `CODE_REVIEW.md`
+- `TASKS.md`
+- `UPDATES.md`
+
+### Commit
+
+- `pending`
+
 ## 2026-06-06 12:39 - Fit Emoji Clues On Small Screens
 
 ### Changed
