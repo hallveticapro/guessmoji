@@ -1,13 +1,15 @@
 "use client";
 
 import { useLayoutEffect, useRef, useState } from "react";
+import {
+  getMaxEmojiFontSize,
+  MIN_EMOJI_FONT_SIZE,
+  supportsResizeObserver,
+} from "./emoji-fit";
 
 type EmojiClueProps = {
   emojis: string;
 };
-
-const MIN_EMOJI_FONT_SIZE = 40;
-const MAX_EMOJI_FONT_SIZE = 144;
 
 export function EmojiClue({ emojis }: EmojiClueProps) {
   const clueRef = useRef<HTMLParagraphElement>(null);
@@ -21,7 +23,7 @@ export function EmojiClue({ emojis }: EmojiClueProps) {
       return;
     }
 
-    if (!("ResizeObserver" in window)) {
+    if (!supportsResizeObserver(window)) {
       return;
     }
 
@@ -30,7 +32,7 @@ export function EmojiClue({ emojis }: EmojiClueProps) {
 
     function fitClue() {
       const availableWidth = Math.max(0, clueElement.clientWidth - 4);
-      const maxFontSize = getMaxFontSize(availableWidth);
+      const maxFontSize = getMaxEmojiFontSize(availableWidth);
 
       clueElement.style.fontSize = `${maxFontSize}px`;
 
@@ -67,20 +69,4 @@ export function EmojiClue({ emojis }: EmojiClueProps) {
       {emojis}
     </p>
   );
-}
-
-function getMaxFontSize(availableWidth: number) {
-  if (availableWidth < 560) {
-    return 72;
-  }
-
-  if (availableWidth < 760) {
-    return 96;
-  }
-
-  if (availableWidth < 1000) {
-    return 128;
-  }
-
-  return MAX_EMOJI_FONT_SIZE;
 }

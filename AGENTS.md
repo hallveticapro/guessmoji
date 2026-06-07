@@ -25,6 +25,11 @@ Current MVP stack:
 - GitHub Actions
 - GHCR image publishing
 
+Current Vitest coverage includes puzzle data integrity, Random Mix behavior,
+public URL parsing, keyboard action mapping, last-category saved-slug
+validation, timer bounds coercion, and EmojiClue `ResizeObserver` support
+checks.
+
 The MVP must not require login, accounts, multiplayer, Redis, Postgres, or any database.
 
 ## Repository
@@ -207,6 +212,14 @@ Game mode conventions:
 - Store only safe local browser preferences such as last category and timer length. Do not add accounts or server persistence for MVP.
 - Shuffle cards automatically each time a category starts, and keep the Shuffle button available for an on-demand reshuffle.
 - Timer choices are local-only and should stop when an answer is revealed.
+- Timer input and saved timer preferences use `src/components/game/timer.ts`
+  for the shared `0-999` second bounds policy.
+- Last-category saved-slug resolution uses
+  `src/components/categories/last-category.ts`; stale saved slugs should be
+  hidden and cleared rather than linked.
+- Emoji clue fitting uses `src/components/game/emoji-fit.ts` so browsers
+  without `ResizeObserver` keep a conservative no-wrap fallback instead of
+  throwing.
 
 ## Important Conventions
 

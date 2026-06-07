@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Category } from "@/types/puzzle";
-
-const LAST_CATEGORY_SLUG_KEY = "guessmoji:lastCategorySlug";
+import { LAST_CATEGORY_SLUG_KEY, resolveLastCategory } from "./last-category";
 
 type LastCategoryLinkProps = {
   categories: Category[];
@@ -17,12 +16,14 @@ export function LastCategoryLink({ categories }: LastCategoryLinkProps) {
     const timeoutId = window.setTimeout(() => {
       try {
         const savedSlug = window.localStorage.getItem(LAST_CATEGORY_SLUG_KEY);
-        const matchingCategory =
-          categories.find((category) => category.slug === savedSlug) ?? null;
+        const { category, shouldClearSavedSlug } = resolveLastCategory(
+          categories,
+          savedSlug,
+        );
 
-        setLastCategory(matchingCategory);
+        setLastCategory(category);
 
-        if (savedSlug && !matchingCategory) {
+        if (shouldClearSavedSlug) {
           window.localStorage.removeItem(LAST_CATEGORY_SLUG_KEY);
         }
       } catch {

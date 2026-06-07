@@ -1,5 +1,55 @@
 # UPDATES.md
 
+## 2026-06-07 14:10 - Harden Plan Closure Evidence
+
+### Changed
+
+- Added a tested last-category resolution helper for valid, invalid, and empty saved slugs.
+- Added a shared timer coercion helper and used it for both settings input and saved timer preferences.
+- Added a tested EmojiClue fitting helper for `ResizeObserver` support detection and font-size thresholds.
+- Updated `PLAN.md` closure evidence for stale last-category handling, favicon head inspection, ResizeObserver fallback, and timer bounds behavior.
+- Updated `AGENTS.md` with the new helper conventions and current Vitest coverage.
+
+### Why
+
+- The independent verifier found the remediation closure was mostly complete but weakly evidenced for invalid saved categories, favicon head inspection, ResizeObserver fallback, and timer edge cases.
+
+### Evidence
+
+- `npm run test`: passed with 6 test files and 40 tests passing.
+- `npm run typecheck`: passed.
+- `npm run lint`: passed.
+- Final rerun of `npm run lint`, `npm run typecheck`, `npm run test`, and `npm run build` passed after documentation updates; tests passed with 6 files and 40 tests.
+- `npm run build` still reports `/play/[categorySlug]` as SSG with generated category paths.
+- `npm run start -- --port 3002`: failed because port `3002` was already in use.
+- `npm run start -- --port 3012`: started successfully for rendered head inspection, then was stopped with Ctrl-C.
+- Rendered head inspection from `http://127.0.0.1:3012/` found five icon/manifest links: `/site.webmanifest`, `/favicon.ico`, `/favicon-96x96.png`, `/favicon.svg`, and `/apple-touch-icon.png`.
+- The same head inspection reported `hasAppFaviconRoute: false`.
+- `docker build -t ghcr.io/hallveticapro/guessmoji:review .` passed after the evidence-hardening changes.
+- Production asset checks confirmed `public/file.svg`, `public/globe.svg`, `public/next.svg`, `public/vercel.svg`, `public/window.svg`, and `src/app/favicon.ico` are absent.
+- Source checks still find no `force-dynamic`, `getPuzzleById`, `getShuffledPuzzles`, `DEFAULT_RANDOM_MIX_COUNT`, `requestAnimationFrame`, `useSyncExternalStore`, or compiled source `.js/.jsx` files.
+- `npm audit --audit-level=moderate` remains nonzero with the documented 2 moderate Next/PostCSS findings; the offered fix would force a breaking downgrade to `next@9.3.3`.
+
+### Files Touched
+
+- `AGENTS.md`
+- `PLAN.md`
+- `UPDATES.md`
+- `src/components/categories/LastCategoryLink.tsx`
+- `src/components/categories/last-category.ts`
+- `src/components/categories/last-category.test.ts`
+- `src/components/game/EmojiClue.tsx`
+- `src/components/game/emoji-fit.ts`
+- `src/components/game/emoji-fit.test.ts`
+- `src/components/game/GameControls.tsx`
+- `src/components/game/timer.ts`
+- `src/components/game/timer.test.ts`
+- `src/components/game/useGameTimer.ts`
+
+### Commit
+
+- pending
+
 ## 2026-06-07 10:13 - Close Code Review Remediation Plan
 
 ### Changed

@@ -33,15 +33,15 @@ Updated: 2026-06-07
 | 1.5 Static play routes with client shuffle | fixed | `generateStaticParams`, no `force-dynamic`, build reports `/play/[categorySlug]` as SSG, Random Mix count test, browser shuffle/restart smoke. |
 | 2.1 Explicit reveal metadata | fixed | Generic fallback removed from `src/data/puzzles.ts`; tests cover no fallback strings and required metadata. |
 | 2.2 Category and puzzle integrity tests | fixed | `src/lib/puzzles.test.ts` covers uniqueness, category references, non-empty answers/clues, Random Mix duplicates, and duplicate-answer policy. |
-| 2.3 Stale last-category link removal | fixed with one browser limitation | Source removes synthetic fallback and clears invalid slug; browser smoke verifies valid `/play/pixar` link. The in-app browser read-only scope prevented mutating localStorage to browser-test the invalid slug. |
+| 2.3 Stale last-category link removal | fixed and verified | Source removes synthetic fallback and clears invalid slug; `src/components/categories/last-category.test.ts` verifies valid, invalid, and empty saved slugs; browser smoke verifies valid `/play/pixar` link. |
 | 2.4 Category metadata policy | fixed | `recommendedGradeBand` and `colorTheme` are rendered/used on home and category cards; browser smoke confirms visible grade bands and themed icon styles. |
-| 3.1 Canonical favicon set | fixed | `src/app/favicon.ico` deleted; public favicon metadata remains in `src/app/layout.tsx`; build passed. |
-| 3.2 ResizeObserver fallback | fixed | `EmojiClue` checks for `ResizeObserver`; mobile browser smoke confirms one-line nowrap shrink-to-fit. |
+| 3.1 Canonical favicon set | fixed and verified | `src/app/favicon.ico` deleted; public favicon metadata remains in `src/app/layout.tsx`; rendered head inspection found only `/site.webmanifest`, `/favicon.ico`, `/favicon-96x96.png`, `/favicon.svg`, and `/apple-touch-icon.png`, with no App Router favicon competitor. |
+| 3.2 ResizeObserver fallback | fixed and verified | `EmojiClue` checks for `ResizeObserver`; `src/components/game/emoji-fit.test.ts` verifies missing and available support; mobile browser smoke confirms one-line nowrap shrink-to-fit. |
 | 3.3 Runtime image asset size | fixed | 512px runtime logo added and used for small placements; image sizes and browser image-load smoke recorded in `UPDATES.md`. |
 | 4.1 Shuffle and Random Mix single sources | fixed | Shared `RANDOM_MIX_SESSION_COUNT` and `getRandomizedPuzzles` are used; redundant local shuffle removed; tests cover 20 unique Random Mix cards. |
 | 4.2 GameBoard responsibility split | fixed | Timer, fullscreen, last-category persistence, and keyboard action mapping extracted; `GameBoard.tsx` reduced from 431 to 354 lines. |
 | 4.3 Shared UI styling primitives | fixed | `src/components/ui/styles.ts` centralizes repeated card/action classes; browser smoke confirms home, categories, play, and settings still render. |
-| 5.1 Controlled timer input | fixed | Timer input is controlled, Enter applies, Off sets zero; browser smoke records `15s` applied. |
+| 5.1 Controlled timer input | fixed and verified | Timer input is controlled, Enter applies, Off sets zero; `src/components/game/timer.test.ts` verifies valid, off, negative, above-999, and invalid values; browser smoke records `15s` applied. |
 | 5.2 Timer preference load simplification | fixed | `requestAnimationFrame` removed from timer loading; timer hook validates `0-999` bounds; `rg` check has no matches. |
 | 5.3 Last-category subscription honesty | fixed | Mount-only behavior selected; `useSyncExternalStore` removed; valid saved category browser smoke passes. |
 | 5.4 About modal close control | fixed | Literal close `x` replaced with `×`; accessible label preserved; browser click-close smoke passes. |

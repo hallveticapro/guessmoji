@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { coerceTimerSeconds } from "./timer";
 
 const TIMER_PREFERENCE_KEY = "guessmoji:timerSeconds";
 
@@ -47,7 +48,7 @@ export function useGameTimer() {
   }, []);
 
   const changeTimer = useCallback((duration: number, shouldStop: boolean) => {
-    const safeDuration = Math.min(999, Math.max(0, duration));
+    const safeDuration = coerceTimerSeconds(duration);
 
     saveLocalPreference(TIMER_PREFERENCE_KEY, String(safeDuration));
     setTimerDuration(safeDuration);
@@ -86,11 +87,5 @@ function saveLocalPreference(key: string, value: string) {
 
 function getSavedTimerDuration() {
   const savedTimer = readLocalPreference(TIMER_PREFERENCE_KEY);
-  const savedDuration = savedTimer ? Number.parseInt(savedTimer, 10) : 0;
-
-  if (Number.isNaN(savedDuration) || savedDuration <= 0) {
-    return 0;
-  }
-
-  return Math.min(999, savedDuration);
+  return coerceTimerSeconds(savedTimer ?? 0);
 }

@@ -9,6 +9,7 @@ import {
   quietActionClassName,
   secondaryActionClassName,
 } from "@/components/ui/styles";
+import { coerceTimerSeconds } from "./timer";
 
 type GameControlsProps = {
   canGoPrevious: boolean;
@@ -71,14 +72,7 @@ export function GameControls({
   }, [isSettingsOpen, timerDuration]);
 
   function applyTimer() {
-    const nextDuration = Number.parseInt(timerInputValue, 10);
-
-    if (Number.isNaN(nextDuration)) {
-      onTimerChange(0);
-      return;
-    }
-
-    onTimerChange(Math.min(999, Math.max(0, nextDuration)));
+    onTimerChange(coerceTimerSeconds(timerInputValue));
   }
 
   useEffect(() => {
