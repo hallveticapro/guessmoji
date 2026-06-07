@@ -1,5 +1,27 @@
 # UPDATES.md
 
+## 2026-06-07 09:33 - Add Measurable Plan Acceptance
+
+### Changed
+
+- Added measurable acceptance evidence for every PLAN item.
+- Split broad plan items where needed so each item can be verified by tests, commands, source inspection, browser smoke notes, or documented deferral evidence.
+- Updated persistent project notes to point future remediation work at the measurable PLAN criteria.
+
+### Why
+
+- The remediation plan should be actionable and auditable, with each item closable by concrete evidence instead of subjective completion.
+
+### Files Touched
+
+- `PLAN.md`
+- `TASKS.md`
+- `UPDATES.md`
+
+### Commit
+
+- `pending`
+
 ## 2026-06-07 09:31 - Scope Review Plan To Code Review Items
 
 ### Changed

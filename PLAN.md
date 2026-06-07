@@ -1,57 +1,94 @@
-# Guessmoji Remediation Plan
+# Guessmoji Code Review Remediation Plan
 
 Generated: 2026-06-07
 
+Source of truth: `CODE_REVIEW.md`
+
 ## Purpose
 
-This plan turns every action item in `CODE_REVIEW.md` into concrete implementation work. The goal is to close the review backlog while preserving the MVP rules: no login, no database, no multiplayer, static local puzzle data, projector-friendly UI, neutral public README, and safe classroom-friendly content.
+This plan converts every action item in `CODE_REVIEW.md` into implementation work with measurable acceptance. If an item is too broad to measure in one pass, it is split into smaller plan items with their own evidence.
 
-## Operating Rules
+The remediation must preserve the MVP scope:
 
-- Work in small commits, one phase or tightly related cluster at a time.
-- Keep `TASKS.md`, `AGENTS.md`, and `UPDATES.md` current when behavior, commands, structure, or conventions change.
-- Run `npm run lint`, `npm run typecheck`, `npm run test`, and `npm run build` before major behavior commits.
-- Do not use `npm audit fix --force` if it downgrades Next.js or crosses incompatible major versions.
-- Keep README examples generic and free of owner-specific personal deployment values.
-- For puzzle data, prefer failing validation over displaying fallback or low-quality clue content.
+- No login or accounts.
+- No database or server-side persistence.
+- No multiplayer.
+- Static local puzzle data.
+- Projector-friendly host UI.
+- Neutral public README with generic examples.
+- Classroom-safe default content.
 
-## Priority Order
+## Measurement Rules
 
-1. Fix host-facing P1 issues that can meaningfully degrade a live game or deployment confidence.
-2. Fix puzzle-data quality issues called out in the review.
-3. Remove duplicate logic and stale fallbacks before larger refactors.
-4. Refactor the game surface only after behavior is covered by tests or a written manual verification checklist.
-5. Batch low-risk polish and dead-code cleanup once the product behavior is stable.
+Every implementation checkpoint must leave objective evidence in at least one of these places:
 
-## Phase 0 - Baseline And Safety Harness
+- Passing command output captured in the terminal during the checkpoint.
+- A test assertion committed to the repository.
+- A specific file change that can be inspected with `rg`, `git diff`, or generated build output.
+- A manual browser checklist recorded in `UPDATES.md` when automation would be disproportionate.
+- A documented deferral in `UPDATES.md` that names the blocker, the fallback, and the remaining verification.
 
-### 0.1 Capture Current Baseline
+Use this standard gate after every non-documentation phase:
 
-**Covers:** setup for all review items.
+```bash
+npm run lint
+npm run typecheck
+npm run test
+npm run build
+```
+
+Use these extra checks when relevant:
+
+```bash
+npm audit --audit-level=moderate
+docker build -t ghcr.io/hallveticapro/guessmoji:review .
+```
+
+## Phase 0 - Baseline And Verification Harness
+
+### 0.1 Capture Baseline Commands
+
+**Source review item:** setup for all review remediation.
 
 **Files**
 
-- `CODE_REVIEW.md`
-- `PLAN.md`
-- `src/lib/puzzles.test.ts`
-- future test files as needed
+- `UPDATES.md`
 
 **Steps**
 
-1. Run `npm run lint`, `npm run typecheck`, `npm run test`, and `npm run build`.
-2. Run `npm audit --audit-level=moderate` and save the current result in `UPDATES.md` if it changes from the review.
-3. Add a short manual smoke checklist for gameplay until component or browser tests exist.
-4. Use that checklist for every gameplay-affecting phase.
+1. Run the standard gate on the current branch.
+2. Run `npm audit --audit-level=moderate`.
+3. Record command names and pass/fail status in `UPDATES.md`.
+4. If a command fails from an external or upstream-only condition, record the exact limitation and continue with the safest fallback.
 
-**Acceptance Criteria**
+**Measurable Acceptance**
 
-- Baseline commands are known before functional changes begin.
-- Any existing audit failures are documented, not hidden.
-- The smoke checklist includes category start, hint, reveal, hide, next, previous, shuffle, restart, settings, fullscreen, timer, and mobile emoji fit.
+- `UPDATES.md` contains a dated baseline entry listing all five commands: `npm run lint`, `npm run typecheck`, `npm run test`, `npm run build`, and `npm audit --audit-level=moderate`.
+- Each listed command has one of these statuses: `passed`, `failed and fixed`, or `blocked by <specific cause>`.
+- No implementation phase starts until this entry exists.
+
+### 0.2 Create Manual Browser Smoke Checklist
+
+**Source review item:** supports P1.1, P1.2, P1.3, P2.7, P3.1, P3.2, P3.3, and P3.5.
+
+**Files**
+
+- `UPDATES.md`
+- Optional future test file if browser automation is added.
+
+**Steps**
+
+1. Create a reusable checklist for home, categories, Random Mix, one non-random category, settings, keyboard controls, timer, fullscreen, and mobile emoji fit.
+2. Record the checklist in `UPDATES.md` or replace it with committed automated tests.
+
+**Measurable Acceptance**
+
+- The checklist has at least these named checks: home loads, categories load, Random Mix starts, non-random category starts, Hint toggles, answer reveals, answer hides, Next advances, Previous moves back, Shuffle changes order, Restart resets progress, settings opens, settings traps focus, timer applies, fullscreen toggles or reports unsupported, emoji clue stays one line at mobile width.
+- Every future manual smoke entry in `UPDATES.md` references this checklist by name or includes the same named checks.
 
 ## Phase 1 - Host UX And Deployment Confidence
 
-### 1.1 Align Keyboard Shortcuts With Documented Host Controls
+### 1.1 Keyboard Shortcut Contract
 
 **Source review item:** P1.1.
 
@@ -59,32 +96,34 @@ This plan turns every action item in `CODE_REVIEW.md` into concrete implementati
 
 - `src/components/game/GameBoard.tsx`
 - `README.md`
-- test file to be added if practical
+- Optional keyboard test file.
+- `UPDATES.md` for manual checklist evidence if tests are not added.
 
 **Steps**
 
-1. Update `handleKeyDown` so Space toggles answer visibility for the current puzzle.
-2. Make ArrowRight move to the next puzzle when possible.
-3. Make ArrowLeft move to the previous puzzle when possible.
-4. Keep H as hint, S as shuffle, R as restart, F as fullscreen, and Escape as overlay close before hide behavior.
-5. Ensure shortcuts do not fire while typing in settings inputs.
-6. Update README only if final behavior intentionally differs from the current documented table.
+1. Align `handleKeyDown` with the documented host controls.
+2. Prevent game shortcuts from firing while a text, number, select, textarea, or contenteditable element is focused.
+3. Update README only if the final shortcut contract intentionally differs from the current controls table.
 
-**Acceptance Criteria**
+**Measurable Acceptance**
 
-- Keyboard behavior matches README.
-- Hosts can move next without accidentally revealing hidden answers.
-- Space does not skip cards.
-- Input fields do not trigger game shortcuts while focused.
+- Space reveals a hidden answer without changing the puzzle index.
+- Space hides a visible answer without changing the puzzle index.
+- ArrowRight changes the puzzle index by exactly `+1` when a next puzzle exists.
+- ArrowRight does not reveal a hidden answer.
+- ArrowLeft changes the puzzle index by exactly `-1` when a previous puzzle exists.
+- H toggles the hint only when the answer is hidden.
+- Escape first closes an open settings/about overlay; if no overlay is open, it hides visible hint or answer without changing the puzzle index.
+- S shuffles, R restarts, and F requests fullscreen only when focus is not inside an editable control.
+- Evidence exists as either committed tests covering the above bullets or a dated `UPDATES.md` manual checklist with the same bullets marked pass/fail.
+- `README.md` controls text exactly matches the final implemented shortcut contract.
 
 **Verification**
 
-- `npm run lint`
-- `npm run typecheck`
-- `npm run test`
-- Manual keyboard smoke on `/play/[categorySlug]`.
+- Standard gate.
+- Keyboard checklist or tests.
 
-### 1.2 Make The Settings Dialog A Real Modal
+### 1.2 Settings Dialog Modal Behavior
 
 **Source review item:** P1.2.
 
@@ -92,32 +131,34 @@ This plan turns every action item in `CODE_REVIEW.md` into concrete implementati
 
 - `src/components/game/GameControls.tsx`
 - `src/components/layout/InfoModal.tsx`
-- optional shared modal hook/helper
+- Optional shared modal helper.
+- `UPDATES.md` for manual focus evidence if tests are not added.
 
 **Steps**
 
-1. Reuse or extract the focus trap/body lock behavior from `InfoModal`.
-2. Move focus into settings when opened.
+1. Reuse or extract the focus trap and body-lock pattern from `InfoModal`.
+2. Move focus into settings on open.
 3. Trap Tab and Shift+Tab inside settings.
 4. Close on Escape and backdrop click.
 5. Restore focus to the gear button on close.
-6. Confirm background controls are not tabbable while settings is open.
 
-**Acceptance Criteria**
+**Measurable Acceptance**
 
-- After opening settings, focus lands inside the dialog.
-- Tab stays inside the dialog.
-- Escape closes the dialog.
-- Closing restores focus to the settings trigger.
-- Timer input, Shuffle, Restart, and Fullscreen remain keyboard accessible.
+- Opening settings makes `document.activeElement` a focusable element inside the settings dialog.
+- Pressing Tab from the last focusable settings control wraps to the first focusable settings control.
+- Pressing Shift+Tab from the first focusable settings control wraps to the last focusable settings control.
+- Pressing Escape closes settings and returns focus to the gear button.
+- Clicking the backdrop closes settings and returns focus to the gear button.
+- While settings is open, at least one body scroll-lock style or class is active and is removed after close.
+- Background `Hint`, `Reveal`, `Next`, and `Previous` controls are not reachable by Tab while settings is open.
+- Evidence exists as automated focus tests or a dated `UPDATES.md` manual focus checklist with each bullet marked pass/fail.
 
 **Verification**
 
-- `npm run lint`
-- `npm run typecheck`
-- Browser or Playwright smoke for focus behavior.
+- Standard gate.
+- Settings focus checklist or tests.
 
-### 1.3 Add Full Quality Gates To The GHCR Workflow
+### 1.3 GHCR Workflow Quality Gate
 
 **Source review item:** P1.4.
 
@@ -125,58 +166,63 @@ This plan turns every action item in `CODE_REVIEW.md` into concrete implementati
 
 - `.github/workflows/docker-publish.yml`
 - `README.md`
+- `UPDATES.md`
 
 **Steps**
 
-1. Add workflow steps for `npm ci`, `npm run lint`, `npm run typecheck`, and `npm run test` before Docker build/publish.
-2. Keep canonical publishing gated to `hallveticapro/guessmoji`.
-3. Keep fork/non-canonical behavior build-only or no-publish as currently intended.
-4. Update README workflow wording so it matches the real CI sequence.
+1. Add `npm ci`, `npm run lint`, `npm run typecheck`, and `npm run test` before Docker build/publish.
+2. Preserve canonical publish gating and fork/non-canonical build-only behavior.
+3. Update README CI wording to match the workflow.
 
-**Acceptance Criteria**
+**Measurable Acceptance**
 
-- A failing lint, typecheck, or test step blocks image publishing.
-- README no longer overstates or understates the workflow.
-- No secrets or owner-specific live URLs are added to public README content.
+- `rg "npm ci|npm run lint|npm run typecheck|npm run test" .github/workflows/docker-publish.yml` finds all four commands.
+- In the workflow file, all four commands appear before the Docker build/push step.
+- The workflow still has a condition that prevents publishing from non-canonical owners.
+- README states exactly that the publish workflow runs install, lint, typecheck, tests, then Docker build/publish.
+- README does not include the live site URL, personal usernames, or owner-specific deployment values in public examples.
+- The next pushed workflow run completes successfully or a failure is documented in `UPDATES.md`.
 
 **Verification**
 
-- Inspect GitHub Actions YAML syntax.
-- Push to trigger workflow at the next useful milestone.
+- YAML inspection.
+- GitHub Actions run result.
 
-### 1.4 Harden Public URL Metadata
+### 1.4 Public URL Metadata Safety
 
 **Source review item:** P1.5.
 
 **Files**
 
 - `src/app/layout.tsx`
+- Optional `src/lib/public-url.ts`
 - `.env`
 - `.env.example`
 - `README.md`
-- possible `src/lib/url.ts`
+- `UPDATES.md`
 
 **Steps**
 
-1. Add a small typed helper for `NEXT_PUBLIC_APP_URL`.
-2. Trim the env var and accept only valid absolute `http` or `https` URLs.
-3. Fall back to a generic local URL for missing or invalid values.
-4. Remove hard-coded live-domain fallback behavior from source defaults.
-5. Document that production values must include `https://`.
+1. Add a typed helper that trims `NEXT_PUBLIC_APP_URL`.
+2. Accept only absolute `http://` or `https://` URLs.
+3. Fall back to a generic local URL when missing or invalid.
+4. Remove hard-coded live-domain fallback behavior.
+5. Document production URL format in README.
 
-**Acceptance Criteria**
+**Measurable Acceptance**
 
-- Malformed `NEXT_PUBLIC_APP_URL` cannot crash metadata generation.
-- Self-hosted installs do not silently emit metadata for the wrong public host.
-- README remains neutral and generic.
+- A committed helper or layout code path handles these four cases without throwing during `npm run build`: missing value, whitespace value, malformed value without scheme, and valid `https://guessmoji.example.com`.
+- `rg "guessmoji.mrhallsclass.com|mrhallsclass|hallveticapro" src/app/layout.tsx .env .env.example README.md` returns no hard-coded public fallback or personal deployment example.
+- README states that production `NEXT_PUBLIC_APP_URL` must include `https://`.
+- Metadata uses the valid configured URL when provided and the generic local fallback when invalid or missing.
+- `UPDATES.md` records the env values used for the malformed and valid build checks without recording secrets.
 
 **Verification**
 
-- `npm run typecheck`
-- `npm run build`
-- Build with missing, valid, and malformed `NEXT_PUBLIC_APP_URL` values.
+- Standard gate.
+- Build with missing, malformed, and valid public URL values.
 
-### 1.5 Remove Dynamic Rendering From Static Play Pages
+### 1.5 Static Play Routes With Client Shuffle
 
 **Source review item:** P1.3.
 
@@ -185,31 +231,33 @@ This plan turns every action item in `CODE_REVIEW.md` into concrete implementati
 - `src/app/play/[categorySlug]/page.tsx`
 - `src/components/game/GameBoard.tsx`
 - `src/lib/puzzles.ts`
+- `UPDATES.md`
 
 **Steps**
 
 1. Remove `dynamic = "force-dynamic"` from the play route.
 2. Pass stable static puzzle data to the client.
-3. Shuffle on the client in a hydration-safe way when a category starts.
-4. Preserve fresh shuffled order for repeated visits, refreshes, restart, and the Shuffle button.
-5. Keep answers hidden on first render.
+3. Shuffle on the client in a hydration-safe way.
+4. Preserve fresh orders for first visit, refresh, Restart, and Shuffle.
+5. Keep answers hidden before the first reveal.
 
-**Acceptance Criteria**
+**Measurable Acceptance**
 
-- Play routes can be statically rendered/cached again.
-- Category starts still produce fresh order.
-- No hydration warnings appear.
-- Random Mix still contains the expected count and no duplicate puzzle ids.
+- `rg "force-dynamic" src/app/play/[categorySlug]/page.tsx` returns no matches.
+- `npm run build` output does not classify `/play/[categorySlug]` as force dynamic unless another documented reason exists.
+- Browser smoke records that direct navigation to `/play/random-mix` and one non-random category shows no hydration warning in the console.
+- Browser smoke records that first visible card has answer hidden.
+- Browser smoke records at least three order-changing events: fresh page load, Restart, and Shuffle.
+- Random Mix still produces exactly 20 cards and no duplicate puzzle ids, proven by test or manual evidence.
 
 **Verification**
 
-- `npm run build`
-- Browser smoke on several direct `/play/[categorySlug]` URLs.
-- Confirm route output no longer shows the play route as force-dynamic unless another valid reason exists.
+- Standard gate.
+- Browser smoke with console inspection.
 
-## Phase 2 - Puzzle Data Quality And Clue Fairness
+## Phase 2 - Puzzle Data Integrity
 
-### 2.1 Remove Generic Reveal Fallback Copy
+### 2.1 Explicit Reveal Metadata
 
 **Source review item:** P2.1.
 
@@ -220,23 +268,25 @@ This plan turns every action item in `CODE_REVIEW.md` into concrete implementati
 
 **Steps**
 
-1. Delete generic `details` and `funFact` fallback strings from the final puzzle mapping.
-2. Make missing metadata fail loudly for core puzzles.
+1. Delete generic `details` and `funFact` fallback strings from final puzzle mapping.
+2. Make missing metadata fail loudly for core/default puzzles.
 3. Prefer direct metadata on puzzle rows or exact coverage validation over id-keyed fallback behavior.
-4. Update tests to prove every core puzzle has explicit reveal copy.
+4. Update tests.
 
-**Acceptance Criteria**
+**Measurable Acceptance**
 
-- No default puzzle can ship generic reveal details or fun facts.
-- Missing core metadata fails a test or build-time validation.
-- Existing specific reveal metadata remains intact.
+- `rg "emoji clues are quick to recognize|pack labels|fun fact fallback|generic" src/data/puzzles.ts src/lib/puzzles.test.ts` returns no shipped generic fallback string, except comments that explicitly document banned values.
+- Tests fail if any core/default puzzle is missing a non-empty `details` value.
+- Tests fail if any core/default puzzle is missing a non-empty `funFact` value.
+- Tests fail if a metadata map contains an id that does not correspond to a core/default puzzle, if that map remains.
+- Tests fail if a core/default puzzle lacks metadata coverage, if an external metadata map remains.
 
 **Verification**
 
 - `npm run test`
 - `npm run build`
 
-### 2.2 Expand Puzzle And Category Integrity Tests
+### 2.2 Category And Puzzle Integrity Tests
 
 **Source review item:** P2.5.
 
@@ -249,52 +299,55 @@ This plan turns every action item in `CODE_REVIEW.md` into concrete implementati
 
 **Steps**
 
-1. Assert category ids are unique.
-2. Assert category slugs are unique.
-3. Assert all non-random puzzles reference a real category.
-4. Assert all puzzle ids are unique.
-5. Assert all puzzles have non-empty answer and emoji clues.
-6. Assert Random Mix contains no duplicate puzzle ids.
-7. Add a duplicate-answer policy: disallow by default or maintain a documented allowlist for intentional repeats.
-8. Review known duplicated answers from the review: `Penguin`, `Fossil`, `S'mores`, `Astronaut`, `Grand Canyon`, and `Yellowstone`.
+1. Add data-driven tests for categories and puzzles.
+2. Add an explicit duplicate-answer policy.
+3. Review duplicated answers named in `CODE_REVIEW.md`.
 
-**Acceptance Criteria**
+**Measurable Acceptance**
 
-- Data integrity failures are caught automatically.
-- Intentional duplicate answers are documented in one place.
-- Unintentional duplicate answers are renamed, removed, or replaced.
+- Tests fail when two category ids are the same.
+- Tests fail when two category slugs are the same.
+- Tests fail when a non-random puzzle references a missing category id.
+- Tests fail when two puzzle ids are the same.
+- Tests fail when any puzzle has an empty `answer`.
+- Tests fail when any puzzle has an empty `emojis` string.
+- Tests fail when Random Mix returns duplicate puzzle ids.
+- Duplicate answer policy is represented in code as either a test that rejects duplicates or an explicit allowlist.
+- If an allowlist is used, it includes a comment or test case for each known duplicate from the review: `Penguin`, `Fossil`, `S'mores`, `Astronaut`, `Grand Canyon`, and `Yellowstone`.
 
 **Verification**
 
 - `npm run test`
-- Manual scan of duplicate-answer test output.
+- Inspect the duplicate-answer test or allowlist.
 
-### 2.3 Remove Stale Last-Category Fallback Links
+### 2.3 Stale Last-Category Link Removal
 
 **Source review item:** P2.4.
 
 **Files**
 
 - `src/components/categories/LastCategoryLink.tsx`
+- `UPDATES.md`
 
 **Steps**
 
-1. Only render the saved category link when the stored slug matches an existing category.
-2. Delete the synthetic fallback category object.
-3. Optionally clear stale local storage when an invalid slug is detected.
+1. Render the saved category link only when the stored slug matches an existing category.
+2. Delete synthetic fallback category behavior.
+3. Optionally clear stale localStorage.
 
-**Acceptance Criteria**
+**Measurable Acceptance**
 
-- Removed or renamed categories cannot produce dead saved-category links.
-- Valid saved categories still render normally.
+- `rg "lastCategory.*fallback|synthetic|storedName|guessmoji:lastCategoryName" src/components/categories/LastCategoryLink.tsx` finds no stale-link fallback path.
+- With localStorage set to a valid category slug, browser smoke records that the last-category link appears and points to the correct `/play/<slug>` route.
+- With localStorage set to an invalid slug, browser smoke records that no last-category link appears.
+- If stale data is cleared, browser smoke records the localStorage key is removed after invalid slug detection.
 
 **Verification**
 
-- Manual localStorage test with valid and invalid category slugs.
-- `npm run lint`
-- `npm run typecheck`
+- Standard gate.
+- Manual localStorage smoke recorded in `UPDATES.md`.
 
-### 2.4 Decide And Apply Category Metadata Policy
+### 2.4 Category Metadata Policy
 
 **Source review item:** P2.8.
 
@@ -304,28 +357,30 @@ This plan turns every action item in `CODE_REVIEW.md` into concrete implementati
 - `src/data/categories.ts`
 - `src/app/categories/page.tsx`
 - `src/app/page.tsx`
+- `UPDATES.md`
 
 **Steps**
 
-1. Decide whether `colorTheme` and `recommendedGradeBand` are product fields.
-2. If useful, surface grade band and/or theme consistently in category cards.
-3. If not useful, remove fields from the type and seed data.
-4. Keep category cards uncluttered and projector-friendly.
+1. Split the metadata decision into `recommendedGradeBand` and `colorTheme`.
+2. For each field, either use it in UI/logic or remove it from type and data.
+3. Keep category cards uncluttered.
 
-**Acceptance Criteria**
+**Measurable Acceptance**
 
-- Category metadata is either visible/useful or deleted.
-- No required seed field exists only as dead maintenance data.
+- `recommendedGradeBand` is either rendered on category/home cards or removed from `src/types/puzzle.ts` and every category seed row.
+- `colorTheme` is either used to drive a visible style/filtering behavior or removed from `src/types/puzzle.ts` and every category seed row.
+- `UPDATES.md` records which choice was made for each field.
+- If a field is kept, browser smoke records where it appears or what behavior it drives.
+- If a field is removed, `rg "recommendedGradeBand|colorTheme" src` returns only expected references such as tests or documentation explaining removal.
 
 **Verification**
 
-- `npm run typecheck`
-- `npm run build`
-- Visual scan of home and category pages if UI changes.
+- Standard gate.
+- Browser visual scan if a field is surfaced.
 
 ## Phase 3 - Runtime, Assets, And Browser Robustness
 
-### 3.1 Canonicalize Favicons
+### 3.1 Canonical Favicon Set
 
 **Source review item:** P2.3.
 
@@ -338,51 +393,56 @@ This plan turns every action item in `CODE_REVIEW.md` into concrete implementati
 - `public/favicon-96x96.png`
 - `public/apple-touch-icon.png`
 - `public/site.webmanifest`
+- `UPDATES.md`
 
 **Steps**
 
 1. Treat public favicon files as canonical.
 2. Remove `src/app/favicon.ico` unless a strong reason to keep it is documented.
 3. Rebuild and inspect generated head links.
-4. Confirm browser tabs and pinned icons use the rounded public assets.
 
-**Acceptance Criteria**
+**Measurable Acceptance**
 
-- Browsers receive one coherent favicon set.
-- No duplicate App Router favicon competes with rounded public icons.
+- `test ! -e src/app/favicon.ico` succeeds, or `UPDATES.md` documents the specific reason it remains.
+- `src/app/layout.tsx` references public favicon, SVG favicon, 96x96 favicon, Apple touch icon, and manifest paths.
+- Browser or build head inspection records no competing App Router favicon link for `src/app/favicon.ico`.
+- `npm run build` passes after the favicon change.
 
 **Verification**
 
 - `npm run build`
-- Browser head inspection.
+- Head-link inspection recorded in `UPDATES.md`.
 
-### 3.2 Harden EmojiClue For Missing ResizeObserver
+### 3.2 ResizeObserver Fallback
 
 **Source review item:** P2.7.
 
 **Files**
 
 - `src/components/game/EmojiClue.tsx`
+- Optional test file.
+- `UPDATES.md`
 
 **Steps**
 
 1. Feature-check `ResizeObserver`.
-2. Provide a conservative CSS-only no-wrap fallback.
-3. Prefer React-managed style state over direct DOM mutation where practical.
-4. Keep the current shrink-to-fit behavior in modern browsers.
+2. Provide a CSS-only no-wrap fallback when unavailable.
+3. Keep shrink-to-fit behavior when `ResizeObserver` exists.
 
-**Acceptance Criteria**
+**Measurable Acceptance**
 
-- `EmojiClue` does not throw when `ResizeObserver` is unavailable.
-- Long emoji clues still stay on one line.
-- Small-screen behavior remains better than wrapping.
+- `EmojiClue` code checks for `ResizeObserver` before constructing it.
+- A test or manual browser snippet sets `window.ResizeObserver = undefined` before rendering and records no thrown error.
+- The fallback element keeps `white-space: nowrap` or equivalent no-wrap behavior.
+- Browser smoke at a mobile width records that a long emoji clue remains on one line.
+- Modern-browser smoke records that shrink-to-fit still reduces font size for an over-wide clue.
 
 **Verification**
 
-- Component/browser smoke with `window.ResizeObserver` removed or mocked.
-- Mobile-width screenshot check if browser tooling is available.
+- Standard gate.
+- ResizeObserver fallback test or manual evidence.
 
-### 3.3 Optimize Runtime Image Assets
+### 3.3 Runtime Image Asset Size
 
 **Source review item:** P3.5.
 
@@ -391,32 +451,36 @@ This plan turns every action item in `CODE_REVIEW.md` into concrete implementati
 - `public/assets/guessmoji-logo.png`
 - `public/assets/guessmoji-embed.png`
 - `public/assets/guessmoji-favicon-master.png`
+- Optional smaller runtime image assets.
 - `src/components/layout/AppShell.tsx`
 - `src/components/layout/InfoModal.tsx`
 - `src/app/page.tsx`
+- `UPDATES.md`
 
 **Steps**
 
-1. Create smaller runtime logo variants for shell/small placements.
-2. Preserve the larger embed image for social previews if needed.
-3. Use `next/image` sizing where appropriate.
-4. Keep visual branding unchanged.
+1. Measure current image sizes.
+2. Create smaller runtime variants for small logo placements when useful.
+3. Preserve social preview image quality.
+4. Use explicit image dimensions or Next Image where appropriate.
 
-**Acceptance Criteria**
+**Measurable Acceptance**
 
-- Smaller UI placements do not load unnecessarily heavy image assets.
-- Social preview image remains high quality.
-- Home, shell, and About modal still look correct.
+- `UPDATES.md` records before/after byte sizes for every runtime image changed.
+- Any image rendered smaller than 200 CSS pixels wide uses an asset no wider than 512 physical pixels, or `UPDATES.md` documents why the larger asset is retained.
+- Open Graph/Twitter metadata still references an image at least 1200 by 630 pixels or documents the final preview dimensions.
+- Browser visual smoke records no layout shift or broken image on home, shell, and About modal.
+- `npm run build` passes.
 
 **Verification**
 
-- `npm run build`
-- Browser visual scan.
-- Static asset size comparison.
+- File size comparison.
+- Standard gate.
+- Browser visual smoke.
 
 ## Phase 4 - DRY And Maintainability Refactors
 
-### 4.1 Centralize Shuffle And Random Mix Counts
+### 4.1 Shuffle And Random Mix Single Sources
 
 **Source review items:** P2.2, Quick Wins, Redundancy Removal Log.
 
@@ -431,58 +495,59 @@ This plan turns every action item in `CODE_REVIEW.md` into concrete implementati
 **Steps**
 
 1. Export one Random Mix session count from the puzzle utility layer.
-2. Use `getRandomizedPuzzles` everywhere instead of local shuffle helpers.
-3. Remove `getShuffledPuzzles` from `GameBoard`.
-4. Keep Random Mix at 20 cards unless product requirements change.
+2. Use `getRandomizedPuzzles` everywhere shuffle behavior is needed.
+3. Remove local shuffle helpers.
+4. Preserve 20-card Random Mix sessions.
 
-**Acceptance Criteria**
+**Measurable Acceptance**
 
-- One shuffle implementation exists.
-- One Random Mix count source exists.
-- Category count display and play behavior agree.
+- `rg "function getShuffledPuzzles|const getShuffledPuzzles|getShuffledPuzzles" src/components/game/GameBoard.tsx` returns no matches.
+- `rg "RANDOM_MIX_SESSION_COUNT|DEFAULT_RANDOM_MIX_COUNT" src` shows exactly one exported count definition and only imports/usages elsewhere.
+- Tests prove Random Mix returns exactly 20 puzzles.
+- Tests prove Random Mix contains no duplicate puzzle ids.
+- Browser smoke records Restart and Shuffle both create a new order.
 
 **Verification**
 
-- `npm run test`
-- Manual Random Mix smoke.
+- Standard gate.
+- `rg` checks.
+- Browser Random Mix smoke.
 
-### 4.2 Refactor GameBoard Into Smaller Logic Units
+### 4.2 GameBoard Responsibility Split
 
 **Source review item:** P2.6.
 
 **Files**
 
 - `src/components/game/GameBoard.tsx`
-- possible `src/components/game/useGameProgress.ts`
-- possible `src/components/game/useGameTimer.ts`
-- possible `src/components/game/useKeyboardShortcuts.ts`
-- possible `src/components/game/useFullscreen.ts`
+- New hooks/helpers under `src/components/game` or `src/lib`.
+- Optional tests.
+- `UPDATES.md`
 
 **Steps**
 
-1. Complete Phase 1 keyboard/modal work first.
-2. Extract game progression and shuffle state.
-3. Extract timer state and local persistence.
-4. Extract keyboard shortcut registration.
-5. Extract fullscreen state.
-6. Keep rendering and layout in `GameBoard`.
-7. Add tests for pure helpers where practical.
+1. Extract game progression and shuffle state.
+2. Extract timer state and local persistence.
+3. Extract keyboard shortcut registration.
+4. Extract fullscreen state.
+5. Keep rendering and layout in `GameBoard`.
+6. Add tests for pure helpers where practical.
 
-**Acceptance Criteria**
+**Measurable Acceptance**
 
-- `GameBoard` is smaller and mostly presentational.
-- Behavior is unchanged from the post-P1 verified flow.
-- Timer stop-on-reveal and restart/shuffle behavior are preserved.
+- `GameBoard.tsx` no longer directly contains all five responsibilities named in the review: progression/shuffle, timer, keyboard registration, fullscreen, and last-category persistence.
+- At least three extracted hooks/helpers exist with names that reflect their responsibilities, or `UPDATES.md` documents why a smaller extraction was safer.
+- `GameBoard.tsx` line count is reduced from the pre-refactor baseline recorded in `UPDATES.md`, or `UPDATES.md` documents why behavior-preserving extraction increased line count.
+- Browser smoke passes for Reveal, Hide, Hint, Next, Previous, Restart, Shuffle, timer stop-on-reveal, fullscreen, and completion.
+- Any extracted pure helper has unit coverage when its behavior can run without the DOM.
 
 **Verification**
 
-- `npm run lint`
-- `npm run typecheck`
-- `npm run test`
-- `npm run build`
-- Full manual gameplay smoke.
+- Standard gate.
+- Pre/post line count recorded in `UPDATES.md`.
+- Full gameplay smoke.
 
-### 4.3 Introduce Minimal Shared UI Styling Primitives
+### 4.3 Shared UI Styling Primitives
 
 **Source review item:** P3.7.
 
@@ -494,133 +559,176 @@ This plan turns every action item in `CODE_REVIEW.md` into concrete implementati
 - `src/components/layout/AppShell.tsx`
 - `src/app/page.tsx`
 - `src/app/categories/page.tsx`
-- possible shared UI component files
+- Optional shared UI component files.
+- `UPDATES.md`
 
 **Steps**
 
-1. Identify repeated primary button, secondary button, icon button, and card class strings.
-2. Extract only patterns already repeated in several places.
-3. Keep the current visual style.
+1. Identify repeated primary button, secondary button, icon button, and card classes.
+2. Extract only repeated patterns.
+3. Keep current visual style.
 4. Avoid broad design-system work.
 
-**Acceptance Criteria**
+**Measurable Acceptance**
 
-- Repeated class strings are reduced.
-- Visual output remains the same or slightly more consistent.
-- No nested-card or heavy abstraction pattern is introduced.
+- At least one repeated button or card treatment used in three or more places is replaced by a shared helper/component, or `UPDATES.md` documents that no pattern met the three-use threshold.
+- Shared helper/component names are specific, such as primary action, secondary action, icon button, or game card.
+- Browser visual smoke records that home, categories, play, and About modal still render without overlapping text or nested-card regressions.
+- `npm run lint` and `npm run build` pass.
 
 **Verification**
 
-- `npm run lint`
-- `npm run build`
-- Browser visual scan.
+- Standard gate.
+- Browser visual smoke.
 
 ## Phase 5 - Polish, Cleanup, And Redundancy Removal
 
-### 5.1 Timer Control Polish
+### 5.1 Controlled Timer Input
 
-**Source review items:** P3.1, P3.3.
+**Source review item:** P3.1.
 
 **Files**
 
 - `src/components/game/GameControls.tsx`
-- `src/components/game/GameBoard.tsx`
+- Optional tests.
+- `UPDATES.md`
 
 **Steps**
 
 1. Make the custom timer input controlled while settings is open.
 2. Let Enter apply timer changes.
-3. Preserve the current `0-999` second bounds unless product requirements change.
-4. Read `guessmoji:timerSeconds` directly in the client effect.
-5. Remove unnecessary `requestAnimationFrame`.
+3. Preserve `0-999` second bounds.
+4. Preserve Off behavior.
 
-**Acceptance Criteria**
+**Measurable Acceptance**
 
-- Timer UI stays synced with state.
-- Enter applies the input.
-- Missing, invalid, zero, and valid timer values behave correctly.
+- The timer input uses a React `value` state instead of only `defaultValue`.
+- Enter applies the visible timer input value without clicking Apply.
+- Values below 0 are clamped or rejected according to the existing bounds.
+- Values above 999 are clamped or rejected according to the existing bounds.
+- Off sets timer duration to 0 and leaves the UI in the documented disabled/off state.
+- Evidence exists as tests or a manual settings checklist in `UPDATES.md`.
 
 **Verification**
 
-- Manual timer smoke.
-- `npm run lint`
-- `npm run typecheck`
+- Standard gate.
+- Timer checklist or tests.
 
-### 5.2 Simplify Last-Category Subscription
+### 5.2 Timer Preference Load Simplification
+
+**Source review item:** P3.3.
+
+**Files**
+
+- `src/components/game/GameBoard.tsx` or extracted timer hook.
+- Optional tests.
+- `UPDATES.md`
+
+**Steps**
+
+1. Read `guessmoji:timerSeconds` directly inside a client-only effect.
+2. Validate with the same `0-999` bounds used by timer changes.
+3. Remove unnecessary `requestAnimationFrame`.
+
+**Measurable Acceptance**
+
+- `rg "requestAnimationFrame" src/components/game/GameBoard.tsx src/components/game src/lib` returns no timer preference loading usage.
+- Missing timer storage keeps the default timer state.
+- Invalid timer storage keeps the default timer state or clears the invalid value.
+- Stored `0` loads as Off.
+- Stored valid value in range loads as that timer duration.
+- Evidence exists as tests or a manual localStorage checklist in `UPDATES.md`.
+
+**Verification**
+
+- Standard gate.
+- Timer storage checklist or tests.
+
+### 5.3 Last-Category Subscription Honesty
 
 **Source review item:** P3.2.
 
 **Files**
 
 - `src/components/categories/LastCategoryLink.tsx`
-- optional small custom event helper
+- Optional custom event helper.
+- `UPDATES.md`
 
 **Steps**
 
 1. Decide whether same-tab live updates are needed.
-2. If not needed, replace `useSyncExternalStore` with a simpler mount-time client effect.
-3. If needed, dispatch a same-tab custom event when writing the last category.
+2. If not needed, replace `useSyncExternalStore` with a mount-time client effect.
+3. If needed, dispatch and listen for a same-tab custom event when writing the last category.
 4. Keep invalid saved categories hidden.
 
-**Acceptance Criteria**
+**Measurable Acceptance**
 
-- The implementation matches the actual product need.
-- It no longer implies same-tab behavior it does not provide.
+- `UPDATES.md` records the selected behavior: mount-only or live same-tab.
+- If mount-only is selected, `rg "useSyncExternalStore" src/components/categories/LastCategoryLink.tsx` returns no matches.
+- If live same-tab is selected, code dispatches and listens for a named custom event when last-category storage changes.
+- Valid saved category appears on the categories page.
+- Invalid saved category does not appear.
+- Same-tab behavior matches the documented choice in `UPDATES.md`.
 
 **Verification**
 
-- Manual categories/play navigation smoke.
-- `npm run typecheck`
+- Standard gate.
+- Last-category checklist in `UPDATES.md`.
 
-### 5.3 Polish About Modal Close Control
+### 5.4 About Modal Close Control
 
 **Source review item:** P3.4.
 
 **Files**
 
 - `src/components/layout/InfoModal.tsx`
+- `UPDATES.md`
 
 **Steps**
 
 1. Replace literal `x` with an intentional close glyph/control.
-2. Keep the accessible label.
-3. Preserve current button size, contrast, and focus behavior.
+2. Keep accessible label.
+3. Preserve focus visibility and contrast.
 
-**Acceptance Criteria**
+**Measurable Acceptance**
 
-- Close control looks intentional.
-- Screen-reader label remains clear.
+- `rg ">x<|aria-label=\"Close about dialog\"[\\s\\S]*>x<" src/components/layout/InfoModal.tsx` finds no literal text-only `x` close control.
+- The close button still has `aria-label="Close about dialog"`.
+- Browser smoke records the close control is focusable, has a visible focus state, and closes the modal with click and Enter.
 
 **Verification**
 
-- Visual and keyboard smoke.
+- Standard gate.
+- About modal checklist.
 
-### 5.4 Tighten TypeScript Config
+### 5.5 TypeScript `allowJs` Policy
 
 **Source review item:** P3.6.
 
 **Files**
 
 - `tsconfig.json`
-- `AGENTS.md` only if `allowJs` must remain
+- `AGENTS.md` only if `allowJs` remains enabled.
 
 **Steps**
 
-1. Check whether any source JavaScript is intentionally compiled.
-2. Disable `allowJs` if not needed.
-3. Document the reason if it must stay enabled.
+1. Check whether source JavaScript is intentionally compiled.
+2. Disable `allowJs` if no compiled JavaScript source is required.
+3. Document a reason if `allowJs` remains enabled.
 
-**Acceptance Criteria**
+**Measurable Acceptance**
 
-- TypeScript config reflects the actual codebase.
-- Accidental `.js` source files are not silently accepted unless intentional.
+- If no intentional compiled JavaScript source exists, `tsconfig.json` has `"allowJs": false` or omits `allowJs`.
+- If `allowJs` remains true, `AGENTS.md` names the exact JavaScript files or tool constraint that requires it.
+- `find src -name "*.js" -o -name "*.jsx"` returns no compiled source files unless they are documented.
+- `npm run typecheck` passes.
 
 **Verification**
 
-- `npm run typecheck`
-- `npm run build`
+- Standard gate.
+- `find` check.
 
-### 5.5 Delete Unused Starter And Placeholder Files
+### 5.6 Delete Starter Assets And Placeholder Styles
 
 **Source review items:** Quick Wins, Redundancy Removal Log.
 
@@ -632,25 +740,32 @@ This plan turns every action item in `CODE_REVIEW.md` into concrete implementati
 - `public/vercel.svg`
 - `public/window.svg`
 - `src/styles/.gitkeep`
+- `AGENTS.md`
 
 **Steps**
 
 1. Confirm no production references remain.
 2. Delete unused starter SVGs.
 3. Delete `src/styles/.gitkeep` if no shared styles file is created.
-4. Update `AGENTS.md` folder tree if the `styles` directory is removed.
+4. Update the folder tree if the styles directory is removed.
 
-**Acceptance Criteria**
+**Measurable Acceptance**
 
-- Unused starter files are gone.
-- Repo tree matches actual structure.
+- `test ! -e public/file.svg` succeeds.
+- `test ! -e public/globe.svg` succeeds.
+- `test ! -e public/next.svg` succeeds.
+- `test ! -e public/vercel.svg` succeeds.
+- `test ! -e public/window.svg` succeeds.
+- `src/styles/.gitkeep` is deleted, or `UPDATES.md` documents the new shared style file that replaced it.
+- `rg "file.svg|globe.svg|next.svg|vercel.svg|window.svg" .` returns no production references.
+- `AGENTS.md` folder tree matches the final `src` structure.
 
 **Verification**
 
-- `rg "file.svg|globe.svg|next.svg|vercel.svg|window.svg"`
-- `npm run build`
+- Standard gate.
+- `test` and `rg` checks.
 
-### 5.6 Remove Or Justify `getPuzzleById`
+### 5.7 `getPuzzleById` Decision
 
 **Source review item:** Redundancy Removal Log.
 
@@ -658,26 +773,28 @@ This plan turns every action item in `CODE_REVIEW.md` into concrete implementati
 
 - `src/lib/puzzles.ts`
 - `src/lib/puzzles.test.ts`
+- `UPDATES.md`
 
 **Steps**
 
-1. Confirm there are no production callers.
-2. Delete `getPuzzleById` and its test if it is not a planned public utility.
-3. If keeping it, document why it exists and where future use is expected.
+1. Confirm whether there are production callers.
+2. Delete `getPuzzleById` and its tests if unused.
+3. If keeping it, document the public utility reason.
 
-**Acceptance Criteria**
+**Measurable Acceptance**
 
-- No unused utility remains without a reason.
-- Tests do not exist only to justify unused production code.
+- If deleted, `rg "getPuzzleById" src` returns no matches.
+- If retained, `UPDATES.md` states the production or planned public utility reason, and tests cover that stated behavior.
+- No test remains solely to exercise unused production code without a documented reason.
 
 **Verification**
 
-- `rg "getPuzzleById"`
-- `npm run test`
+- Standard gate.
+- `rg "getPuzzleById" src`
 
 ## Phase 6 - Dependency Security
 
-### 6.1 Resolve Or Track Moderate Audit Findings
+### 6.1 Moderate Audit Findings
 
 **Source review item:** P2.9.
 
@@ -693,24 +810,26 @@ This plan turns every action item in `CODE_REVIEW.md` into concrete implementati
 2. Check whether compatible patched versions exist.
 3. Upgrade only within compatible modern versions.
 4. Do not force a downgrade.
-5. Document remaining upstream-only findings if no safe fix exists.
+5. Document remaining upstream-only findings.
 
-**Acceptance Criteria**
+**Measurable Acceptance**
 
-- Audit findings are either fixed or explicitly tracked.
-- Dependency upgrades do not break the app stack.
+- `UPDATES.md` records the exact count of moderate-or-higher findings before remediation.
+- If compatible patches exist, `package.json` and `package-lock.json` move only to compatible modern versions and the standard gate passes.
+- If findings remain, `UPDATES.md` records each remaining package/advisory, why no safe compatible fix was applied, and the next review trigger.
+- `npm audit --audit-level=moderate` exits 0, or exits nonzero with every remaining finding documented as upstream-only/no-safe-compatible-fix.
+- No commit uses `npm audit fix --force`.
 
 **Verification**
 
-- `npm run lint`
-- `npm run typecheck`
-- `npm run test`
-- `npm run build`
+- Standard gate.
 - `npm audit --audit-level=moderate`
 
 ## Phase 7 - Final Review Closure
 
-### 7.1 Close The Review Backlog
+### 7.1 Review Backlog Closure Evidence
+
+**Source review item:** all of `CODE_REVIEW.md`.
 
 **Files**
 
@@ -725,47 +844,51 @@ This plan turns every action item in `CODE_REVIEW.md` into concrete implementati
 1. Add completion notes to `PLAN.md` as phases are finished.
 2. Mark related project tasks complete or adjusted in `TASKS.md`.
 3. Keep `AGENTS.md` updated with new commands, structure, conventions, and data policies.
-4. Update `CODE_REVIEW.md` or add a follow-up review note when all items are closed.
-5. Run the full verification suite.
+4. Add a closure note to `CODE_REVIEW.md` or create a follow-up review note.
+5. Run final verification.
 
-**Acceptance Criteria**
+**Measurable Acceptance**
 
-- Every P1, P2, P3, Quick Win, and Redundancy Removal Log item from `CODE_REVIEW.md` is fixed, deleted, intentionally deferred with a reason, or superseded by a documented decision.
-- The app remains MVP-scoped with no accounts, database, or multiplayer.
+- The coverage map below has no missing `CODE_REVIEW.md` action items.
+- Every coverage map row has one of these statuses recorded in `PLAN.md` or `UPDATES.md`: `fixed`, `deleted`, `verified`, `deferred with reason`, or `superseded by documented decision`.
+- Final verification records status for `npm run lint`, `npm run typecheck`, `npm run test`, `npm run build`, `npm audit --audit-level=moderate`, and Docker build.
+- Browser smoke records pass/fail for home, categories, Random Mix, one non-random category, settings modal, keyboard controls, timer controls, and mobile emoji fit.
+- README still contains no live site URL, personal username, or owner-specific deployment value in public examples.
+- The app remains account-free, database-free, and multiplayer-free, verified by source search or documented architecture review.
 
-**Final Verification**
+**Verification**
 
-- `npm run lint`
-- `npm run typecheck`
-- `npm run test`
-- `npm run build`
+- Standard gate.
 - `npm audit --audit-level=moderate`
-- Browser smoke on home, categories, several play pages, settings modal, keyboard controls, and mobile emoji fit.
+- Docker build.
+- Browser smoke.
 
 ## Coverage Map
 
-| Review item | Plan section |
-| --- | --- |
-| P1.1 Keyboard shortcuts | 1.1 |
-| P1.2 Settings modal focus | 1.2 |
-| P1.3 Dynamic play route | 1.5 |
-| P1.4 GHCR quality gate | 1.3 |
-| P1.5 Public URL metadata | 1.4 |
-| P2.1 Generic reveal fallback | 2.1 |
-| P2.2 Shuffle and Random Mix duplication | 4.1 |
-| P2.3 Duplicate favicon sources | 3.1 |
-| P2.4 Last-category stale fallback | 2.3 |
-| P2.5 Data validation and duplicate answers | 2.2 |
-| P2.6 GameBoard refactor | 4.2 |
-| P2.7 EmojiClue ResizeObserver fallback | 3.2 |
-| P2.8 Category metadata policy | 2.4 |
-| P2.9 Dependency audit findings | 6.1 |
-| P3.1 Timer input | 5.1 |
-| P3.2 Last-category subscription | 5.2 |
-| P3.3 Timer requestAnimationFrame | 5.1 |
-| P3.4 About close button | 5.3 |
-| P3.5 Image optimization | 3.3 |
-| P3.6 TypeScript `allowJs` | 5.4 |
-| P3.7 Shared styling primitives | 4.3 |
-| Quick wins | 4.1, 5.3, 5.5 |
-| Redundancy removal log | 3.1, 4.1, 5.5, 5.6 |
+| Review item | Plan item | Measurable evidence |
+| --- | --- | --- |
+| Baseline verification harness | 0.1, 0.2 | Baseline command status and reusable smoke checklist |
+| P1.1 Keyboard shortcuts | 1.1 | Shortcut tests or manual checklist plus README match |
+| P1.2 Settings modal focus | 1.2 | Focus-trap tests or manual focus checklist |
+| P1.3 Dynamic play route | 1.5 | No `force-dynamic`, build route evidence, no hydration warnings |
+| P1.4 GHCR quality gate | 1.3 | Workflow command order and successful Actions run |
+| P1.5 Public URL metadata | 1.4 | URL helper build matrix and generic README/env values |
+| P2.1 Generic reveal fallback | 2.1 | Tests for explicit metadata and no fallback strings |
+| P2.2 Shuffle and Random Mix duplication | 4.1 | Single helper/count `rg` checks and Random Mix tests |
+| P2.3 Duplicate favicon sources | 3.1 | No `src/app/favicon.ico` or documented exception plus head inspection |
+| P2.4 Last-category stale fallback | 2.3 | Valid/invalid localStorage smoke |
+| P2.5 Data validation and duplicate answers | 2.2 | Data-driven integrity tests and duplicate-answer policy |
+| P2.6 GameBoard refactor | 4.2 | Extracted hooks/helpers, line-count note, gameplay smoke |
+| P2.7 EmojiClue ResizeObserver fallback | 3.2 | Undefined `ResizeObserver` render evidence and mobile one-line smoke |
+| P2.8 Category metadata policy | 2.4 | Field used in UI/logic or removed, with `rg` evidence |
+| P2.9 Dependency audit findings | 6.1 | Audit output and compatible-fix or documented-deferral evidence |
+| P3.1 Timer input | 5.1 | Controlled value, Enter apply, timer checklist/tests |
+| P3.2 Last-category subscription | 5.3 | Mount-only or custom-event evidence matching documented choice |
+| P3.3 Timer requestAnimationFrame | 5.2 | No timer-loading `requestAnimationFrame`, storage checklist/tests |
+| P3.4 About close button | 5.4 | No literal text-only `x`, accessible label, modal smoke |
+| P3.5 Image optimization | 3.3 | Before/after byte sizes and visual smoke |
+| P3.6 TypeScript `allowJs` | 5.5 | `allowJs` disabled or documented, source `.js` check |
+| P3.7 Shared styling primitives | 4.3 | Shared helper/component or documented no-threshold result |
+| Quick wins | 4.1, 5.4, 5.6 | Deleted starter assets, close control polish, shared shuffle/count |
+| Redundancy removal log | 3.1, 4.1, 5.6, 5.7 | Deleted or justified redundant files/helpers |
+| Final closure | 7.1 | Status for every row plus final command, Docker, and browser evidence |

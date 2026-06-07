@@ -30,7 +30,7 @@ As of 2026-06-06:
 - Category play should start in a fresh shuffled order every time, with the Shuffle button kept for an on-demand reshuffle.
 - Emoji clues should shrink to fit on smaller screens instead of wrapping onto multiple lines.
 - A comprehensive code review backlog now lives in `CODE_REVIEW.md`; use its P1 and P2 items to guide near-term cleanup.
-- A concrete remediation plan now lives in `PLAN.md`; use it to resolve every `CODE_REVIEW.md` action item phase by phase.
+- A concrete remediation plan now lives in `PLAN.md`; every plan item has measurable acceptance evidence so review remediation can be closed objectively.
 
 The app should support many themed categories, including:
 
