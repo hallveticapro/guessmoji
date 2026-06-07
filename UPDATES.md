@@ -1,5 +1,26 @@
 # UPDATES.md
 
+## 2026-06-06 22:21 - Refine Code Review Report
+
+### Changed
+
+- Tightened the code review report with browser-smoke evidence for the settings dialog focus bug.
+- Clarified public URL metadata risks, timer preference naming, generic reveal fallback wording, and duplicate answer data findings.
+- Added `getPuzzleById` to the redundancy review notes because it has no production callers.
+
+### Why
+
+- The review report should be precise enough to use as a backlog without rediscovering the same evidence.
+
+### Files Touched
+
+- `CODE_REVIEW.md`
+- `UPDATES.md`
+
+### Commit
+
+- `pending`
+
 ## 2026-06-06 22:15 - Add Comprehensive Code Review Report
 
 ### Changed

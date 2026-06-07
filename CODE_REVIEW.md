@@ -4,7 +4,7 @@ Generated: 2026-06-06 22:15 EDT
 
 ## Executive Summary
 
-Guessmoji is in healthy MVP shape: the main classroom game flow exists, the app is database-free, Dockerized, and the current local checks pass for lint, typecheck, tests, and production build. The largest practical risks are UX regressions in the host controls, especially keyboard behavior and the settings dialog, plus deployment confidence gaps because the publish workflow does not run the full quality gate before building the GHCR image. The dominant good pattern is simple static TypeScript data with a small utility layer; the dominant debt pattern is duplicated gameplay/data logic split across pages, components, and seed files. No P0 issues were found, but several P1/P2 issues will compound as more categories, host controls, or display modes are added.
+Guessmoji is in healthy MVP shape: the main classroom game flow exists, the app is database-free, Dockerized, and the current local checks pass for lint, typecheck, tests, and production build. The largest practical risks are UX regressions in the host controls, especially keyboard behavior and the settings dialog, plus deployment confidence gaps because the publish workflow does not run the full quality gate before building the GHCR image. The dominant good pattern is simple static TypeScript data with a small utility layer; the dominant debt pattern is duplicated gameplay/data logic split across pages, components, and seed files. A browser smoke test confirmed the game flow works at a basic level, but it also confirmed that settings-dialog focus can escape to background controls. No P0 issues were found, but several P1/P2 issues will compound as more categories, host controls, or display modes are added.
 
 ## 2. Prioritised Action Items
 
@@ -40,7 +40,7 @@ In Guessmoji, align the keyboard shortcuts with the documented host controls. Up
 
 **Problem**
 
-The settings panel uses `role="dialog"` and `aria-modal="true"`, but focus is not moved into the dialog, focus is not trapped, and background controls remain tabbable. The About modal already implements a stronger modal pattern with focus capture, Escape handling, and body scroll lock. This inconsistency can degrade keyboard and screen-reader use during a live classroom session.
+The settings panel uses `role="dialog"` and `aria-modal="true"`, but focus is not moved into the dialog, focus is not trapped, and background controls remain tabbable. A local Playwright smoke confirmed that after opening settings, focus stayed on the gear button and Tab moved to the underlying `Hint` button. The About modal already implements a stronger modal pattern with focus capture, Escape handling, and body scroll lock. This inconsistency can degrade keyboard and screen-reader use during a live classroom session.
 
 **Fix prompt**
 
@@ -82,7 +82,7 @@ The workflow builds and pushes a Docker image, but it does not run `npm run lint
 In Guessmoji, update `.github/workflows/docker-publish.yml` so the canonical repository publish job runs `npm ci`, `npm run lint`, `npm run typecheck`, `npm run test`, and then the Docker build/publish steps. Keep the existing behavior where forks and non-canonical owners build but do not publish to `ghcr.io/hallveticapro/guessmoji`. Update `README.md` so its CI description exactly matches the workflow. Do not add secrets or owner-specific deployment URLs to the README.
 ```
 
-#### 5. Metadata URL parsing can crash if `NEXT_PUBLIC_APP_URL` is malformed
+#### 5. Public URL metadata can be wrong or crash if `NEXT_PUBLIC_APP_URL` is missing/malformed
 
 **Affected files / functions**
 
@@ -92,12 +92,12 @@ In Guessmoji, update `.github/workflows/docker-publish.yml` so the canonical rep
 
 **Problem**
 
-`new URL(appUrl)` is evaluated during metadata setup. If a self-hosted deployment sets `NEXT_PUBLIC_APP_URL` to a value without a scheme, with whitespace, or with another malformed value, metadata creation can throw during build or runtime. This is easy to misconfigure in Unraid-style environment screens where users may paste `guessmoji.example.com` instead of `https://guessmoji.example.com`.
+`new URL(appUrl)` is evaluated during metadata setup. If a self-hosted deployment sets `NEXT_PUBLIC_APP_URL` to a value without a scheme, with whitespace, or with another malformed value, metadata creation can throw during build or runtime. If the variable is missing, `src/app/layout.tsx` falls back to a specific live domain even though `.env.example`, Docker Compose, and the public README use generic/local defaults. That can generate social preview metadata for the wrong host in forks or self-hosted installs.
 
 **Fix prompt**
 
 ```txt
-In Guessmoji, harden public app URL handling in `src/app/layout.tsx`. Add a small typed helper that trims `NEXT_PUBLIC_APP_URL`, accepts only valid absolute HTTP/HTTPS URLs, and falls back to a safe generic local URL if invalid or missing. Keep `.env` and `.env.example` safe and generic, and add a short README note that `NEXT_PUBLIC_APP_URL` must include `https://` when set. Ensure metadata generation cannot crash because of a malformed environment value.
+In Guessmoji, harden public app URL handling in `src/app/layout.tsx`. Add a small typed helper that trims `NEXT_PUBLIC_APP_URL`, accepts only valid absolute HTTP/HTTPS URLs, and falls back to a safe generic local URL in development if invalid or missing. Avoid a hard-coded canonical live domain in public defaults. Keep `.env` and `.env.example` safe and generic, and add a short README note that `NEXT_PUBLIC_APP_URL` must include `https://` when set for production. Ensure metadata generation cannot crash because of a malformed environment value.
 ```
 
 ### P2
@@ -106,17 +106,17 @@ In Guessmoji, harden public app URL handling in `src/app/layout.tsx`. Add a smal
 
 **Affected files / functions**
 
-- `src/data/puzzles.ts`, `withMetadata`
+- `src/data/puzzles.ts`, final `puzzles` metadata mapping
 - `src/lib/puzzles.test.ts`, fallback reveal copy assertions
 
 **Problem**
 
-The project rules say default puzzles should not ship generic reveal copy. Tests currently assert that no exposed default puzzle contains the generic strings, but the fallback strings still exist in `withMetadata`. That creates a future footgun: adding or renaming a core puzzle id can silently ship vague detail and fun-fact copy instead of failing fast.
+The project rules say default puzzles should not ship generic reveal copy. Tests currently assert that no exposed default puzzle contains the generic strings, but the fallback strings still exist in the final `puzzles` mapping. That creates a future footgun: adding or renaming a core puzzle id can silently ship vague detail and fun-fact copy instead of failing fast.
 
 **Fix prompt**
 
 ```txt
-In Guessmoji, remove generic detail and fun-fact fallback copy from `src/data/puzzles.ts`. Make `withMetadata` fail loudly during development or build if a core puzzle is missing explicit metadata, or merge metadata directly into the core puzzle objects so the data cannot drift by id. Update `src/lib/puzzles.test.ts` to assert that every core puzzle has explicit `details` and `funFact` values and that the generic fallback strings no longer exist in the data module.
+In Guessmoji, remove generic detail and fun-fact fallback copy from `src/data/puzzles.ts`. Make the final `puzzles` export fail loudly during development or build if a core puzzle is missing explicit metadata, or merge metadata directly into the core puzzle objects so the data cannot drift by id. Update `src/lib/puzzles.test.ts` to assert that every core puzzle has explicit `details` and `funFact` values and that the generic fallback strings no longer exist in the data module.
 ```
 
 #### 2. Shuffle and Random Mix constants are duplicated across app layers
@@ -185,12 +185,12 @@ In Guessmoji, simplify `src/components/categories/LastCategoryLink.tsx` so it on
 
 **Problem**
 
-Current tests cover basic counts, Random Mix size, and absence of fallback reveal copy, but they do not assert full data integrity. With 600 puzzles across 60 categories, duplicate ids, invalid category ids, duplicate slugs, missing required reveal fields, or empty emoji clues could slip into the seed set and create broken pages or weak reveals.
+Current tests cover basic counts, Random Mix size, and absence of fallback reveal copy, but they do not assert full data integrity. With 600 puzzles across 60 categories, duplicate ids, invalid category ids, duplicate slugs, missing required reveal fields, or empty emoji clues could slip into the seed set and create broken pages or weak reveals. A direct data search found duplicated expanded-pack answers such as `Penguin`, `Fossil`, `S'mores`, `Astronaut`, `Grand Canyon`, and `Yellowstone`; some repeats may be acceptable, but the policy should be explicit.
 
 **Fix prompt**
 
 ```txt
-In Guessmoji, expand `src/lib/puzzles.test.ts` with data integrity tests for all shipped categories and puzzles. Assert that category ids and slugs are unique, every non-random puzzle references a real category, every puzzle id is unique, every puzzle has non-empty answer and emoji fields, every default puzzle has classroom-safe reveal metadata where required, and Random Mix contains no duplicate puzzle ids. Keep the tests data-driven so future category additions are checked automatically.
+In Guessmoji, expand `src/lib/puzzles.test.ts` with data integrity tests for all shipped categories and puzzles. Assert that category ids and slugs are unique, every non-random puzzle references a real category, every puzzle id is unique, every puzzle has non-empty answer and emoji fields, every default puzzle has classroom-safe reveal metadata where required, and Random Mix contains no duplicate puzzle ids. Add a duplicate-answer policy: either disallow duplicates across generic educational packs or keep a small documented allowlist for intentional cross-pack repeats. Keep the tests data-driven so future category additions are checked automatically.
 ```
 
 #### 6. `GameBoard` mixes game state, persistence, timer, fullscreen, keyboard, and rendering
@@ -277,7 +277,7 @@ The custom timer input uses `defaultValue`, so it can drift from `timerDuration`
 **Fix prompt**
 
 ```txt
-In Guessmoji, make the custom timer input in `src/components/game/GameControls.tsx` controlled while the settings dialog is open. Keep it synced with `timerDuration`, clamp values to the existing 10-300 second range, and let Enter apply the value. Preserve the existing preset buttons and Off behavior.
+In Guessmoji, make the custom timer input in `src/components/game/GameControls.tsx` controlled while the settings dialog is open. Keep it synced with `timerDuration`, preserve the current 0-999 second bounds unless product requirements choose a narrower range, and let Enter apply the value. Preserve the existing Off behavior.
 ```
 
 #### 2. Last-category subscription only reacts to cross-tab storage events
@@ -300,7 +300,7 @@ In Guessmoji, simplify or complete `src/components/categories/LastCategoryLink.t
 
 **Affected files / functions**
 
-- `src/components/game/GameBoard.tsx`, initial `useEffect` that reads `guessmoji:timerDuration`
+- `src/components/game/GameBoard.tsx`, initial `useEffect` that reads `guessmoji:timerSeconds`
 
 **Problem**
 
@@ -309,7 +309,7 @@ The timer preference is read inside `requestAnimationFrame` from a client-only e
 **Fix prompt**
 
 ```txt
-In Guessmoji, simplify the timer preference load in `src/components/game/GameBoard.tsx`. Read `guessmoji:timerDuration` directly inside the existing client-only `useEffect`, validate it with the same 10-300 second bounds, and set `hasLoadedTimerPreference` after the read. Preserve behavior for missing, invalid, and disabled timer values.
+In Guessmoji, simplify the timer preference load in `src/components/game/GameBoard.tsx`. Read `guessmoji:timerSeconds` directly inside the existing client-only `useEffect`, validate it with the same 0-999 second bounds used by `changeTimer`, and set timer state after the read. Preserve behavior for missing, invalid, and disabled timer values.
 ```
 
 #### 4. About modal close button uses text instead of the app's icon-button convention
@@ -397,6 +397,7 @@ These are small, safe fixes that can be batched after the P1 items are scheduled
 - Remove `src/app/favicon.ico` after confirming the public favicon files are the canonical rounded browser icons.
 - Change the About modal close button from literal `x` text to a more intentional accessible close glyph/control.
 - Add data integrity assertions for unique puzzle ids, unique category slugs, and valid category references.
+- Review or allowlist duplicated expanded-pack answers such as `Penguin`, `Fossil`, `S'mores`, `Astronaut`, `Grand Canyon`, and `Yellowstone`.
 - Update README/control text after the final keyboard behavior is fixed so docs and UI cannot drift.
 
 Batch prompt:
@@ -416,4 +417,5 @@ In Guessmoji, make a small cleanup pass without changing product behavior. Delet
 - `src/app/favicon.ico` - duplicate favicon source competing with the explicit public favicon metadata; remove after confirming the rounded public icons are canonical.
 - `getShuffledPuzzles` in `src/components/game/GameBoard.tsx` - duplicate of `getRandomizedPuzzles` in `src/lib/puzzles.ts`.
 - `RANDOM_MIX_SESSION_COUNT` in `src/app/categories/page.tsx` - duplicate Random Mix count once a shared exported count is used.
-- Generic fallback strings in `src/data/puzzles.ts` `withMetadata` - default reveal content should be explicit or fail validation rather than silently falling back.
+- Generic fallback strings in `src/data/puzzles.ts` final `puzzles` mapping - default reveal content should be explicit or fail validation rather than silently falling back.
+- `getPuzzleById` in `src/lib/puzzles.ts` - no production code uses it; delete if it is not intended as a public utility, and remove or replace the test that only exercises this unused helper.
