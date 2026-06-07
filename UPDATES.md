@@ -90,7 +90,7 @@
 
 ### Commit
 
-- `33a316d584f664617a8883430f8d8970aee2d616`
+- `ec34ad82516f3b67ff4b65a6e9a709d6fb0f591b`
 
 ## 2026-06-07 09:47 - Capture Phase 0 Baseline Evidence
 
