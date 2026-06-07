@@ -1,5 +1,4 @@
 import type { Puzzle } from "@/types/puzzle";
-import { categories } from "@/data/categories";
 import { expandedPuzzles } from "@/data/expandedPacks";
 
 const corePuzzles = [
@@ -216,23 +215,22 @@ const corePuzzleMetadata: Record<string, Required<Pick<Puzzle, "details" | "funF
   "ice-age": { details: "Released: 2002 | Type: animated film", funFact: "Scrat's endless acorn chase became one of Ice Age's signature running jokes." },
 };
 
-const categoryNamesById = new Map(categories.map((category) => [category.id, category.name]));
 const allPuzzles: Puzzle[] = [...corePuzzles, ...expandedPuzzles];
 
 export const puzzles = allPuzzles.map(
   (puzzle) => {
     const metadata = corePuzzleMetadata[puzzle.id];
+    const details = puzzle.details ?? metadata?.details;
+    const funFact = puzzle.funFact ?? metadata?.funFact;
+
+    if (!details || !funFact) {
+      throw new Error(`Missing reveal metadata for puzzle "${puzzle.id}".`);
+    }
 
     return {
       ...puzzle,
-      details:
-        puzzle.details ??
-        metadata?.details ??
-        `Pack: ${categoryNamesById.get(puzzle.categoryId) ?? "Guessmoji"} | Difficulty: ${puzzle.difficulty}`,
-      funFact:
-        puzzle.funFact ??
-        metadata?.funFact ??
-        `${puzzle.answer} appears in the ${categoryNamesById.get(puzzle.categoryId) ?? "Guessmoji"} pack because its emoji clues are quick to recognize.`,
+      details,
+      funFact,
     } satisfies Puzzle;
   },
 );

@@ -3,10 +3,10 @@ import { categories } from "@/data/categories";
 import { puzzles } from "@/data/puzzles";
 import {
   getCategoryBySlug,
-  getPuzzleById,
   getPuzzlesByCategoryId,
   getRandomMix,
   getRandomizedPuzzles,
+  RANDOM_MIX_SESSION_COUNT,
 } from "@/lib/puzzles";
 
 describe("puzzle utilities", () => {
@@ -41,6 +41,66 @@ describe("puzzle utilities", () => {
     expect(puzzles.some((puzzle) => puzzle.details?.startsWith("Pack:"))).toBe(false);
   });
 
+  it("keeps category ids and slugs unique", () => {
+    expect(new Set(categories.map((category) => category.id)).size).toBe(
+      categories.length,
+    );
+    expect(new Set(categories.map((category) => category.slug)).size).toBe(
+      categories.length,
+    );
+  });
+
+  it("keeps puzzle ids unique", () => {
+    expect(new Set(puzzles.map((puzzle) => puzzle.id)).size).toBe(puzzles.length);
+  });
+
+  it("keeps every non-random puzzle linked to a real category", () => {
+    const categoryIds = new Set(categories.map((category) => category.id));
+
+    expect(puzzles.every((puzzle) => categoryIds.has(puzzle.categoryId))).toBe(
+      true,
+    );
+  });
+
+  it("keeps every answer and emoji clue non-empty", () => {
+    expect(puzzles.every((puzzle) => puzzle.answer.trim().length > 0)).toBe(true);
+    expect(puzzles.every((puzzle) => puzzle.emojis.trim().length > 0)).toBe(true);
+  });
+
+  it("documents intentional duplicate answers", () => {
+    const allowedDuplicateAnswers = new Set([
+      // Movie titles also appear as character-focused entertainment clues.
+      "Cinderella",
+      "Moana",
+      "Mulan",
+      "Rapunzel",
+      // Character or franchise clues intentionally overlap across entertainment packs.
+      "Pokemon",
+      "Thor",
+      // Review-identified overlaps retained across educational/general packs.
+      "Penguin",
+      "Fossil",
+      "S'mores",
+      "Astronaut",
+      "Grand Canyon",
+      "Yellowstone",
+    ]);
+    const answersByName = new Map<string, string[]>();
+
+    for (const puzzle of puzzles) {
+      const ids = answersByName.get(puzzle.answer) ?? [];
+      ids.push(puzzle.id);
+      answersByName.set(puzzle.answer, ids);
+    }
+
+    const unexpectedDuplicates = [...answersByName]
+      .filter(([, ids]) => ids.length > 1)
+      .map(([answer]) => answer)
+      .filter((answer) => !allowedDuplicateAnswers.has(answer));
+
+    expect(unexpectedDuplicates).toEqual([]);
+  });
+
   it("looks up a category by slug", () => {
     expect(getCategoryBySlug("pixar")?.name).toBe("Pixar");
   });
@@ -56,15 +116,11 @@ describe("puzzle utilities", () => {
     expect(pixarPuzzles.every((puzzle) => puzzle.categoryId === "pixar")).toBe(true);
   });
 
-  it("looks up a puzzle by id", () => {
-    expect(getPuzzleById("lion-king")?.answer).toBe("The Lion King");
-  });
-
   it("returns a random mix with the requested count and no duplicate ids", () => {
-    const randomMix = getRandomMix(20);
+    const randomMix = getRandomMix(RANDOM_MIX_SESSION_COUNT);
     const uniqueIds = new Set(randomMix.map((puzzle) => puzzle.id));
 
-    expect(randomMix).toHaveLength(20);
+    expect(randomMix).toHaveLength(RANDOM_MIX_SESSION_COUNT);
     expect(uniqueIds.size).toBe(randomMix.length);
     expect(randomMix.every((puzzle) => puzzle.categoryId !== "random-mix")).toBe(true);
   });

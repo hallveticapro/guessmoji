@@ -11,13 +11,17 @@ const MAX_EMOJI_FONT_SIZE = 144;
 
 export function EmojiClue({ emojis }: EmojiClueProps) {
   const clueRef = useRef<HTMLParagraphElement>(null);
-  const [fontSize, setFontSize] = useState(MAX_EMOJI_FONT_SIZE);
+  const [fontSize, setFontSize] = useState(MIN_EMOJI_FONT_SIZE);
 
   useLayoutEffect(() => {
     const clue = clueRef.current;
     const container = clue?.parentElement;
 
     if (!clue || !container) {
+      return;
+    }
+
+    if (!("ResizeObserver" in window)) {
       return;
     }
 

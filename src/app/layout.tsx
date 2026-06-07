@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { AppShell } from "@/components/layout/AppShell";
+import { getPublicAppUrl, getPublicAppUrlString } from "@/lib/public-url";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,13 +14,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const appUrl =
-  process.env.NEXT_PUBLIC_APP_URL ?? "https://guessmoji.mrhallsclass.com/";
+const appUrl = getPublicAppUrlString();
 const appDescription =
   "Guessmoji is a fast emoji guessing game with themed packs, big clues, hidden answers, hints, and fun facts for quick group play.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(appUrl),
+  metadataBase: getPublicAppUrl(),
   title: {
     default: "Guessmoji",
     template: "%s | Guessmoji",

@@ -129,9 +129,9 @@ export function InfoModal() {
               type="button"
               onClick={() => setIsOpen(false)}
               className="sticky top-3 z-10 float-right mr-3 mt-3 grid size-12 place-items-center rounded-full border-2 border-[#d5e4df] bg-white text-2xl font-black leading-none text-[#17324d] shadow-[0_3px_0_#d5e4df] transition hover:-translate-y-0.5 focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-[#8bc9c3]"
-              aria-label="Close About Guessmoji"
+              aria-label="Close about dialog"
             >
-              x
+              ×
             </button>
 
             <Image

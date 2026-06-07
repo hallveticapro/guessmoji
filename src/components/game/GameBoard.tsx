@@ -5,34 +5,45 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { AnswerReveal } from "@/components/game/AnswerReveal";
 import { EmojiClue } from "@/components/game/EmojiClue";
 import { GameControls } from "@/components/game/GameControls";
+import { getGameKeyboardAction } from "@/components/game/keyboard";
 import { ProgressIndicator } from "@/components/game/ProgressIndicator";
+import { useFullscreenMode } from "@/components/game/useFullscreenMode";
+import { useGameTimer } from "@/components/game/useGameTimer";
+import { useLastCategoryPersistence } from "@/components/game/useLastCategoryPersistence";
+import { getRandomizedPuzzles } from "@/lib/puzzles";
 import type { Category, Puzzle } from "@/types/puzzle";
 
 type GameBoardProps = {
   category: Category;
   categories: Category[];
   initialPuzzles: Puzzle[];
+  sessionPuzzleCount?: number;
 };
-
-const LAST_CATEGORY_SLUG_KEY = "guessmoji:lastCategorySlug";
-const LAST_CATEGORY_NAME_KEY = "guessmoji:lastCategoryName";
-const TIMER_PREFERENCE_KEY = "guessmoji:timerSeconds";
 
 export function GameBoard({
   category,
   categories,
   initialPuzzles,
+  sessionPuzzleCount,
 }: GameBoardProps) {
-  const [puzzles, setPuzzles] = useState(initialPuzzles);
+  const [puzzles, setPuzzles] = useState(() =>
+    getInitialSessionPuzzles(initialPuzzles, sessionPuzzleCount),
+  );
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnswerVisible, setIsAnswerVisible] = useState(false);
   const [isHintVisible, setIsHintVisible] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
-  const [timerDuration, setTimerDuration] = useState(0);
-  const [timeRemaining, setTimeRemaining] = useState(0);
-  const [isTimerStopped, setIsTimerStopped] = useState(false);
+  const { isFullscreen, toggleFullscreenMode } = useFullscreenMode();
+  const {
+    changeTimer: applyTimerDuration,
+    resetTimer,
+    stopTimer,
+    timerDuration,
+    timeRemaining,
+  } = useGameTimer();
+
+  useLastCategoryPersistence(category);
 
   const categoryNamesById = useMemo(
     () => new Map(categories.map((item) => [item.id, item.name])),
@@ -40,89 +51,49 @@ export function GameBoard({
   );
 
   const currentPuzzle = puzzles[currentIndex];
-  const answerCategoryName =
-    categoryNamesById.get(currentPuzzle.categoryId) ?? category.name;
   const isLastPuzzle = currentIndex >= puzzles.length - 1;
 
-  useEffect(() => {
-    saveLocalPreference(LAST_CATEGORY_SLUG_KEY, category.slug);
-    saveLocalPreference(LAST_CATEGORY_NAME_KEY, category.name);
-  }, [category.name, category.slug]);
+  const preparePuzzleDeck = useCallback(() => {
+    const shuffledPuzzles = getRandomizedPuzzles(initialPuzzles);
+
+    return shuffledPuzzles.slice(0, sessionPuzzleCount ?? shuffledPuzzles.length);
+  }, [initialPuzzles, sessionPuzzleCount]);
 
   useEffect(() => {
-    const frameId = window.requestAnimationFrame(() => {
-      const savedDuration = getSavedTimerDuration();
-
-      if (savedDuration > 0) {
-        setTimerDuration(savedDuration);
-        setTimeRemaining(savedDuration);
-        setIsTimerStopped(false);
-      }
-    });
+    const timeoutId = window.setTimeout(() => {
+      setPuzzles(preparePuzzleDeck());
+      setCurrentIndex(0);
+      setIsComplete(false);
+      setIsAnswerVisible(false);
+      setIsHintVisible(false);
+      setIsSettingsOpen(false);
+      resetTimer();
+    }, 0);
 
     return () => {
-      window.cancelAnimationFrame(frameId);
+      window.clearTimeout(timeoutId);
     };
-  }, []);
+  }, [preparePuzzleDeck, resetTimer]);
 
   const resetPuzzleState = useCallback(() => {
     setIsAnswerVisible(false);
     setIsHintVisible(false);
     setIsSettingsOpen(false);
-    setIsTimerStopped(false);
-    setTimeRemaining(timerDuration);
-  }, [timerDuration]);
-
-  useEffect(() => {
-    if (timerDuration <= 0 || isTimerStopped || timeRemaining <= 0) {
-      return;
-    }
-
-    const intervalId = window.setInterval(() => {
-      setTimeRemaining((seconds) => Math.max(0, seconds - 1));
-    }, 1000);
-
-    return () => {
-      window.clearInterval(intervalId);
-    };
-  }, [isTimerStopped, timeRemaining, timerDuration]);
-
-  const toggleFullscreenMode = useCallback(async () => {
-    try {
-      if (!document.fullscreenEnabled) {
-        return;
-      }
-
-      if (document.fullscreenElement) {
-        await document.exitFullscreen();
-        return;
-      }
-
-      await document.documentElement.requestFullscreen();
-    } catch {
-      // Some browsers or displays can deny fullscreen requests.
-    } finally {
-      setIsFullscreen(Boolean(document.fullscreenElement));
-    }
-  }, []);
-
-  useEffect(() => {
-    function syncFullscreenState() {
-      setIsFullscreen(Boolean(document.fullscreenElement));
-    }
-
-    syncFullscreenState();
-    document.addEventListener("fullscreenchange", syncFullscreenState);
-
-    return () => {
-      document.removeEventListener("fullscreenchange", syncFullscreenState);
-    };
-  }, []);
+    resetTimer();
+  }, [resetTimer]);
 
   const showAnswer = useCallback(() => {
     setIsAnswerVisible(true);
     setIsHintVisible(false);
-    setIsTimerStopped(true);
+    stopTimer();
+  }, [stopTimer]);
+
+  const hideAnswer = useCallback(() => {
+    setIsAnswerVisible(false);
+  }, []);
+
+  const closeSettings = useCallback(() => {
+    setIsSettingsOpen(false);
   }, []);
 
   const toggleHint = useCallback(() => {
@@ -138,8 +109,8 @@ export function GameBoard({
     setIsAnswerVisible(false);
     setIsHintVisible(false);
     setIsSettingsOpen(false);
-    setIsTimerStopped(true);
-  }, []);
+    stopTimer();
+  }, [stopTimer]);
 
   const goToNextPuzzle = useCallback(() => {
     if (isLastPuzzle) {
@@ -159,29 +130,24 @@ export function GameBoard({
   }, [resetPuzzleState]);
 
   const shufflePuzzles = useCallback(() => {
-    setPuzzles((currentPuzzles) => getShuffledPuzzles(currentPuzzles));
+    setPuzzles((currentPuzzles) => getRandomizedPuzzles(currentPuzzles));
     setCurrentIndex(0);
     setIsComplete(false);
     resetPuzzleState();
   }, [resetPuzzleState]);
 
   const restartCategory = useCallback(() => {
-    setPuzzles(getShuffledPuzzles(initialPuzzles));
+    setPuzzles(preparePuzzleDeck());
     setCurrentIndex(0);
     setIsComplete(false);
     resetPuzzleState();
-  }, [initialPuzzles, resetPuzzleState]);
+  }, [preparePuzzleDeck, resetPuzzleState]);
 
   const changeTimer = useCallback(
     (duration: number) => {
-      const safeDuration = Math.min(999, Math.max(0, duration));
-
-      saveLocalPreference(TIMER_PREFERENCE_KEY, String(safeDuration));
-      setTimerDuration(safeDuration);
-      setTimeRemaining(safeDuration);
-      setIsTimerStopped(isAnswerVisible || isComplete || safeDuration === 0);
+      applyTimerDuration(duration, isAnswerVisible || isComplete);
     },
-    [isAnswerVisible, isComplete],
+    [applyTimerDuration, isAnswerVisible, isComplete],
   );
 
   useEffect(() => {
@@ -190,71 +156,51 @@ export function GameBoard({
         return;
       }
 
-      if (event.key === "Escape") {
-        event.preventDefault();
-        if (isSettingsOpen) {
+      const action = getGameKeyboardAction(event.key, {
+        isAnswerVisible,
+        isComplete,
+        isSettingsOpen,
+      });
+
+      if (!action) {
+        return;
+      }
+
+      event.preventDefault();
+
+      switch (action) {
+        case "close-settings":
           setIsSettingsOpen(false);
           return;
-        }
+        case "hide-clues":
+          setIsHintVisible(false);
+          setIsAnswerVisible(false);
+          return;
+        case "toggle-answer":
+          if (isAnswerVisible) {
+            hideAnswer();
+            return;
+          }
 
-        setIsHintVisible(false);
-        setIsAnswerVisible(false);
-        return;
-      }
-
-      if (isComplete) {
-        return;
-      }
-
-      if (event.key === " ") {
-        event.preventDefault();
-        if (isAnswerVisible) {
+          showAnswer();
+          return;
+        case "next":
           goToNextPuzzle();
           return;
-        }
-
-        showAnswer();
-        return;
-      }
-
-      if (event.key === "ArrowRight") {
-        event.preventDefault();
-        if (isAnswerVisible) {
-          goToNextPuzzle();
+        case "previous":
+          goToPreviousPuzzle();
           return;
-        }
-
-        showAnswer();
-        return;
-      }
-
-      if (event.key === "ArrowLeft") {
-        event.preventDefault();
-        goToPreviousPuzzle();
-        return;
-      }
-
-      if (event.key.toLowerCase() === "h") {
-        event.preventDefault();
-        toggleHint();
-        return;
-      }
-
-      if (event.key.toLowerCase() === "s") {
-        event.preventDefault();
-        shufflePuzzles();
-        return;
-      }
-
-      if (event.key.toLowerCase() === "r") {
-        event.preventDefault();
-        restartCategory();
-        return;
-      }
-
-      if (event.key.toLowerCase() === "f") {
-        event.preventDefault();
-        void toggleFullscreenMode();
+        case "hint":
+          toggleHint();
+          return;
+        case "shuffle":
+          shufflePuzzles();
+          return;
+        case "restart":
+          restartCategory();
+          return;
+        case "fullscreen":
+          void toggleFullscreenMode();
       }
     }
 
@@ -266,6 +212,7 @@ export function GameBoard({
   }, [
     goToNextPuzzle,
     goToPreviousPuzzle,
+    hideAnswer,
     isAnswerVisible,
     isComplete,
     isSettingsOpen,
@@ -275,6 +222,17 @@ export function GameBoard({
     toggleFullscreenMode,
     toggleHint,
   ]);
+
+  if (!currentPuzzle) {
+    return (
+      <section className="flex flex-1 items-center justify-center bg-[radial-gradient(circle_at_top_right,rgba(255,202,66,0.28),transparent_24rem),linear-gradient(145deg,#fffaf0,#eef8f2)] px-5 py-12 text-[#17324d]">
+        <p className="text-lg font-black">Preparing shuffled deck...</p>
+      </section>
+    );
+  }
+
+  const answerCategoryName =
+    categoryNamesById.get(currentPuzzle.categoryId) ?? category.name;
 
   if (isComplete) {
     return (
@@ -363,7 +321,7 @@ export function GameBoard({
           isHintVisible={isHintVisible}
           isSettingsOpen={isSettingsOpen}
           nextLabel={isLastPuzzle ? "Finish" : "Next"}
-          onCloseSettings={() => setIsSettingsOpen(false)}
+          onCloseSettings={closeSettings}
           onHint={toggleHint}
           onNext={goToNextPuzzle}
           onPrevious={goToPreviousPuzzle}
@@ -380,17 +338,6 @@ export function GameBoard({
   );
 }
 
-function getShuffledPuzzles(puzzlesToShuffle: readonly Puzzle[]) {
-  const shuffled = [...puzzlesToShuffle];
-
-  for (let index = shuffled.length - 1; index > 0; index -= 1) {
-    const swapIndex = Math.floor(Math.random() * (index + 1));
-    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
-  }
-
-  return shuffled;
-}
-
 function isEditableTarget(target: EventTarget | null) {
   if (!(target instanceof HTMLElement)) {
     return false;
@@ -399,33 +346,9 @@ function isEditableTarget(target: EventTarget | null) {
   return Boolean(target.closest("input, textarea, select, [contenteditable='true']"));
 }
 
-function saveLocalPreference(key: string, value: string) {
-  try {
-    window.localStorage.setItem(key, value);
-  } catch {
-    // Local storage can be unavailable in locked-down browsers.
-  }
-}
-
-function readLocalPreference(key: string) {
-  if (typeof window === "undefined") {
-    return null;
-  }
-
-  try {
-    return window.localStorage.getItem(key);
-  } catch {
-    return null;
-  }
-}
-
-function getSavedTimerDuration() {
-  const savedTimer = readLocalPreference(TIMER_PREFERENCE_KEY);
-  const savedDuration = savedTimer ? Number.parseInt(savedTimer, 10) : 0;
-
-  if (Number.isNaN(savedDuration) || savedDuration <= 0) {
-    return 0;
-  }
-
-  return Math.min(999, savedDuration);
+function getInitialSessionPuzzles(
+  puzzlesToPlay: readonly Puzzle[],
+  sessionPuzzleCount?: number,
+) {
+  return puzzlesToPlay.slice(0, sessionPuzzleCount ?? puzzlesToPlay.length);
 }

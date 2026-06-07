@@ -5,8 +5,8 @@ import {
   getAllCategories,
   getCategoryBySlug,
   getPuzzlesByCategoryId,
-  getRandomMix,
-  getRandomizedPuzzles,
+  getRandomMixPuzzlePool,
+  RANDOM_MIX_SESSION_COUNT,
 } from "@/lib/puzzles";
 import type { Category, Puzzle } from "@/types/puzzle";
 
@@ -16,7 +16,13 @@ type PlayPageProps = {
   }>;
 };
 
-export const dynamic = "force-dynamic";
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return getAllCategories().map((category) => ({
+    categorySlug: category.slug,
+  }));
+}
 
 export async function generateMetadata({ params }: PlayPageProps): Promise<Metadata> {
   const { categorySlug } = await params;
@@ -49,16 +55,19 @@ export default async function PlayPage({ params }: PlayPageProps) {
       category={category}
       categories={getAllCategories()}
       initialPuzzles={puzzles}
+      sessionPuzzleCount={
+        category.id === "random-mix" ? RANDOM_MIX_SESSION_COUNT : undefined
+      }
     />
   );
 }
 
 function getPlayablePuzzles(category: Category): Puzzle[] {
   if (category.id === "random-mix") {
-    return getRandomMix(20);
+    return getRandomMixPuzzlePool();
   }
 
-  return getRandomizedPuzzles(getPuzzlesByCategoryId(category.id));
+  return getPuzzlesByCategoryId(category.id);
 }
 
 function MissingCategory({ slug }: { slug: string }) {

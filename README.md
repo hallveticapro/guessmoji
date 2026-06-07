@@ -119,6 +119,8 @@ npm start
 | `Left Arrow` | Previous puzzle |
 | `S` | Shuffle |
 | `R` | Restart |
+| `F` | Fullscreen |
+| `Escape` | Close overlays, then hide visible hint or answer |
 
 ## Category Discovery
 
@@ -163,8 +165,8 @@ npm run test
 npm run build
 ```
 
-The Docker publishing workflow runs the same checks before building and publishing the
-container image.
+The Docker publishing workflow installs dependencies, runs lint, typecheck, and tests,
+then builds and publishes the container image.
 
 ## Docker Compose
 
@@ -242,7 +244,9 @@ Unraid notes:
 
 - Use any open host port if `3000` is already taken.
 - Point your reverse proxy to the chosen host port or to container port `3000`.
-- Set `NEXT_PUBLIC_APP_URL` to the public URL for your deployment.
+- Set `NEXT_PUBLIC_APP_URL` to the public URL for your deployment. Production
+  values must include the full `https://` scheme, such as
+  `https://guessmoji.example.com`.
 - Keep `.env` limited to safe public values unless you intentionally add secrets later.
 
 ## Social Preview Metadata
@@ -255,7 +259,8 @@ The app uses local assets for social previews and install metadata:
 - Favicons: files in `public/`
 
 Update `NEXT_PUBLIC_APP_URL` before building a production image so Open Graph and
-Twitter metadata resolve against the correct deployment URL.
+Twitter metadata resolve against the correct deployment URL. Use an absolute URL
+with `https://` for public deployments.
 
 ## Troubleshooting
 

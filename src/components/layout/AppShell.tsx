@@ -19,10 +19,10 @@ export function AppShell({ children }: { children: ReactNode }) {
             aria-label="Guessmoji home"
           >
             <Image
-              src="/assets/guessmoji-logo.png"
+              src="/assets/guessmoji-logo-512.png"
               alt=""
-              width={1254}
-              height={1254}
+              width={512}
+              height={512}
               className="size-14 rounded-2xl border-2 border-[#d5e4df] bg-white object-cover shadow-[0_4px_0_rgba(23,50,77,0.08)]"
             />
             <span>Guessmoji</span>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type GameControlsProps = {
   canGoPrevious: boolean;
@@ -45,12 +45,26 @@ export function GameControls({
   timeRemaining,
 }: GameControlsProps) {
   const timerInputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const [timerInputValue, setTimerInputValue] = useState(String(timerDuration));
+
+  useEffect(() => {
+    if (isSettingsOpen) {
+      const timeoutId = window.setTimeout(() => {
+        setTimerInputValue(String(timerDuration));
+      }, 0);
+
+      return () => {
+        window.clearTimeout(timeoutId);
+      };
+    }
+
+    return undefined;
+  }, [isSettingsOpen, timerDuration]);
 
   function applyTimer() {
-    const nextDuration = Number.parseInt(
-      timerInputRef.current?.value ?? String(timerDuration),
-      10,
-    );
+    const nextDuration = Number.parseInt(timerInputValue, 10);
 
     if (Number.isNaN(nextDuration)) {
       onTimerChange(0);
@@ -59,6 +73,57 @@ export function GameControls({
 
     onTimerChange(Math.min(999, Math.max(0, nextDuration)));
   }
+
+  useEffect(() => {
+    if (!isSettingsOpen) {
+      return;
+    }
+
+    const previousFocus = document.activeElement as HTMLElement | null;
+    const previousOverflow = document.body.style.overflow;
+
+    document.body.style.overflow = "hidden";
+    closeButtonRef.current?.focus();
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onCloseSettings();
+        return;
+      }
+
+      if (event.key !== "Tab") {
+        return;
+      }
+
+      const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      );
+
+      if (!focusable || focusable.length === 0) {
+        return;
+      }
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = previousOverflow;
+      previousFocus?.focus();
+    };
+  }, [isSettingsOpen, onCloseSettings]);
 
   return (
     <>
@@ -105,6 +170,7 @@ export function GameControls({
           onClick={onCloseSettings}
         >
           <div
+            ref={dialogRef}
             aria-modal="true"
             className="w-full max-w-xl rounded-[1.35rem] border-2 border-[#d5e4df] bg-[#fffdf7] p-5 text-[#17324d] shadow-[0_10px_0_rgba(23,50,77,0.14)]"
             onClick={(event) => event.stopPropagation()}
@@ -124,6 +190,7 @@ export function GameControls({
                 </h2>
               </div>
               <button
+                ref={closeButtonRef}
                 type="button"
                 onClick={onCloseSettings}
                 className="grid size-11 place-items-center rounded-full border-2 border-[#d5e4df] bg-white text-2xl font-black text-[#17324d] shadow-[0_3px_0_#d5e4df] transition hover:-translate-y-0.5 focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-[#8bc9c3]"
@@ -148,7 +215,14 @@ export function GameControls({
                     min={0}
                     max={999}
                     type="number"
-                    defaultValue={timerDuration}
+                    value={timerInputValue}
+                    onChange={(event) => setTimerInputValue(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") {
+                        event.preventDefault();
+                        applyTimer();
+                      }
+                    }}
                     ref={timerInputRef}
                     className="min-h-12 flex-1 rounded-xl border-2 border-[#cbdbd8] bg-white px-4 py-3 text-lg font-bold text-[#17324d] focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-[#8bc9c3]"
                   />
@@ -162,10 +236,7 @@ export function GameControls({
                   <button
                     type="button"
                     onClick={() => {
-                      if (timerInputRef.current) {
-                        timerInputRef.current.value = "0";
-                      }
-
+                      setTimerInputValue("0");
                       onTimerChange(0);
                     }}
                     className="min-h-12 rounded-xl border-2 border-[#d5e4df] bg-white px-5 py-3 text-base font-black text-[#17324d] shadow-[0_3px_0_#d5e4df] transition hover:-translate-y-0.5 hover:bg-[#e1f5ef] focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-[#8bc9c3]"

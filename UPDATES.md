@@ -1,5 +1,97 @@
 # UPDATES.md
 
+## 2026-06-07 10:07 - Apply Review Remediation Batch One
+
+### Changed
+
+- Aligned keyboard shortcuts with the README contract and added unit tests for shortcut action mapping.
+- Made `/play/[categorySlug]` statically generated with client-side shuffle on category start, restart, and shuffle.
+- Added a public URL helper with tests and removed the hard-coded live URL metadata fallback.
+- Added CI install, lint, typecheck, and test steps before Docker build/publish.
+- Removed generic reveal fallback copy and added broader puzzle/category integrity tests.
+- Simplified stale last-category behavior to render only valid saved categories.
+- Surfaced category grade bands and color themes on home/category cards.
+- Removed duplicate App Router favicon and unused starter SVG/style placeholder files.
+- Added a 512px runtime logo and used it for small shell/home logo placements.
+- Extracted game timer, fullscreen, last-category persistence, and keyboard action logic out of `GameBoard`.
+- Made the settings timer input controlled, added Enter-to-apply behavior, and added settings dialog focus trapping/body scroll lock.
+- Hardened `EmojiClue` for browsers without `ResizeObserver`.
+- Replaced the About modal close `x` with an intentional close glyph while preserving the accessible label.
+- Disabled TypeScript `allowJs`.
+
+### Why
+
+- These changes resolve the first large batch of `CODE_REVIEW.md` findings while preserving the static, database-free MVP game flow.
+
+### Evidence
+
+- `npm run lint`: passed.
+- `npm run typecheck`: passed.
+- `npm run test`: passed, 3 test files passed and 27 tests passed.
+- `npm run build`: passed; `/play/[categorySlug]` is now `● (SSG)` with generated category paths.
+- `NEXT_PUBLIC_APP_URL='   ' npm run build`: passed.
+- `NEXT_PUBLIC_APP_URL='guessmoji.example.com' npm run build`: passed.
+- `NEXT_PUBLIC_APP_URL='https://guessmoji.example.com' npm run build`: passed.
+- `docker build -t ghcr.io/hallveticapro/guessmoji:review .`: passed.
+- `npm audit --audit-level=moderate`: still exits nonzero with 2 moderate findings through Next's bundled `postcss <8.5.10`; no safe compatible fix was applied because `npm audit fix --force` would install `next@9.3.3`.
+- `rg "force-dynamic|getPuzzleById|getShuffledPuzzles|DEFAULT_RANDOM_MIX_COUNT|requestAnimationFrame|useSyncExternalStore" src`: no matches.
+- `find src -name '*.js' -o -name '*.jsx'`: no compiled source JavaScript files found.
+- Browser smoke on `http://localhost:3001`: home, categories, Pixar, and Random Mix loaded; Reveal showed the answer; Space hid the answer; ArrowRight advanced; ArrowLeft returned; H toggled hint; Escape hid the hint; settings opened with focus inside the dialog; Tab and Shift+Tab stayed inside the dialog; timer Enter applied `15s`; Escape closed settings and restored focus to the gear button; Shuffle and Restart changed card order; mobile 360px emoji clue stayed `nowrap` on one line with `52px` font size; browser console had no warnings/errors.
+- Browser smoke confirmed the valid last-category link appears after playing Pixar and points to `/play/pixar`.
+- Browser smoke confirmed category cards show grade bands and themed icon styles.
+- Browser smoke confirmed home logo and About modal embed image loaded; About close button has `aria-label="Close about dialog"` and click closes the modal.
+- Image measurements: `guessmoji-logo.png` is 1254x1254 / 852K, `guessmoji-logo-512.png` is 512x512 / 260K, `guessmoji-embed.png` is 1733x907 / 656K, favicon PNG/ICO assets remain smaller public browser assets.
+- `GameBoard.tsx` reduced from 431 lines to 354 lines after extracting hooks/helpers.
+
+### Remaining
+
+- The next pushed GitHub Actions workflow run still needs remote confirmation.
+- The invalid stale last-category localStorage case is source-verified but not browser-mutated in this session because the in-app browser evaluate scope is read-only.
+- `PLAN.md` item 4.3 still needs either a shared styling primitive extraction or a documented no-extraction decision.
+- `PLAN.md` final closure still needs an explicit final status pass across the coverage map.
+
+### Files Touched
+
+- `.github/workflows/docker-publish.yml`
+- `AGENTS.md`
+- `README.md`
+- `TASKS.md`
+- `UPDATES.md`
+- `public/assets/guessmoji-logo-512.png`
+- `public/file.svg`
+- `public/globe.svg`
+- `public/next.svg`
+- `public/vercel.svg`
+- `public/window.svg`
+- `src/app/categories/page.tsx`
+- `src/app/favicon.ico`
+- `src/app/layout.tsx`
+- `src/app/page.tsx`
+- `src/app/play/[categorySlug]/page.tsx`
+- `src/components/categories/LastCategoryLink.tsx`
+- `src/components/game/EmojiClue.tsx`
+- `src/components/game/GameBoard.tsx`
+- `src/components/game/GameControls.tsx`
+- `src/components/game/keyboard.ts`
+- `src/components/game/keyboard.test.ts`
+- `src/components/game/useFullscreenMode.ts`
+- `src/components/game/useGameTimer.ts`
+- `src/components/game/useLastCategoryPersistence.ts`
+- `src/components/layout/AppShell.tsx`
+- `src/components/layout/InfoModal.tsx`
+- `src/data/puzzles.ts`
+- `src/lib/category-theme.ts`
+- `src/lib/public-url.ts`
+- `src/lib/public-url.test.ts`
+- `src/lib/puzzles.ts`
+- `src/lib/puzzles.test.ts`
+- `src/styles/.gitkeep`
+- `tsconfig.json`
+
+### Commit
+
+- `33a316d584f664617a8883430f8d8970aee2d616`
+
 ## 2026-06-07 09:47 - Capture Phase 0 Baseline Evidence
 
 ### Changed
@@ -44,7 +136,7 @@
 
 ### Commit
 
-- `pending`
+- `626c4c7035a8184fdcf58cf6a04469c20b04ee43`
 
 ## 2026-06-07 09:46 - Remove Out-Of-Scope Clue Audit Note
 

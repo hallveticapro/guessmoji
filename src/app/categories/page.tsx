@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LastCategoryLink } from "@/components/categories/LastCategoryLink";
-import { getAllCategories, getPuzzlesByCategoryId } from "@/lib/puzzles";
+import {
+  getAllCategories,
+  getPuzzlesByCategoryId,
+  RANDOM_MIX_SESSION_COUNT,
+} from "@/lib/puzzles";
+import { getCategoryThemeStyle } from "@/lib/category-theme";
 import type { Category, PuzzleDifficulty } from "@/types/puzzle";
-
-const RANDOM_MIX_SESSION_COUNT = 20;
 
 const difficultyLabels: Record<PuzzleDifficulty, string> = {
   easy: "Easy",
@@ -51,7 +54,8 @@ export default function CategoriesPage() {
               >
                 <div className="flex items-start justify-between gap-4">
                   <span
-                    className="grid size-16 place-items-center rounded-2xl bg-sky-100 text-4xl"
+                    className="grid size-16 place-items-center rounded-2xl border-2 text-4xl"
+                    style={getCategoryThemeStyle(category)}
                     aria-hidden="true"
                   >
                     {category.icon}
@@ -72,6 +76,11 @@ export default function CategoriesPage() {
                   <span className="rounded-full bg-sky-100 px-3 py-1 text-sm font-bold text-sky-800">
                     {difficultyLabel}
                   </span>
+                  {category.recommendedGradeBand && (
+                    <span className="rounded-full bg-slate-100 px-3 py-1 text-sm font-bold text-slate-700">
+                      Grades {category.recommendedGradeBand}
+                    </span>
+                  )}
                 </div>
 
                 <p className="mt-6 text-base font-black text-sky-700 transition group-hover:text-sky-900">

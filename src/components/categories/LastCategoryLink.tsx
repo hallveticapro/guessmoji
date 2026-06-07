@@ -1,53 +1,39 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useSyncExternalStore } from "react";
+import { useEffect, useState } from "react";
 import type { Category } from "@/types/puzzle";
 
 const LAST_CATEGORY_SLUG_KEY = "guessmoji:lastCategorySlug";
-const LAST_CATEGORY_NAME_KEY = "guessmoji:lastCategoryName";
 
 type LastCategoryLinkProps = {
   categories: Category[];
 };
 
 export function LastCategoryLink({ categories }: LastCategoryLinkProps) {
-  const lastCategorySnapshot = useSyncExternalStore(
-    subscribeToStorage,
-    getLastCategorySnapshot,
-    getServerSnapshot,
-  );
+  const [lastCategory, setLastCategory] = useState<Category | null>(null);
 
-  const lastCategory = useMemo(() => {
-    if (!lastCategorySnapshot) {
-      return null;
-    }
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      try {
+        const savedSlug = window.localStorage.getItem(LAST_CATEGORY_SLUG_KEY);
+        const matchingCategory =
+          categories.find((category) => category.slug === savedSlug) ?? null;
 
-    try {
-      const { savedName, savedSlug } = JSON.parse(lastCategorySnapshot) as {
-        savedName: string | null;
-        savedSlug: string | null;
-      };
-      const matchingCategory = categories.find((category) => category.slug === savedSlug);
+        setLastCategory(matchingCategory);
 
-      if (matchingCategory) {
-        return matchingCategory;
+        if (savedSlug && !matchingCategory) {
+          window.localStorage.removeItem(LAST_CATEGORY_SLUG_KEY);
+        }
+      } catch {
+        setLastCategory(null);
       }
+    }, 0);
 
-      if (savedSlug && savedName) {
-        return {
-          id: savedSlug,
-          name: savedName,
-          slug: savedSlug,
-          description: "Continue the last game.",
-        } satisfies Category;
-      }
-    } catch {
-      return null;
-    }
-
-    return null;
-  }, [categories, lastCategorySnapshot]);
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [categories]);
 
   if (!lastCategory) {
     return null;
@@ -71,27 +57,4 @@ export function LastCategoryLink({ categories }: LastCategoryLinkProps) {
       </Link>
     </div>
   );
-}
-
-function subscribeToStorage(onStoreChange: () => void) {
-  window.addEventListener("storage", onStoreChange);
-
-  return () => {
-    window.removeEventListener("storage", onStoreChange);
-  };
-}
-
-function getLastCategorySnapshot() {
-  try {
-    return JSON.stringify({
-      savedSlug: window.localStorage.getItem(LAST_CATEGORY_SLUG_KEY),
-      savedName: window.localStorage.getItem(LAST_CATEGORY_NAME_KEY),
-    });
-  } catch {
-    return "";
-  }
-}
-
-function getServerSnapshot() {
-  return "";
 }

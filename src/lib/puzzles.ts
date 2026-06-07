@@ -3,7 +3,7 @@ import { puzzles } from "@/data/puzzles";
 import type { Category, Puzzle } from "@/types/puzzle";
 
 const RANDOM_MIX_CATEGORY_ID = "random-mix";
-const DEFAULT_RANDOM_MIX_COUNT = 20;
+export const RANDOM_MIX_SESSION_COUNT = 20;
 
 export function getAllCategories(): Category[] {
   return categories;
@@ -21,10 +21,6 @@ export function getPuzzlesByCategoryId(categoryId: string): Puzzle[] {
   return puzzles.filter((puzzle) => puzzle.categoryId === categoryId);
 }
 
-export function getPuzzleById(id: string): Puzzle | undefined {
-  return puzzles.find((puzzle) => puzzle.id === id);
-}
-
 export function getRandomizedPuzzles(puzzleList: readonly Puzzle[]): Puzzle[] {
   const shuffled = [...puzzleList];
 
@@ -36,11 +32,15 @@ export function getRandomizedPuzzles(puzzleList: readonly Puzzle[]): Puzzle[] {
   return shuffled;
 }
 
-export function getRandomMix(count = DEFAULT_RANDOM_MIX_COUNT): Puzzle[] {
-  const safeCount = Math.max(0, count);
-  const uniquePuzzlePool = uniquePuzzlesById(
+export function getRandomMixPuzzlePool(): Puzzle[] {
+  return uniquePuzzlesById(
     puzzles.filter((puzzle) => puzzle.categoryId !== RANDOM_MIX_CATEGORY_ID),
   );
+}
+
+export function getRandomMix(count = RANDOM_MIX_SESSION_COUNT): Puzzle[] {
+  const safeCount = Math.max(0, count);
+  const uniquePuzzlePool = getRandomMixPuzzlePool();
 
   return getRandomizedPuzzles(uniquePuzzlePool).slice(0, safeCount);
 }

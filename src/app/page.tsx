@@ -1,6 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getAllCategories, getPuzzlesByCategoryId } from "@/lib/puzzles";
+import {
+  getAllCategories,
+  getPuzzlesByCategoryId,
+  RANDOM_MIX_SESSION_COUNT,
+} from "@/lib/puzzles";
+import { getCategoryThemeStyle } from "@/lib/category-theme";
 
 const featuredCategorySlugs = [
   "disney-movies",
@@ -42,10 +47,10 @@ export default function Home() {
 
         <div className="relative mx-auto flex min-h-[58svh] w-full max-w-5xl flex-col items-center justify-center py-10 text-center">
           <Image
-            src="/assets/guessmoji-logo.png"
+            src="/assets/guessmoji-logo-512.png"
             alt=""
-            width={1254}
-            height={1254}
+            width={512}
+            height={512}
             priority
             className="mb-5 size-28 rounded-[1.7rem] border-2 border-[#d5e4df] bg-white object-cover shadow-[0_7px_0_rgba(23,50,77,0.08)]"
           />
@@ -114,7 +119,7 @@ export default function Home() {
             {featuredCategories.map((category) => {
               const puzzleCount =
                 category.id === "random-mix"
-                  ? 20
+                  ? RANDOM_MIX_SESSION_COUNT
                   : getPuzzlesByCategoryId(category.id).length;
 
               return (
@@ -124,7 +129,11 @@ export default function Home() {
                   className="group rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-sky-300 hover:shadow-md focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-sky-500"
                 >
                   <div className="flex items-start justify-between gap-4">
-                    <span className="text-4xl" aria-hidden="true">
+                    <span
+                      className="grid size-14 place-items-center rounded-2xl border-2 text-4xl"
+                      style={getCategoryThemeStyle(category)}
+                      aria-hidden="true"
+                    >
                       {category.icon}
                     </span>
                     <span className="rounded-full bg-amber-100 px-3 py-1 text-sm font-black text-amber-900">
@@ -137,6 +146,11 @@ export default function Home() {
                   <p className="mt-3 text-base leading-7 text-slate-600">
                     {category.description}
                   </p>
+                  {category.recommendedGradeBand && (
+                    <p className="mt-4 inline-flex rounded-full bg-slate-100 px-3 py-1 text-sm font-bold text-slate-700">
+                      Grades {category.recommendedGradeBand}
+                    </p>
+                  )}
                   <p className="mt-5 text-sm font-black text-sky-700 transition group-hover:text-sky-900">
                     Start this category
                   </p>

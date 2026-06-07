@@ -66,7 +66,6 @@ Current:
 │   ├── components/
 │   ├── data/
 │   ├── lib/
-│   ├── styles/
 │   └── types/
 └── tsconfig.json
 ```
@@ -79,7 +78,6 @@ src/
   components/
   data/
   lib/
-  styles/
   types/
 ```
 
@@ -162,6 +160,7 @@ The original 100 entertainment puzzles have explicit reveal `details` and `funFa
 Current public assets:
 
 - Main logo: `public/assets/guessmoji-logo.png`
+- Small runtime logo: `public/assets/guessmoji-logo-512.png`
 - Social/embed image: `public/assets/guessmoji-embed.png`
 - Favicon master copy: `public/assets/guessmoji-favicon-master.png`
 - Favicons and manifest: `public/favicon-96x96.png`, `public/favicon.svg`, `public/favicon.ico`, `public/apple-touch-icon.png`, `public/site.webmanifest`

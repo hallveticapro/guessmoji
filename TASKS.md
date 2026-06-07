@@ -32,6 +32,11 @@ As of 2026-06-06:
 - A comprehensive code review backlog now lives in `CODE_REVIEW.md`; use its P1 and P2 items to guide near-term cleanup.
 - A concrete remediation plan now lives in `PLAN.md`; every plan item has measurable acceptance evidence so review remediation can be closed objectively.
 
+As of 2026-06-07:
+
+- The first review remediation batch addressed host keyboard controls, settings modal focus management, static play route generation, public URL metadata validation, puzzle data integrity tests, generic reveal fallback removal, category metadata usage, favicon source cleanup, runtime logo sizing, and several redundancy removals.
+- Remaining review remediation work should be tracked against `PLAN.md` until every row is fixed, verified, deferred with a reason, or superseded by a documented decision.
+
 The app should support many themed categories, including:
 
 - Disney Movies
