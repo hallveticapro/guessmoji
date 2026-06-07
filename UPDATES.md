@@ -1,5 +1,24 @@
 # UPDATES.md
 
+## 2026-06-07 09:46 - Remove Out-Of-Scope Clue Audit Note
+
+### Changed
+
+- Removed an AGENTS note for the old direct-answer clue audit that is not part of the current CODE_REVIEW remediation plan.
+
+### Why
+
+- Persistent agent notes should match the measurable PLAN scope and avoid adding unrequested review work.
+
+### Files Touched
+
+- `AGENTS.md`
+- `UPDATES.md`
+
+### Commit
+
+- pending
+
 ## 2026-06-07 09:33 - Add Measurable Plan Acceptance
 
 ### Changed

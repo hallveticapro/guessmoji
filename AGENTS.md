@@ -157,8 +157,6 @@ The current seed set includes 600 puzzles across 60 categories, including Random
 
 The original 100 entertainment puzzles have explicit reveal `details` and `funFact` metadata in `src/data/puzzles.ts`. Do not ship generic fallback reveal copy such as pack labels or vague "emoji clues are quick to recognize" facts for default puzzles.
 
-Literal noun puzzle clues should not include the exact answer emoji when a clear exact glyph exists. For example, `Fox` should not use the fox emoji, `Elephant` should not use the elephant emoji, and fruit/vegetable cards should avoid the exact produce glyph as the clue.
-
 ## Brand And Public Assets
 
 Current public assets:
