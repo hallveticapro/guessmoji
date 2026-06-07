@@ -29,17 +29,14 @@ As of 2026-06-06:
 - Reveal metadata for default puzzles should use specific, researched details and fun facts instead of generic fallback copy.
 - Category play should start in a fresh shuffled order every time, with the Shuffle button kept for an on-demand reshuffle.
 - Emoji clues should shrink to fit on smaller screens instead of wrapping onto multiple lines.
-- A comprehensive code review backlog now lives in `CODE_REVIEW.md`; use its P1 and P2 items to guide near-term cleanup.
-- A concrete remediation plan now lives in `PLAN.md`; every plan item has measurable acceptance evidence so review remediation can be closed objectively.
 
 As of 2026-06-07:
 
 - The first review remediation batch addressed host keyboard controls, settings modal focus management, static play route generation, public URL metadata validation, puzzle data integrity tests, generic reveal fallback removal, category metadata usage, favicon source cleanup, runtime logo sizing, and several redundancy removals.
-- `PLAN.md` now records final status for every code-review remediation row. The only deferred item is the known upstream Next/PostCSS moderate audit finding because the available npm fix would force a breaking downgrade.
-- A new `PLAN.md` now covers the full card clue audit. Every shipped puzzle card must be reviewed so emoji clues do not include the direct answer emoji or an overly literal answer substitute.
-- The clue audit should create `CLUE_AUDIT.md`, an answer emoji banlist, and automated leak tests before editing large batches of cards.
-- The clue audit plan is split into 19 measurable action items; every item must keep concrete acceptance evidence before it can be marked complete.
-- `CLUE_AUDIT.md`, `src/data/answerEmojiBanlist.ts`, and `src/lib/clue-audit.test.ts` now provide the durable audit evidence. Future card packs must update the banlist when a new answer has a direct emoji representation and must pass the clue-audit tests before commit.
+- The known upstream Next/PostCSS moderate audit finding remains deferred because the available npm fix would force a breaking downgrade.
+- Every shipped puzzle card was audited so emoji clues do not include direct answer emoji or overly literal answer substitutes.
+- `src/data/answerEmojiBanlist.ts` and `src/lib/clue-audit.test.ts` provide durable direct-answer emoji regression coverage. Future card packs must update the banlist when a new answer has a direct emoji representation and must pass clue-audit tests before commit.
+- Completed review and audit artifacts were removed from the repo; keep future plans in `TASKS.md` unless a separate temporary artifact is truly needed.
 
 The app should support many themed categories, including:
 
@@ -155,35 +152,13 @@ It must include:
 
 `UPDATES.md` must be updated after **every meaningful change**.
 
-Each entry must use this format:
-
-```md
-## YYYY-MM-DD HH:mm - Short Change Title
-
-### Changed
-
-- Bullet list of what changed.
-
-### Why
-
-- Why this change was made.
-
-### Files Touched
-
-- `path/to/file`
-
-### Commit
-
-- Commit hash after commit is made.
-```
-
-If the commit hash is not known yet when writing the entry, add:
+Each entry must use this one-line format:
 
 ```txt
-Commit: pending
+YYYY-MM-DD HH:mm: Short description of what changed.
 ```
 
-Then update it after committing.
+Keep entries concise and avoid per-file or per-commit sections.
 
 ---
 

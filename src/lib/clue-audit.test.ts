@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { readFileSync } from "node:fs";
 import { answerEmojiBanlist } from "@/data/answerEmojiBanlist";
 import { categories } from "@/data/categories";
 import {
@@ -72,43 +71,18 @@ describe("clue audit helpers", () => {
     expect(puzzleByAnswer.get("vegetables:Carrot")?.emojis).not.toContain("🥕");
   });
 
-  it("keeps the audit log aligned with source categories and reviewed counts", () => {
-    const auditLog = readFileSync("CLUE_AUDIT.md", "utf8");
-    const matrixSection = auditLog
-      .split("## Category Review Matrix")[1]
-      .split("## Direct Emoji Candidate Inventory")[0];
-    const categoryRows = matrixSection
-      .split("\n")
-      .filter((line) => line.startsWith("| ") && !line.includes("---"))
-      .filter((line) => !line.startsWith("| category id "));
-
-    expect(categoryRows).toHaveLength(categories.length);
-
-    const rowByCategoryId = new Map(
-      categoryRows.map((line) => {
-        const cells = line.split("|").slice(1, -1).map((cell) => cell.trim());
-        return [cells[0], cells];
-      }),
-    );
+  it("keeps source categories aligned with shipped puzzle coverage", () => {
+    expect(categories).toHaveLength(60);
+    expect(puzzles).toHaveLength(600);
 
     for (const category of categories) {
-      const cells = rowByCategoryId.get(category.id);
-      expect(cells, `${category.id} missing from CLUE_AUDIT.md`).toBeDefined();
-
       if (category.id === "random-mix") {
-        expect(cells?.[3]).toBe("0 direct / derived from source pool");
-        expect(cells?.[5]).toBe("derived-reviewed");
+        expect(getPuzzlesByCategoryId(category.id)).toHaveLength(0);
         continue;
       }
 
       const sourceCount = getPuzzlesByCategoryId(category.id).length;
-      expect(Number(cells?.[2])).toBe(sourceCount);
-      expect(Number(cells?.[3])).toBe(sourceCount);
-      expect(cells?.[5]).toBe("reviewed");
+      expect(sourceCount, `${category.id} should have source puzzles`).toBeGreaterThan(0);
     }
-
-    expect(auditLog).not.toContain("| pending |");
-    expect(auditLog).toContain("Allowed Exceptions");
-    expect(auditLog).toContain("None.");
   });
 });
