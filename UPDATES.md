@@ -1,16 +1,37 @@
 # UPDATES.md
 
+## 2026-06-07 09:31 - Scope Review Plan To Code Review Items
+
+### Changed
+
+- Removed a non-review direct-answer emoji audit item from `PLAN.md`.
+- Updated TASKS, AGENTS, and the prior update entry so the remediation plan clearly maps to `CODE_REVIEW.md`.
+
+### Why
+
+- The requested plan should resolve the action items in `CODE_REVIEW.md` without adding unrelated scope.
+
+### Files Touched
+
+- `AGENTS.md`
+- `PLAN.md`
+- `TASKS.md`
+- `UPDATES.md`
+
+### Commit
+
+- pending
+
 ## 2026-06-07 09:21 - Add Review Remediation Plan
 
 ### Changed
 
 - Added a concrete remediation plan for all CODE_REVIEW action items.
-- Added a new plan item to audit puzzle cards for direct-answer emoji clues.
-- Documented the new plan artifact and clue-quality convention in persistent project notes.
+- Documented the new plan artifact in persistent project notes.
 
 ### Why
 
-- The review backlog needs an implementation roadmap, and puzzle clues should stay fair instead of revealing literal noun answers through exact emoji glyphs.
+- The review backlog needs an implementation roadmap with clear ordering, acceptance criteria, validation steps, and documentation checkpoints.
 
 ### Files Touched
 

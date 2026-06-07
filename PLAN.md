@@ -18,7 +18,7 @@ This plan turns every action item in `CODE_REVIEW.md` into concrete implementati
 ## Priority Order
 
 1. Fix host-facing P1 issues that can meaningfully degrade a live game or deployment confidence.
-2. Fix puzzle-data quality issues, including the new direct-answer emoji clue audit.
+2. Fix puzzle-data quality issues called out in the review.
 3. Remove duplicate logic and stale fallbacks before larger refactors.
 4. Refactor the game surface only after behavior is covered by tests or a written manual verification checklist.
 5. Batch low-risk polish and dead-code cleanup once the product behavior is stable.
@@ -269,53 +269,7 @@ This plan turns every action item in `CODE_REVIEW.md` into concrete implementati
 - `npm run test`
 - Manual scan of duplicate-answer test output.
 
-### 2.3 New Action Item - Audit Cards For Direct-Answer Emoji Clues
-
-**User-requested item:** Added after `CODE_REVIEW.md`.
-
-**Files**
-
-- `src/data/puzzles.ts`
-- `src/data/expandedPacks.ts`
-- `src/lib/puzzles.test.ts`
-- optional `src/data/directAnswerEmojiPolicy.ts`
-
-**Problem**
-
-Some literal noun cards may give away the answer by including the exact answer emoji in the clue. For example, if the answer is `Fox`, the clue should not include the fox emoji. The same rule should apply to literal animals, ocean animals, birds, insects, dinosaurs, fruit, vegetables, plants, tools, vehicles, and other categories where an exact emoji exists.
-
-**Policy**
-
-- For literal vocabulary answers, do not include the exact answer glyph in the emoji clue.
-- Examples: `Fox` should not include `🦊`, `Elephant` should not include `🐘`, `Giraffe` should not include `🦒`, `Apple` should not include `🍎` or `🍏`, `Carrot` should not include `🥕`, and ocean animal answers should not include their exact animal glyph.
-- Use indirect clues instead: habitat, traits, actions, context, shape, color, sound, environment, or category-adjacent symbols.
-- For named media/title puzzles, review case by case. Do not blindly ban every symbolic emoji if the answer is a phrase, but avoid clues that fully spell out the answer.
-- The clue should be solvable, not automatic.
-
-**Steps**
-
-1. Build a direct-answer emoji watchlist for categories most likely to have exact glyphs: Animals, Ocean Animals, Dinosaurs, Birds, Insects and Bugs, Fruit, Vegetables, Plants, Vehicles, Construction Machines, Kitchen Tools, Art Supplies, School Supplies, Camping, Beach Day, Around the House, and similar concrete-object packs.
-2. Scan all 600 puzzles for answer-to-emoji leakage using the watchlist.
-3. Manually audit all flagged rows.
-4. Rewrite over-obvious clues to use indirect clues.
-5. Add tests that fail when known forbidden answer emoji pairs appear in clue strings.
-6. Add a short data convention to `AGENTS.md` so future packs avoid exact-answer emoji giveaways.
-
-**Acceptance Criteria**
-
-- Literal noun cards no longer include their exact answer emoji when a clear exact emoji exists.
-- Fruit and vegetable cards do not use the exact fruit/vegetable glyph as the clue.
-- Animal, ocean animal, bird, insect, and dinosaur cards avoid exact species glyphs when available.
-- Tests cover the highest-risk direct-answer emoji pairs.
-- Clues remain fair and playable after the audit.
-
-**Verification**
-
-- `npm run test`
-- Manual review of all changed puzzle rows.
-- Browser smoke through at least five audited categories.
-
-### 2.4 Remove Stale Last-Category Fallback Links
+### 2.3 Remove Stale Last-Category Fallback Links
 
 **Source review item:** P2.4.
 
@@ -340,7 +294,7 @@ Some literal noun cards may give away the answer by including the exact answer e
 - `npm run lint`
 - `npm run typecheck`
 
-### 2.5 Decide And Apply Category Metadata Policy
+### 2.4 Decide And Apply Category Metadata Policy
 
 **Source review item:** P2.8.
 
@@ -777,7 +731,6 @@ Some literal noun cards may give away the answer by including the exact answer e
 **Acceptance Criteria**
 
 - Every P1, P2, P3, Quick Win, and Redundancy Removal Log item from `CODE_REVIEW.md` is fixed, deleted, intentionally deferred with a reason, or superseded by a documented decision.
-- The new direct-answer emoji clue audit is complete and covered by tests or policy.
 - The app remains MVP-scoped with no accounts, database, or multiplayer.
 
 **Final Verification**
@@ -787,7 +740,7 @@ Some literal noun cards may give away the answer by including the exact answer e
 - `npm run test`
 - `npm run build`
 - `npm audit --audit-level=moderate`
-- Browser smoke on home, categories, several play pages, settings modal, keyboard controls, mobile emoji fit, and audited puzzle categories.
+- Browser smoke on home, categories, several play pages, settings modal, keyboard controls, and mobile emoji fit.
 
 ## Coverage Map
 
@@ -801,12 +754,11 @@ Some literal noun cards may give away the answer by including the exact answer e
 | P2.1 Generic reveal fallback | 2.1 |
 | P2.2 Shuffle and Random Mix duplication | 4.1 |
 | P2.3 Duplicate favicon sources | 3.1 |
-| P2.4 Last-category stale fallback | 2.4 |
+| P2.4 Last-category stale fallback | 2.3 |
 | P2.5 Data validation and duplicate answers | 2.2 |
-| New direct-answer emoji clue audit | 2.3 |
 | P2.6 GameBoard refactor | 4.2 |
 | P2.7 EmojiClue ResizeObserver fallback | 3.2 |
-| P2.8 Category metadata policy | 2.5 |
+| P2.8 Category metadata policy | 2.4 |
 | P2.9 Dependency audit findings | 6.1 |
 | P3.1 Timer input | 5.1 |
 | P3.2 Last-category subscription | 5.2 |
