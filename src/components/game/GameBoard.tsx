@@ -10,6 +10,11 @@ import { ProgressIndicator } from "@/components/game/ProgressIndicator";
 import { useFullscreenMode } from "@/components/game/useFullscreenMode";
 import { useGameTimer } from "@/components/game/useGameTimer";
 import { useLastCategoryPersistence } from "@/components/game/useLastCategoryPersistence";
+import {
+  cx,
+  gameCardClassName,
+  primaryPillActionClassName,
+} from "@/components/ui/styles";
 import { getRandomizedPuzzles } from "@/lib/puzzles";
 import type { Category, Puzzle } from "@/types/puzzle";
 
@@ -237,7 +242,7 @@ export function GameBoard({
   if (isComplete) {
     return (
       <section className="flex flex-1 items-center bg-[radial-gradient(circle_at_top_right,rgba(255,202,66,0.28),transparent_24rem),linear-gradient(145deg,#fffaf0,#eef8f2)] px-5 py-12 text-[#17324d] sm:px-6 lg:px-8">
-        <div className="mx-auto w-full max-w-3xl rounded-[1.35rem] border-2 border-[#d5e4df] bg-white/90 p-7 text-center shadow-[0_8px_0_rgba(23,50,77,0.08)]">
+        <div className={cx("mx-auto w-full max-w-3xl p-7 text-center", gameCardClassName)}>
           <p className="text-sm font-black uppercase tracking-normal text-[#00778d]">
             Category complete
           </p>
@@ -251,7 +256,7 @@ export function GameBoard({
             <button
               type="button"
               onClick={restartCategory}
-              className="inline-flex min-h-14 items-center justify-center rounded-full border-2 border-transparent bg-[#ffca42] px-7 py-3 text-lg font-black text-[#17324d] shadow-[0_5px_0_#d79800] transition hover:-translate-y-0.5 focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-[#f0cf74]"
+              className={cx(primaryPillActionClassName, "px-7")}
             >
               Play Again
             </button>
@@ -301,7 +306,12 @@ export function GameBoard({
         </div>
 
         <div className="flex flex-1 flex-col justify-center gap-5">
-          <div className="flex min-h-[22rem] flex-col items-center justify-center rounded-[1.35rem] border-2 border-[#d5e4df] bg-white/90 p-6 text-[#17324d] shadow-[0_8px_0_rgba(23,50,77,0.08)] print:border-slate-300 sm:min-h-[28rem]">
+          <div
+            className={cx(
+              "flex min-h-[22rem] flex-col items-center justify-center p-6 print:border-slate-300 sm:min-h-[28rem]",
+              gameCardClassName,
+            )}
+          >
             <EmojiClue emojis={currentPuzzle.emojis} />
           </div>
 

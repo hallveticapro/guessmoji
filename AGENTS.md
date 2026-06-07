@@ -64,6 +64,10 @@ Current:
 ├── src/
 │   ├── app/
 │   ├── components/
+│   │   ├── categories/
+│   │   ├── game/
+│   │   ├── layout/
+│   │   └── ui/
 │   ├── data/
 │   ├── lib/
 │   └── types/
@@ -76,6 +80,10 @@ Expected source layout:
 src/
   app/
   components/
+    categories/
+    game/
+    layout/
+    ui/
   data/
   lib/
   types/
@@ -211,6 +219,7 @@ Game mode conventions:
 - Keep all default puzzles broadly friendly and safe.
 - Do not add login, accounts, a database, or multiplayer until the core app is stable.
 - Prefer established project patterns over new abstractions.
+- Shared class helpers live in `src/components/ui/styles.ts`; keep them small and specific to repeated treatments that appear in multiple places.
 
 ## Updating UPDATES.md
 

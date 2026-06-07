@@ -1,5 +1,37 @@
 # UPDATES.md
 
+## 2026-06-07 10:10 - Extract Shared Game UI Styles
+
+### Changed
+
+- Added small shared class helpers for repeated game cards and action buttons.
+- Replaced repeated play-surface primary, secondary, quiet, and card class strings with the shared helpers.
+- Updated agent notes with the new `src/components/ui` folder and convention.
+
+### Why
+
+- `PLAN.md` item 4.3 calls for extracting repeated UI styling primitives when a treatment appears in three or more places, while avoiding broad design-system work.
+
+### Evidence
+
+- `npm run lint`: passed.
+- `npm run typecheck`: initially collided with a concurrent `next build` rewriting `.next/types`, then passed on clean rerun.
+- `npm run test`: passed, 3 test files passed and 27 tests passed.
+- `npm run build`: passed.
+- Browser smoke on `http://localhost:3001`: home, categories, Random Mix play, and settings dialog rendered; Reveal/settings controls appeared; settings contained Apply, Off, Previous, Shuffle, Restart, Fullscreen, and Back to Categories; browser console had no warnings/errors.
+
+### Files Touched
+
+- `AGENTS.md`
+- `UPDATES.md`
+- `src/components/game/GameBoard.tsx`
+- `src/components/game/GameControls.tsx`
+- `src/components/ui/styles.ts`
+
+### Commit
+
+- `pending`
+
 ## 2026-06-07 10:07 - Apply Review Remediation Batch One
 
 ### Changed

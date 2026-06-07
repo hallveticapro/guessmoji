@@ -2,6 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import {
+  cx,
+  primaryPillActionClassName,
+  primarySmallActionClassName,
+  quietActionClassName,
+  secondaryActionClassName,
+} from "@/components/ui/styles";
 
 type GameControlsProps = {
   canGoPrevious: boolean;
@@ -144,7 +151,7 @@ export function GameControls({
             <button
               type="button"
               onClick={onRevealAnswer}
-              className="min-h-14 rounded-full border-2 border-transparent bg-[#ffca42] px-9 py-3 text-lg font-black text-[#17324d] shadow-[0_5px_0_#d79800] transition hover:-translate-y-0.5 focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-[#f0cf74]"
+              className={cx(primaryPillActionClassName, "px-9")}
             >
               Reveal
             </button>
@@ -155,7 +162,7 @@ export function GameControls({
           <button
             type="button"
             onClick={onNext}
-            className="min-h-14 rounded-full border-2 border-transparent bg-[#ffca42] px-10 py-3 text-lg font-black text-[#17324d] shadow-[0_5px_0_#d79800] transition hover:-translate-y-0.5 focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-[#f0cf74]"
+            className={cx(primaryPillActionClassName, "px-10")}
           >
             {nextLabel}
           </button>
@@ -256,28 +263,31 @@ export function GameControls({
                   type="button"
                   onClick={onPrevious}
                   disabled={!canGoPrevious}
-                  className="min-h-12 rounded-xl border-2 border-transparent bg-[#17324d] px-4 py-3 text-base font-black text-white shadow-[0_4px_0_rgba(23,50,77,0.25)] transition hover:-translate-y-0.5 focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-[#8bc9c3] disabled:cursor-not-allowed disabled:bg-[#d5e4df] disabled:text-[#5a6d75] disabled:shadow-none"
+                  className={cx(
+                    secondaryActionClassName,
+                    "disabled:cursor-not-allowed disabled:bg-[#d5e4df] disabled:text-[#5a6d75] disabled:shadow-none",
+                  )}
                 >
                   Previous
                 </button>
                 <button
                   type="button"
                   onClick={onShuffle}
-                  className="min-h-12 rounded-xl border-2 border-transparent bg-[#17324d] px-4 py-3 text-base font-black text-white shadow-[0_4px_0_rgba(23,50,77,0.25)] transition hover:-translate-y-0.5 focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-[#8bc9c3]"
+                  className={secondaryActionClassName}
                 >
                   Shuffle
                 </button>
                 <button
                   type="button"
                   onClick={onRestart}
-                  className="min-h-12 rounded-xl border-2 border-[#d5e4df] bg-white px-4 py-3 text-base font-black text-[#17324d] shadow-[0_3px_0_#d5e4df] transition hover:-translate-y-0.5 hover:bg-[#e1f5ef] focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-[#8bc9c3]"
+                  className={quietActionClassName}
                 >
                   Restart
                 </button>
                 <button
                   type="button"
                   onClick={onToggleFullscreen}
-                  className="min-h-12 rounded-xl border-2 border-[#d5e4df] bg-white px-4 py-3 text-base font-black text-[#17324d] shadow-[0_3px_0_#d5e4df] transition hover:-translate-y-0.5 hover:bg-[#e1f5ef] focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-[#8bc9c3]"
+                  className={quietActionClassName}
                 >
                   {isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
                 </button>
@@ -285,7 +295,7 @@ export function GameControls({
 
               <Link
                 href="/categories"
-                className="inline-flex min-h-12 items-center justify-center rounded-xl border-2 border-transparent bg-[#ffca42] px-5 py-3 text-base font-black text-[#17324d] shadow-[0_4px_0_#d79800] transition hover:-translate-y-0.5 focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-[#f0cf74]"
+                className={primarySmallActionClassName}
               >
                 Back to Categories
               </Link>
