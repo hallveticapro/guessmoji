@@ -1,5 +1,28 @@
 # UPDATES.md
 
+## 2026-06-07 09:21 - Add Review Remediation Plan
+
+### Changed
+
+- Added a concrete remediation plan for all CODE_REVIEW action items.
+- Added a new plan item to audit puzzle cards for direct-answer emoji clues.
+- Documented the new plan artifact and clue-quality convention in persistent project notes.
+
+### Why
+
+- The review backlog needs an implementation roadmap, and puzzle clues should stay fair instead of revealing literal noun answers through exact emoji glyphs.
+
+### Files Touched
+
+- `AGENTS.md`
+- `PLAN.md`
+- `TASKS.md`
+- `UPDATES.md`
+
+### Commit
+
+- `pending`
+
 ## 2026-06-06 22:21 - Refine Code Review Report
 
 ### Changed

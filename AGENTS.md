@@ -45,6 +45,7 @@ Current:
 .
 ├── AGENTS.md
 ├── CODE_REVIEW.md
+├── PLAN.md
 ├── README.md
 ├── TASKS.md
 ├── UPDATES.md
@@ -155,6 +156,8 @@ Random Mix should pull from multiple safe categories and avoid duplicates.
 The current seed set includes 600 puzzles across 60 categories, including Random Mix. Keep new default puzzles broadly friendly, recognizable, and free of mature or horror content unless a future opt-in pack is explicitly added.
 
 The original 100 entertainment puzzles have explicit reveal `details` and `funFact` metadata in `src/data/puzzles.ts`. Do not ship generic fallback reveal copy such as pack labels or vague "emoji clues are quick to recognize" facts for default puzzles.
+
+Literal noun puzzle clues should not include the exact answer emoji when a clear exact glyph exists. For example, `Fox` should not use the fox emoji, `Elephant` should not use the elephant emoji, and fruit/vegetable cards should avoid the exact produce glyph as the clue.
 
 ## Brand And Public Assets
 
