@@ -1,5 +1,25 @@
 # UPDATES.md
 
+## 2026-06-07 19:37 - Restore Browser Favicon Priority
+
+### Changed
+
+- Updated root metadata so browsers receive `/favicon.ico` and `/favicon-96x96.png` as the favicon candidates.
+- Stopped advertising the large embedded SVG favicon as a primary browser tab icon.
+
+### Why
+
+- Some browsers can prefer the last `rel="icon"` candidate and fail to display the large SVG favicon reliably. The ICO and PNG assets are smaller, concrete image formats and are already present in `public/`.
+
+### Files Touched
+
+- `src/app/layout.tsx`
+- `UPDATES.md`
+
+### Commit
+
+- `pending`
+
 ## 2026-06-07 19:30 - Record Remote Clue Audit Verification
 
 ### Changed
