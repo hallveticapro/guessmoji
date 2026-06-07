@@ -1,5 +1,31 @@
 # UPDATES.md
 
+## 2026-06-07 19:30 - Record Remote Clue Audit Verification
+
+### Changed
+
+- Added remote verification evidence for the pushed clue audit checkpoint.
+
+### Why
+
+- `PLAN.md` requires the audit work to be pushed and accepted by GitHub Actions, with the final pushed checkpoint documented.
+
+### Evidence
+
+- Local worktree was clean after commit `64adc9c`.
+- `git push origin main` succeeded for `64adc9c`.
+- GitHub Actions run `27108035513` completed successfully for head SHA `64adc9cd85cfa37f4b2d6fefc13542412a86dae9`.
+- The run included install dependencies, lint, typecheck, test, Docker Buildx setup, GHCR login, metadata extraction, and Docker build/maybe-push.
+- GitHub emitted the known Node.js 20 third-party action deprecation annotation for `actions/checkout@v4`, `docker/build-push-action@v6`, `docker/login-action@v3`, `docker/metadata-action@v5`, and `docker/setup-buildx-action@v3`.
+
+### Files Touched
+
+- `UPDATES.md`
+
+### Commit
+
+- `pending`
+
 ## 2026-06-07 19:25 - Complete Card Clue Audit Evidence
 
 ### Changed
