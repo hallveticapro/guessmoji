@@ -38,6 +38,7 @@ As of 2026-06-07:
 - `PLAN.md` now records final status for every code-review remediation row. The only deferred item is the known upstream Next/PostCSS moderate audit finding because the available npm fix would force a breaking downgrade.
 - A new `PLAN.md` now covers the full card clue audit. Every shipped puzzle card must be reviewed so emoji clues do not include the direct answer emoji or an overly literal answer substitute.
 - The clue audit should create `CLUE_AUDIT.md`, an answer emoji banlist, and automated leak tests before editing large batches of cards.
+- The clue audit plan is split into 19 measurable action items; every item must keep concrete acceptance evidence before it can be marked complete.
 
 The app should support many themed categories, including:
 

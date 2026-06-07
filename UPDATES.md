@@ -1,5 +1,34 @@
 # UPDATES.md
 
+## 2026-06-07 14:50 - Add Measurable Clue Audit Acceptance
+
+### Changed
+
+- Split the full-card clue audit plan into 19 concrete action items.
+- Added measurable acceptance criteria to every plan item, including exact evidence requirements for baseline counts, category coverage, banlist behavior, leak tests, browser smoke, final source consistency, and GitHub Actions verification.
+- Updated `TASKS.md` and `AGENTS.md` to note that clue-audit items must keep concrete acceptance evidence before they are marked complete.
+
+### Why
+
+- The clue audit needs to be executable and objectively verifiable across hundreds of cards. Broad items were split so each step has a clear completion signal before puzzle data changes begin.
+
+### Evidence
+
+- `python3` plan scan found `total=19 missing=0` for `###` plan items containing `**Measurable Acceptance**`.
+- `rg` source inspection confirmed each action item has a measurable acceptance block.
+- Documentation-only change; no app source or runtime behavior changed.
+
+### Files Touched
+
+- `AGENTS.md`
+- `PLAN.md`
+- `TASKS.md`
+- `UPDATES.md`
+
+### Commit
+
+- `pending`
+
 ## 2026-06-07 14:39 - Add Card Clue Audit Plan
 
 ### Changed
