@@ -1,5 +1,42 @@
 # UPDATES.md
 
+## 2026-06-07 14:13 - Add Literal Component Evidence
+
+### Changed
+
+- Added `jsdom` for lightweight component tests.
+- Added a `LastCategoryLink` component test that sets valid and stale localStorage slugs, renders the component, and verifies stale slugs are cleared without rendering a dead link.
+- Added an `EmojiClue` component test that removes `window.ResizeObserver`, renders the component, and verifies it stays no-wrap at the conservative fallback font size without throwing.
+- Updated `PLAN.md` and `AGENTS.md` so the closure evidence names the new component tests.
+
+### Why
+
+- The verifier accepted the prior evidence in practice but noted two literal PLAN sub-bullets still wanted invalid localStorage render evidence and a missing-`ResizeObserver` render/snippet.
+
+### Evidence
+
+- `npm install -D jsdom` succeeded; npm still reports only the documented 2 moderate Next/PostCSS audit findings.
+- `npm run test`: passed with 8 test files and 43 tests passing.
+- `npm run typecheck`: passed.
+- `npm run lint`: passed.
+- `npm run build`: passed and still reports `/play/[categorySlug]` as SSG with generated category paths.
+- `docker build -t ghcr.io/hallveticapro/guessmoji:review .` passed.
+- `npm audit --audit-level=moderate` remains nonzero with the documented 2 moderate Next/PostCSS findings; the offered fix would force a breaking downgrade to `next@9.3.3`.
+
+### Files Touched
+
+- `AGENTS.md`
+- `PLAN.md`
+- `UPDATES.md`
+- `package.json`
+- `package-lock.json`
+- `src/components/categories/LastCategoryLink.test.tsx`
+- `src/components/game/EmojiClue.test.tsx`
+
+### Commit
+
+- pending
+
 ## 2026-06-07 14:10 - Harden Plan Closure Evidence
 
 ### Changed

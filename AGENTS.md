@@ -20,15 +20,15 @@ Current MVP stack:
 - Tailwind CSS
 - ESLint
 - Static local seed data
-- Vitest for utility tests
+- Vitest for utility and lightweight jsdom component tests
 - Docker
 - GitHub Actions
 - GHCR image publishing
 
 Current Vitest coverage includes puzzle data integrity, Random Mix behavior,
-public URL parsing, keyboard action mapping, last-category saved-slug
-validation, timer bounds coercion, and EmojiClue `ResizeObserver` support
-checks.
+public URL parsing, keyboard action mapping, last-category saved-slug validation
+and component rendering, timer bounds coercion, and EmojiClue `ResizeObserver`
+support checks plus missing-`ResizeObserver` component rendering.
 
 The MVP must not require login, accounts, multiplayer, Redis, Postgres, or any database.
 
