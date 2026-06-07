@@ -14,6 +14,7 @@
 
 ### Files Touched
 
+- `AGENTS.md`
 - `PLAN.md`
 - `TASKS.md`
 - `UPDATES.md`
