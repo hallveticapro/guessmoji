@@ -6,6 +6,12 @@ Generated: 2026-06-06 22:15 EDT
 
 Guessmoji is in healthy MVP shape: the main classroom game flow exists, the app is database-free, Dockerized, and the current local checks pass for lint, typecheck, tests, and production build. The largest practical risks are UX regressions in the host controls, especially keyboard behavior and the settings dialog, plus deployment confidence gaps because the publish workflow does not run the full quality gate before building the GHCR image. The dominant good pattern is simple static TypeScript data with a small utility layer; the dominant debt pattern is duplicated gameplay/data logic split across pages, components, and seed files. A browser smoke test confirmed the game flow works at a basic level, but it also confirmed that settings-dialog focus can escape to background controls. No P0 issues were found, but several P1/P2 issues will compound as more categories, host controls, or display modes are added.
 
+## Remediation Status
+
+Updated: 2026-06-07
+
+The action items in this report have been remediated through `PLAN.md`, except the upstream dependency audit item, which is documented as deferred because the available npm fix requires a breaking downgrade to `next@9.3.3`. Final evidence is recorded in `UPDATES.md` entries `2026-06-07 10:07`, `2026-06-07 10:10`, and `2026-06-07 10:13`. The pushed GitHub Actions workflow run `27094924796` completed successfully with install, lint, typecheck, tests, and Docker build/push.
+
 ## 2. Prioritised Action Items
 
 ### P0

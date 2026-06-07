@@ -1,5 +1,37 @@
 # UPDATES.md
 
+## 2026-06-07 10:13 - Close Code Review Remediation Plan
+
+### Changed
+
+- Added final status evidence to `PLAN.md` for every `CODE_REVIEW.md` remediation row.
+- Added a remediation status note to `CODE_REVIEW.md`.
+- Updated project task and agent notes with the final remediation state and remaining audit deferral.
+
+### Why
+
+- The review remediation effort needs a durable closure record that names what was fixed, what was verified, and what remains deferred for a specific external reason.
+
+### Evidence
+
+- Local final gate from the remediation checkpoints: `npm run lint` passed, `npm run typecheck` passed on clean rerun, `npm run test` passed with 3 files and 27 tests, `npm run build` passed, and `docker build -t ghcr.io/hallveticapro/guessmoji:review .` passed.
+- `npm audit --audit-level=moderate` remains nonzero with 2 moderate findings through Next's bundled `postcss <8.5.10`; no forced downgrade was applied.
+- GitHub Actions run `27094924796`: passed in 1m20s after push to `main`, including Checkout, Install dependencies, Lint, Typecheck, Test, Set up Docker Buildx, Log in to GHCR, Extract metadata, and Build and maybe push.
+- Browser smoke evidence is recorded in the 10:07 and 10:10 entries.
+- Source architecture remains MVP-scoped: no login, accounts, database, Postgres, Redis, or multiplayer added.
+
+### Files Touched
+
+- `AGENTS.md`
+- `CODE_REVIEW.md`
+- `PLAN.md`
+- `TASKS.md`
+- `UPDATES.md`
+
+### Commit
+
+- `pending`
+
 ## 2026-06-07 10:10 - Extract Shared Game UI Styles
 
 ### Changed

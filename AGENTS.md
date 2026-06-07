@@ -251,4 +251,5 @@ Because a commit cannot include its own final hash in file contents, use `pendin
 
 - The GHCR image is published and anonymously pullable at the configured package path as of 2026-06-05.
 - If the repository owner changes later, update `.github/workflows/docker-publish.yml`, `docker-compose.yml`, `TASKS.md`, and internal agent notes together. Keep `README.md` generic.
-- `npm` currently reports two moderate dependency audit findings from the scaffolded dependency tree.
+- `npm` currently reports two moderate dependency audit findings from Next's bundled PostCSS dependency; the available forced fix would downgrade Next to `9.3.3`, so this is documented as an upstream-only deferral.
+- GitHub Actions run `27094924796` passed on 2026-06-07 and included install, lint, typecheck, tests, and Docker build/push. GitHub emitted a runner annotation that several third-party actions still run on Node.js 20 and should be watched for upstream Node.js 24-compatible updates.

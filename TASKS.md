@@ -35,7 +35,7 @@ As of 2026-06-06:
 As of 2026-06-07:
 
 - The first review remediation batch addressed host keyboard controls, settings modal focus management, static play route generation, public URL metadata validation, puzzle data integrity tests, generic reveal fallback removal, category metadata usage, favicon source cleanup, runtime logo sizing, and several redundancy removals.
-- Remaining review remediation work should be tracked against `PLAN.md` until every row is fixed, verified, deferred with a reason, or superseded by a documented decision.
+- `PLAN.md` now records final status for every code-review remediation row. The only deferred item is the known upstream Next/PostCSS moderate audit finding because the available npm fix would force a breaking downgrade.
 
 The app should support many themed categories, including:
 

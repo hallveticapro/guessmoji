@@ -18,6 +18,39 @@ The remediation must preserve the MVP scope:
 - Neutral public README with generic examples.
 - Classroom-safe default content.
 
+## Closure Status
+
+Updated: 2026-06-07
+
+| Plan item | Status | Evidence |
+| --- | --- | --- |
+| 0.1 Baseline commands | verified | `UPDATES.md` entry `2026-06-07 09:47` records lint, typecheck, test, build, and audit status. |
+| 0.2 Browser smoke checklist | verified | `UPDATES.md` entry `2026-06-07 09:47` records the reusable checklist. |
+| 1.1 Keyboard shortcut contract | fixed | `src/components/game/keyboard.ts`, `src/components/game/keyboard.test.ts`, README controls, browser smoke in `UPDATES.md`. |
+| 1.2 Settings dialog modal behavior | fixed | `src/components/game/GameControls.tsx`; browser smoke records focus entry, Tab wrap, Shift+Tab wrap, Escape close, body scroll lock, and focus restore. |
+| 1.3 GHCR workflow quality gate | fixed and verified | Workflow now runs install, lint, typecheck, and tests before Docker build; GitHub Actions run `27094924796` passed. |
+| 1.4 Public URL metadata safety | fixed | `src/lib/public-url.ts`, `src/lib/public-url.test.ts`, README HTTPS note, and build matrix in `UPDATES.md`. |
+| 1.5 Static play routes with client shuffle | fixed | `generateStaticParams`, no `force-dynamic`, build reports `/play/[categorySlug]` as SSG, Random Mix count test, browser shuffle/restart smoke. |
+| 2.1 Explicit reveal metadata | fixed | Generic fallback removed from `src/data/puzzles.ts`; tests cover no fallback strings and required metadata. |
+| 2.2 Category and puzzle integrity tests | fixed | `src/lib/puzzles.test.ts` covers uniqueness, category references, non-empty answers/clues, Random Mix duplicates, and duplicate-answer policy. |
+| 2.3 Stale last-category link removal | fixed with one browser limitation | Source removes synthetic fallback and clears invalid slug; browser smoke verifies valid `/play/pixar` link. The in-app browser read-only scope prevented mutating localStorage to browser-test the invalid slug. |
+| 2.4 Category metadata policy | fixed | `recommendedGradeBand` and `colorTheme` are rendered/used on home and category cards; browser smoke confirms visible grade bands and themed icon styles. |
+| 3.1 Canonical favicon set | fixed | `src/app/favicon.ico` deleted; public favicon metadata remains in `src/app/layout.tsx`; build passed. |
+| 3.2 ResizeObserver fallback | fixed | `EmojiClue` checks for `ResizeObserver`; mobile browser smoke confirms one-line nowrap shrink-to-fit. |
+| 3.3 Runtime image asset size | fixed | 512px runtime logo added and used for small placements; image sizes and browser image-load smoke recorded in `UPDATES.md`. |
+| 4.1 Shuffle and Random Mix single sources | fixed | Shared `RANDOM_MIX_SESSION_COUNT` and `getRandomizedPuzzles` are used; redundant local shuffle removed; tests cover 20 unique Random Mix cards. |
+| 4.2 GameBoard responsibility split | fixed | Timer, fullscreen, last-category persistence, and keyboard action mapping extracted; `GameBoard.tsx` reduced from 431 to 354 lines. |
+| 4.3 Shared UI styling primitives | fixed | `src/components/ui/styles.ts` centralizes repeated card/action classes; browser smoke confirms home, categories, play, and settings still render. |
+| 5.1 Controlled timer input | fixed | Timer input is controlled, Enter applies, Off sets zero; browser smoke records `15s` applied. |
+| 5.2 Timer preference load simplification | fixed | `requestAnimationFrame` removed from timer loading; timer hook validates `0-999` bounds; `rg` check has no matches. |
+| 5.3 Last-category subscription honesty | fixed | Mount-only behavior selected; `useSyncExternalStore` removed; valid saved category browser smoke passes. |
+| 5.4 About modal close control | fixed | Literal close `x` replaced with `×`; accessible label preserved; browser click-close smoke passes. |
+| 5.5 TypeScript `allowJs` policy | fixed | `allowJs` disabled; source `.js/.jsx` check returns no files; typecheck passes. |
+| 5.6 Delete starter assets and placeholder styles | fixed | Starter SVGs, duplicate favicon, and `.gitkeep` deleted; `rg` finds no production references. |
+| 5.7 `getPuzzleById` decision | deleted | Unused helper and its test were removed; `rg "getPuzzleById" src` has no matches. |
+| 6.1 Moderate audit findings | deferred with reason | Audit still reports 2 moderate Next/PostCSS findings; no compatible safe fix exists without forced downgrade to `next@9.3.3`; documented in `UPDATES.md`. |
+| 7.1 Review backlog closure evidence | verified | This table, `CODE_REVIEW.md`, `TASKS.md`, `AGENTS.md`, and `UPDATES.md` record final status and verification evidence. |
+
 ## Measurement Rules
 
 Every implementation checkpoint must leave objective evidence in at least one of these places:
