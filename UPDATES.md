@@ -48,3 +48,4 @@
 2026-06-07 19:30: Recorded remote clue audit verification.
 2026-06-07 19:37: Fixed favicon by prioritizing ICO and PNG browser icons.
 2026-06-07 19:45: Cleaned repository docs by removing completed audit files, trimming agent/update guidance, and keeping audit coverage in tests.
+2026-06-08 08:54: Added Random Mix source category context and replaced favicon bundle.
