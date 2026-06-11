@@ -50,7 +50,7 @@ describe("GameBoard", () => {
     window.localStorage.clear();
   });
 
-  it("shows the source category on a revealed Random Mix card", async () => {
+  it("shows the source category before revealing a Random Mix card", async () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -66,7 +66,8 @@ describe("GameBoard", () => {
       );
     });
 
-    expect(container.textContent).not.toContain("From: Pixar");
+    expect(container.textContent).toContain("From: Pixar");
+    expect(container.textContent).not.toContain("Toy Story");
 
     await act(async () => {
       await new Promise((resolve) => {
@@ -79,6 +80,7 @@ describe("GameBoard", () => {
     });
 
     expect(container.textContent).toContain("From: Pixar");
+    expect(container.textContent).toContain("Toy Story");
 
     await act(async () => {
       root.unmount();

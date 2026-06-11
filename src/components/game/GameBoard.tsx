@@ -238,8 +238,7 @@ export function GameBoard({
 
   const answerCategoryName =
     categoryNamesById.get(currentPuzzle.categoryId) ?? category.name;
-  const shouldShowSourceCategory =
-    category.id === "random-mix" && isAnswerVisible;
+  const shouldShowSourceCategory = category.id === "random-mix";
 
   if (isComplete) {
     return (
