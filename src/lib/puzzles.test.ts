@@ -41,6 +41,14 @@ describe("puzzle utilities", () => {
     expect(puzzles.some((puzzle) => puzzle.details?.startsWith("Pack:"))).toBe(false);
   });
 
+  it("does not expose generic emoji explanation filler", () => {
+    expect(
+      puzzles.some((puzzle) =>
+        puzzle.explanation?.includes("by showing the main visual clues"),
+      ),
+    ).toBe(false);
+  });
+
   it("keeps category ids and slugs unique", () => {
     expect(new Set(categories.map((category) => category.id)).size).toBe(
       categories.length,

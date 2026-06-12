@@ -1701,7 +1701,7 @@ Required:
 Required:
 
 - Hint must be available before answer reveal.
-- Answer reveal should show answer, category, difficulty, details, explanation, and fun fact.
+- Answer reveal should show answer, category, difficulty, details, optional explanation, and fun fact.
 - Next should appear after reveal.
 - End of category should show a completion state.
 - Keep Random Mix category metadata hidden until answer reveal.

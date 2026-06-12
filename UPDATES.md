@@ -50,3 +50,4 @@
 2026-06-07 19:45: Cleaned repository docs by removing completed audit files, trimming agent/update guidance, and keeping audit coverage in tests.
 2026-06-08 08:54: Added Random Mix source category context and replaced favicon bundle.
 2026-06-11 17:27: Showed Random Mix source categories before answer reveal.
+2026-06-11 21:51: Removed generic generated emoji explanation filler from expanded answer cards.

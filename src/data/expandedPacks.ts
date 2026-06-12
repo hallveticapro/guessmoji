@@ -1094,7 +1094,6 @@ export const expandedPuzzles = expandedPackSeeds.flatMap((pack) =>
     difficulty,
     hint,
     details,
-    explanation: `${emojis} points to ${answer} by showing the main visual clues from the ${pack.name} theme.`,
     funFact,
     tags: [...pack.tags, pack.id],
   })),

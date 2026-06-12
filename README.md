@@ -102,7 +102,7 @@ npm start
 ### Host Controls
 
 - Hint: show a pre-reveal clue.
-- Reveal Answer: show the answer, details, explanation, and fun fact.
+- Reveal Answer: show the answer, details, and fun fact.
 - Hide Answer: return the card to guessing mode.
 - Next and Previous: move through the current category.
 - Restart: return to the first card.
