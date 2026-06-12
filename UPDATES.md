@@ -51,3 +51,4 @@
 2026-06-08 08:54: Added Random Mix source category context and replaced favicon bundle.
 2026-06-11 17:27: Showed Random Mix source categories before answer reveal.
 2026-06-11 21:51: Removed generic generated emoji explanation filler from expanded answer cards.
+2026-06-11 21:53: Removed the category preview section from the home page.

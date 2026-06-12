@@ -1,20 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import {
-  getAllCategories,
-  getPuzzlesByCategoryId,
-  RANDOM_MIX_SESSION_COUNT,
-} from "@/lib/puzzles";
-import { getCategoryThemeStyle } from "@/lib/category-theme";
-
-const featuredCategorySlugs = [
-  "disney-movies",
-  "pixar",
-  "marvel",
-  "star-wars",
-  "kid-tv-shows",
-  "random-mix",
-];
 
 const emojiBackdropRows = [
   "🦁👑  ❄️👭  🌊🚣‍♀️  🪔🧞‍♂️  🏠🕯️",
@@ -25,11 +10,6 @@ const emojiBackdropRows = [
 ];
 
 export default function Home() {
-  const categories = getAllCategories();
-  const featuredCategories = featuredCategorySlugs
-    .map((slug) => categories.find((category) => category.slug === slug))
-    .filter((category) => category !== undefined);
-
   return (
     <>
       <section className="relative isolate overflow-hidden bg-amber-100 px-5 py-16 sm:py-20 lg:px-8">
@@ -93,71 +73,6 @@ export default function Home() {
               <p className="mt-2 text-lg font-bold text-slate-700">{label}</p>
             </div>
           ))}
-        </div>
-      </section>
-
-      <section className="bg-slate-50 px-5 py-14 lg:px-8">
-        <div className="mx-auto w-full max-w-7xl">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-sm font-black uppercase tracking-normal text-sky-700">
-                Category preview
-              </p>
-              <h2 className="mt-2 text-3xl font-black tracking-normal text-slate-950 sm:text-4xl">
-                Pick a theme and play
-              </h2>
-            </div>
-            <Link
-              href="/categories"
-              className="inline-flex min-h-12 items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-base font-black text-white transition hover:bg-slate-800 focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-sky-500"
-            >
-              Browse Categories
-            </Link>
-          </div>
-
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {featuredCategories.map((category) => {
-              const puzzleCount =
-                category.id === "random-mix"
-                  ? RANDOM_MIX_SESSION_COUNT
-                  : getPuzzlesByCategoryId(category.id).length;
-
-              return (
-                <Link
-                  key={category.id}
-                  href={`/play/${category.slug}`}
-                  className="group rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-sky-300 hover:shadow-md focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-sky-500"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <span
-                      className="grid size-14 place-items-center rounded-2xl border-2 text-4xl"
-                      style={getCategoryThemeStyle(category)}
-                      aria-hidden="true"
-                    >
-                      {category.icon}
-                    </span>
-                    <span className="rounded-full bg-amber-100 px-3 py-1 text-sm font-black text-amber-900">
-                      {puzzleCount} puzzles
-                    </span>
-                  </div>
-                  <h3 className="mt-5 text-2xl font-black text-slate-950">
-                    {category.name}
-                  </h3>
-                  <p className="mt-3 text-base leading-7 text-slate-600">
-                    {category.description}
-                  </p>
-                  {category.recommendedGradeBand && (
-                    <p className="mt-4 inline-flex rounded-full bg-slate-100 px-3 py-1 text-sm font-bold text-slate-700">
-                      Grades {category.recommendedGradeBand}
-                    </p>
-                  )}
-                  <p className="mt-5 text-sm font-black text-sky-700 transition group-hover:text-sky-900">
-                    Start this category
-                  </p>
-                </Link>
-              );
-            })}
-          </div>
         </div>
       </section>
     </>
