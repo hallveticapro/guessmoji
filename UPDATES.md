@@ -52,3 +52,4 @@
 2026-06-11 17:27: Showed Random Mix source categories before answer reveal.
 2026-06-11 21:51: Removed generic generated emoji explanation filler from expanded answer cards.
 2026-06-11 21:53: Removed the category preview section from the home page.
+2026-08-18 18:18: Added authoritative category and card generation rules plus future pool and round-history requirements.

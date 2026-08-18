@@ -4,7 +4,7 @@
 
 Guessmoji is a group-friendly emoji Pictionary game. A host selects a themed category, shows large emoji clues, lets players guess, then reveals answers on a shared screen.
 
-`TASKS.md` is the authoritative project plan. Keep it current when scope or task status changes.
+`TASKS.md` is the authoritative project plan. Keep it current when scope or task status changes. `CONTENT_GENERATION_RULES.md` is the authoritative standard for creating or revising categories and cards.
 
 ## Current Stack
 
@@ -79,6 +79,8 @@ The shipped seed set has 600 puzzles across 60 categories, including Random Mix.
 Keep default puzzles broadly friendly, recognizable, and free of mature or horror content unless a future opt-in pack is explicitly added. Do not ship generic fallback reveal copy for default puzzles.
 
 Future card additions must update `src/data/answerEmojiBanlist.ts` whenever an answer has a direct emoji representation. Run `src/lib/clue-audit.test.ts` before committing new or changed cards.
+
+Follow `CONTENT_GENERATION_RULES.md` for category scope, answer selection, clue construction, repetition limits, difficulty, reveal copy, safety, automated validation, and clean-context blind review. Quality outranks card-count targets.
 
 ## Game Conventions
 

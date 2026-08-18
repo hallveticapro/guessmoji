@@ -38,6 +38,15 @@ As of 2026-06-07:
 - `src/data/answerEmojiBanlist.ts` and `src/lib/clue-audit.test.ts` provide durable direct-answer emoji regression coverage. Future card packs must update the banlist when a new answer has a direct emoji representation and must pass clue-audit tests before commit.
 - Completed review and audit artifacts were removed from the repo; keep future plans in `TASKS.md` unless a separate temporary artifact is truly needed.
 
+As of 2026-08-18:
+
+- `CONTENT_GENERATION_RULES.md` is the authoritative standard for future category and card generation and for the planned audit of existing content.
+- Category pools must contain a multiple of 10 cards. Target 30 strong cards, prefer at least 20, and allow 10 when a narrow category cannot support more without obscure answers or weak clues.
+- A round should draw 10 unique cards from its category pool.
+- Store per-category seen-card history as safe local browser data. New rounds should prefer unseen cards, and the round after a pool is exhausted should begin a fresh cycle.
+- Shuffle should reorder the current round rather than select a different set of cards.
+- A future content pass should audit every existing category and card against `CONTENT_GENERATION_RULES.md`, expanding pools where the category supports additional high-quality cards.
+
 The app should support many themed categories, including:
 
 - Disney Movies
@@ -106,6 +115,7 @@ README.md
 AGENTS.md
 UPDATES.md
 TASKS.md
+CONTENT_GENERATION_RULES.md
 ```
 
 ---
@@ -2062,7 +2072,7 @@ Follow this exact order first:
 
 1. Create public GitHub repo `guessmoji`.
 2. Clone repo locally.
-3. Add `TASKS.md`, `README.md`, `AGENTS.md`, `UPDATES.md`, and `.gitignore`.
+3. Add `TASKS.md`, `README.md`, `AGENTS.md`, `UPDATES.md`, `CONTENT_GENERATION_RULES.md`, and `.gitignore`.
 4. Commit documentation checkpoint.
 5. Scaffold Next.js app.
 6. Commit scaffold checkpoint.
