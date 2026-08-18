@@ -168,6 +168,22 @@ describe("content audit helpers", () => {
     );
   });
 
+  it("does not treat punctuation-only answers as duplicate normalized answers", () => {
+    const punctuationAnswers = makePuzzles(10).map((puzzle, index) =>
+      index < 2 ? { ...puzzle, answer: "!!!" } : puzzle,
+    );
+
+    expect(findContentInvariantViolations([makeCategory()], punctuationAnswers)).toEqual([]);
+  });
+
+  it("does not treat variation-selector-only clues as duplicate clues", () => {
+    const variationSelectorClues = makePuzzles(10).map((puzzle, index) =>
+      index < 2 ? { ...puzzle, emojis: "\uFE0F" } : puzzle,
+    );
+
+    expect(findContentInvariantViolations([makeCategory()], variationSelectorClues)).toEqual([]);
+  });
+
   it("counts each emoji once per card and normalizes variation selectors", () => {
     const twentyCards = makePuzzles(20).map((puzzle, index) => ({
       ...puzzle,

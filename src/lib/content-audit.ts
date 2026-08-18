@@ -163,6 +163,9 @@ function findDuplicateFindings(
       duplicateType === "clue"
         ? normalizeVariationSelectors(rawValue)
         : normalizeAnswerForAudit(rawValue);
+    if (!value.trim()) {
+      continue;
+    }
 
     const matchingPuzzles = valuesByKey.get(value) ?? [];
     matchingPuzzles.push(puzzle);
