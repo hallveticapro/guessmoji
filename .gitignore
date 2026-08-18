@@ -47,6 +47,6 @@ next-env.d.ts
 .idea/
 .vscode/
 
-# Codex implementation workspaces
+# Codex implementation workspaces and temporary audit packets/reports
 .worktrees/
 .superpowers/
