@@ -155,13 +155,14 @@ function findDuplicateFindings(
   const valuesByKey = new Map<string, Puzzle[]>();
 
   for (const puzzle of categoryPuzzles) {
-    const value =
-      duplicateType === "clue"
-        ? normalizeVariationSelectors(puzzle.emojis)
-        : normalizeAnswerForAudit(puzzle.answer);
-    if (!value.trim()) {
+    const rawValue = duplicateType === "clue" ? puzzle.emojis : puzzle.answer;
+    if (typeof rawValue !== "string" || !rawValue.trim()) {
       continue;
     }
+    const value =
+      duplicateType === "clue"
+        ? normalizeVariationSelectors(rawValue)
+        : normalizeAnswerForAudit(rawValue);
 
     const matchingPuzzles = valuesByKey.get(value) ?? [];
     matchingPuzzles.push(puzzle);

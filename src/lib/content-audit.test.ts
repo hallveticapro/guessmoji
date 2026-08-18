@@ -132,6 +132,42 @@ describe("content audit helpers", () => {
     );
   });
 
+  it("reports a missing answer without crashing duplicate-answer scanning", () => {
+    const missingAnswerPuzzle = {
+      ...makePuzzle(),
+      answer: undefined,
+    } as unknown as Puzzle;
+    let findings: ReturnType<typeof findContentInvariantViolations> = [];
+
+    expect(() => {
+      findings = findContentInvariantViolations([makeCategory()], [missingAnswerPuzzle]);
+    }).not.toThrow();
+    expect(findings).toContainEqual(
+      expect.objectContaining({
+        rule: "missing-required-field",
+        puzzleIds: ["puzzle-1"],
+      }),
+    );
+  });
+
+  it("reports missing emojis without crashing duplicate-clue scanning", () => {
+    const missingEmojisPuzzle = {
+      ...makePuzzle(),
+      emojis: undefined,
+    } as unknown as Puzzle;
+    let findings: ReturnType<typeof findContentInvariantViolations> = [];
+
+    expect(() => {
+      findings = findContentInvariantViolations([makeCategory()], [missingEmojisPuzzle]);
+    }).not.toThrow();
+    expect(findings).toContainEqual(
+      expect.objectContaining({
+        rule: "missing-required-field",
+        puzzleIds: ["puzzle-1"],
+      }),
+    );
+  });
+
   it("counts each emoji once per card and normalizes variation selectors", () => {
     const twentyCards = makePuzzles(20).map((puzzle, index) => ({
       ...puzzle,
