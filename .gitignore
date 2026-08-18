@@ -46,3 +46,7 @@ next-env.d.ts
 # editor
 .idea/
 .vscode/
+
+# Codex implementation workspaces
+.worktrees/
+.superpowers/
