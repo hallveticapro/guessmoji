@@ -165,6 +165,9 @@ describe("clue audit helpers", () => {
     const galaxy = get("space-galaxy");
     expect(milkyWay.emojis).toContain("🏠");
     expect(galaxy.emojis).toContain("🌫️");
+    expect(galaxy.emojis).toContain("🌠");
+    expect(galaxy.hint).toMatch(/beyond our home galaxy/i);
+    expect(galaxy.hint).not.toMatch(/Milky Way/i);
     expect(["⭐", "🌀", "🔭", "🌌"].filter((emoji) =>
       milkyWay.emojis.includes(emoji) && galaxy.emojis.includes(emoji),
     )).toEqual([]);
