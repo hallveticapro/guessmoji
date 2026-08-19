@@ -45,17 +45,24 @@ rounds, projector use, smartboards, Chromebooks, tablets, and phones.
 
 ## Features
 
-- 60 themed categories with 600 total puzzles.
+- 60 source categories with 730 source puzzles, plus the derived Random Mix option
+  (61 category choices total).
 - Classroom-friendly packs for movies, characters, shows, games, school topics,
   animals, science, landmarks, holidays, idioms, emotions, and more.
-- Random Mix mode built from the broader safe puzzle pool.
+- Random Mix mode built from a 719-card pool deduplicated by normalized answer.
 - Large emoji clue card for shared-screen play.
 - Hint, reveal, hide answer, next, previous, shuffle, restart, fullscreen, and timer
   controls.
 - Settings dialog for secondary controls.
 - Completion screen with replay and category navigation.
-- Fresh shuffled card order each time a category starts, plus on-demand reshuffle.
+- Ten-card source rounds that prefer unseen cards and cycle deterministically after
+  the category pool is exhausted.
+- Ten-card Random Mix sessions with source-category metadata shown only after reveal.
+- Fresh shuffled card order each time a category starts, plus on-demand reshuffle
+  without consuming another round.
 - Local browser preferences for last category and timer length.
+- Per-category round history stored safely in local browser storage; timer changes and
+  restart do not consume another round.
 - Static TypeScript seed data with no database requirement.
 - Open Graph, Twitter, Discord, and Facebook-friendly preview image.
 - Dockerfile, Docker Compose, and GitHub Actions workflow for GHCR publishing.
@@ -124,16 +131,23 @@ npm start
 
 ## Category Discovery
 
-Use the category browser to choose a pack by theme. Current categories include Disney
-Movies, Disney Princesses, Pixar, Marvel, Star Wars, DreamWorks, Video Game Movies,
-Kid TV Shows, Animated Classics, Animals, Ocean Animals, Dinosaurs, Sports, Board
-Games, Video Games, Pokemon, Minecraft, Science, Space, Weather, Math, Books and
-Stories, Fairy Tales, Landmarks, Geography, Vehicles, Jobs, Music, Art Supplies,
-School Supplies, Holidays, Literal Phrases, Idioms, Emotions, Robots, Plants, and
-Random Mix.
+Use the category browser to choose a pack by theme. The current 60 source categories
+are Disney Movies, Disney Princesses, Pixar, Marvel, Star Wars, DreamWorks, Video
+Game Movies, Kid TV Shows, Animated Classics, Animals, Ocean Animals, Dinosaurs,
+Birds, Insects and Bugs, Fruit, Vegetables, Desserts, Snacks, Breakfast, Sports,
+Outdoor Games, Board Games, Card and Party Games, Video Games, Arcade Classics,
+Pokemon, Minecraft, Science, Space, Weather, Math, Books and Stories, Fairy Tales,
+Myths and Legends, World Landmarks, U.S. Landmarks, World Geography, Vehicles,
+Construction & Building, Jobs, Musical Instruments, Music Genres, Art Supplies,
+School Supplies, Camping, National Parks, Holidays, Halloween, Winter Holidays,
+Summer Fun, Beach Day, Amusement Park, Around the House, Kitchen Tools, Literal
+Phrases, Idioms, Emotions, Robots, Plants, and Harry Potter. Random Mix is the
+61st derived category choice.
 
-Random Mix pulls from multiple safe categories and avoids duplicate puzzle IDs in the
-generated play set.
+Every source category has at least one complete ten-card block; Harry Potter has 20
+cards. Random Mix pulls from the safe source pool, keeps the first occurrence of each
+normalized answer, and starts a ten-card session without revealing a card's source
+category until the answer is revealed.
 
 ## Puzzle Data
 
@@ -151,8 +165,8 @@ Each puzzle can include:
 - Fun fact
 - Tags
 
-The MVP seed set is static and checked into the repository. This keeps setup simple,
-portable, and database-free.
+The MVP seed set is static and checked into the repository: 730 source cards across
+60 source categories. This keeps setup simple, portable, and database-free.
 
 ## Run the Checks
 
@@ -185,8 +199,30 @@ NEXT_PUBLIC_APP_NAME="Guessmoji"
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ```
 
-To build locally instead of pulling an image, uncomment the `build` block in
-`docker-compose.yml`.
+The URL used for Open Graph and Twitter metadata is baked into an image during its
+build. Runtime `NEXT_PUBLIC_APP_URL` keeps container configuration consistent, but it
+does not rewrite metadata in an already-built image. To build a local production image
+for a deployment URL, pass the build argument explicitly:
+
+```bash
+docker build --build-arg NEXT_PUBLIC_APP_URL=https://guessmoji.example.com -t guessmoji:local .
+```
+
+To build with Compose instead of pulling an image, uncomment the `build` block in
+`docker-compose.yml`; its commented `args` entry passes the value from `.env` to the
+Docker build.
+
+To update an existing Compose deployment that uses the published image, pull the new
+image and recreate the service:
+
+```bash
+docker compose pull
+docker compose up -d --force-recreate
+docker compose ps
+```
+
+The example Compose file tracks the convenient `latest` tag. For reproducible
+deployments, replace it with an immutable commit-SHA or release tag before pulling.
 
 ## Use a Published GHCR Image
 
@@ -214,7 +250,7 @@ Typical proxy settings:
 
 - Forward hostname: the container host or Docker service name.
 - Forward port: `3000`.
-- Public URL: set `NEXT_PUBLIC_APP_URL` to your public HTTPS URL.
+- Public URL: build the image with `NEXT_PUBLIC_APP_URL` set to your public HTTPS URL.
 - WebSocket support: not required for the MVP.
 
 HTTPS is recommended for public deployments and for clean social preview metadata.
@@ -244,9 +280,11 @@ Unraid notes:
 
 - Use any open host port if `3000` is already taken.
 - Point your reverse proxy to the chosen host port or to container port `3000`.
-- Set `NEXT_PUBLIC_APP_URL` to the public URL for your deployment. Production
-  values must include the full `https://` scheme, such as
-  `https://guessmoji.example.com`.
+- When building your own production image, pass `NEXT_PUBLIC_APP_URL` as a Docker
+  build argument set to the public URL. Production values must include the full
+  `https://` scheme, such as `https://guessmoji.example.com`.
+- A prebuilt GHCR image carries the metadata URL from its build; setting this variable
+  only at container runtime cannot change that image's social preview tags.
 - Keep `.env` limited to safe public values unless you intentionally add secrets later.
 
 ## Social Preview Metadata
@@ -258,9 +296,10 @@ The app uses local assets for social previews and install metadata:
 - Web manifest: `public/site.webmanifest`
 - Favicons: files in `public/`
 
-Update `NEXT_PUBLIC_APP_URL` before building a production image so Open Graph and
-Twitter metadata resolve against the correct deployment URL. Use an absolute URL
-with `https://` for public deployments.
+Pass `NEXT_PUBLIC_APP_URL` before building a production image so Open Graph and Twitter
+metadata resolve against the correct deployment URL. Use an absolute URL with
+`https://` for public deployments. A prebuilt image must be rebuilt and republished if
+its metadata URL needs to change.
 
 ## Troubleshooting
 

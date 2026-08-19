@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { GameBoard } from "@/components/game/GameBoard";
+import { SOURCE_CATEGORY_ROUND_COUNT } from "@/components/game/round-history";
 import {
   getAllCategories,
   getCategoryBySlug,
@@ -56,7 +57,9 @@ export default async function PlayPage({ params }: PlayPageProps) {
       categories={getAllCategories()}
       initialPuzzles={puzzles}
       sessionPuzzleCount={
-        category.id === "random-mix" ? RANDOM_MIX_SESSION_COUNT : undefined
+        category.id === "random-mix"
+          ? RANDOM_MIX_SESSION_COUNT
+          : SOURCE_CATEGORY_ROUND_COUNT
       }
     />
   );

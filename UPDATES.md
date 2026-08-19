@@ -52,3 +52,14 @@
 2026-06-11 17:27: Showed Random Mix source categories before answer reveal.
 2026-06-11 21:51: Removed generic generated emoji explanation filler from expanded answer cards.
 2026-06-11 21:53: Removed the category preview section from the home page.
+2026-08-18 18:18: Added authoritative category and card generation rules plus future pool and round-history requirements.
+2026-08-19 03:22: Remediated all Partition C cards, added explicit explanations and clue-audit coverage, and retained only complete expansion blocks.
+2026-08-19 04:01: Applied Partition C fix round 1: omitted six blind-rejected expansion blocks, repaired remaining source-review findings, and added cross-partition S'mores regression coverage.
+2026-08-19 04:20: Applied Partition C fix round 2: omitted four rejected expansion blocks, repaired hint/source blockers, and documented the Literal Phrases/Idioms boundary.
+2026-08-19 04:40: Applied Partition C fix round 3: omitted the rejected Robots block, corrected the live source ledger, and documented the lexicalized-metaphor carve-out.
+2026-08-19 05:00: Applied Partition C fix round 4: removed visible phrase-answer metadata leaks and repaired Camping S'mores and Zion clue guessability.
+2026-08-19 05:10: Applied Partition C fix round 5: corrected Zion's fixed-metal-chain wording and simplified the visible Literal Phrases category boundary.
+2026-08-19 05:23: Added the 20-card Harry Potter category with normalized component bans, duplicate/Random Mix regressions, and source-backed Task 8 evidence.
+2026-08-19 05:45: Applied Harry Potter fix round 1: corrected Dumbledore's alchemy fact and separated Golden Snitch/Quidditch clues; fresh staged delta blind review pending.
+2026-08-19 06:05: Closed the Harry Potter audit and added dynamic catalog invariants, category-aligned audit packet balancing, ten-card round history, and final generic count documentation.
+2026-08-19 06:30: Hardened Docker build metadata, added pull-request validation and GHCR update guidance, and cleaned tracked temporary audit evidence.

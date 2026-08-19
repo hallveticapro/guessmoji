@@ -1,12 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnswerReveal } from "@/components/game/AnswerReveal";
 import { EmojiClue } from "@/components/game/EmojiClue";
 import { GameControls } from "@/components/game/GameControls";
 import { getGameKeyboardAction } from "@/components/game/keyboard";
 import { ProgressIndicator } from "@/components/game/ProgressIndicator";
+import {
+  readCategoryRoundHistory,
+  writeCategoryRoundHistory,
+} from "@/components/game/round-history-storage";
+import {
+  selectCategoryRound,
+  SOURCE_CATEGORY_ROUND_COUNT,
+} from "@/components/game/round-history";
 import { useFullscreenMode } from "@/components/game/useFullscreenMode";
 import { useGameTimer } from "@/components/game/useGameTimer";
 import { useLastCategoryPersistence } from "@/components/game/useLastCategoryPersistence";
@@ -31,8 +39,14 @@ export function GameBoard({
   initialPuzzles,
   sessionPuzzleCount,
 }: GameBoardProps) {
+  const sourceRoundCount = sessionPuzzleCount ?? SOURCE_CATEGORY_ROUND_COUNT;
+  const isSourceCategory = category.id !== "random-mix";
+  const timerResetCategoryIdRef = useRef<string | null>(null);
   const [puzzles, setPuzzles] = useState(() =>
-    getInitialSessionPuzzles(initialPuzzles, sessionPuzzleCount),
+    getInitialSessionPuzzles(
+      initialPuzzles,
+      isSourceCategory ? sourceRoundCount : sessionPuzzleCount,
+    ),
   );
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnswerVisible, setIsAnswerVisible] = useState(false);
@@ -59,10 +73,23 @@ export function GameBoard({
   const isLastPuzzle = currentIndex >= puzzles.length - 1;
 
   const preparePuzzleDeck = useCallback(() => {
+    if (isSourceCategory) {
+      const storage = getBrowserStorage();
+      const seenIds = readCategoryRoundHistory(storage, category.id);
+      const selection = selectCategoryRound(
+        initialPuzzles,
+        seenIds,
+        sourceRoundCount,
+      );
+
+      writeCategoryRoundHistory(storage, category.id, selection.seenIds);
+      return selection.puzzles;
+    }
+
     const shuffledPuzzles = getRandomizedPuzzles(initialPuzzles);
 
     return shuffledPuzzles.slice(0, sessionPuzzleCount ?? shuffledPuzzles.length);
-  }, [initialPuzzles, sessionPuzzleCount]);
+  }, [category.id, initialPuzzles, isSourceCategory, sessionPuzzleCount, sourceRoundCount]);
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
@@ -72,13 +99,21 @@ export function GameBoard({
       setIsAnswerVisible(false);
       setIsHintVisible(false);
       setIsSettingsOpen(false);
-      resetTimer();
     }, 0);
 
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, [preparePuzzleDeck, resetTimer]);
+  }, [preparePuzzleDeck]);
+
+  useEffect(() => {
+    if (timerResetCategoryIdRef.current === category.id) {
+      return;
+    }
+
+    timerResetCategoryIdRef.current = category.id;
+    resetTimer();
+  }, [category.id, resetTimer]);
 
   const resetPuzzleState = useCallback(() => {
     setIsAnswerVisible(false);
@@ -142,6 +177,12 @@ export function GameBoard({
   }, [resetPuzzleState]);
 
   const restartCategory = useCallback(() => {
+    setCurrentIndex(0);
+    setIsComplete(false);
+    resetPuzzleState();
+  }, [resetPuzzleState]);
+
+  const startNextRound = useCallback(() => {
     setPuzzles(preparePuzzleDeck());
     setCurrentIndex(0);
     setIsComplete(false);
@@ -238,7 +279,6 @@ export function GameBoard({
 
   const answerCategoryName =
     categoryNamesById.get(currentPuzzle.categoryId) ?? category.name;
-  const shouldShowSourceCategory = category.id === "random-mix";
 
   if (isComplete) {
     return (
@@ -256,7 +296,7 @@ export function GameBoard({
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <button
               type="button"
-              onClick={restartCategory}
+              onClick={startNextRound}
               className={cx(primaryPillActionClassName, "px-7")}
             >
               Play Again
@@ -314,11 +354,6 @@ export function GameBoard({
             )}
           >
             <EmojiClue emojis={currentPuzzle.emojis} />
-            {shouldShowSourceCategory && (
-              <p className="mt-5 rounded-full border-2 border-[#8bc9c3] bg-[#e1f5ef] px-5 py-2 text-sm font-black uppercase tracking-normal text-[#00778d]">
-                From: {answerCategoryName}
-              </p>
-            )}
           </div>
 
           <AnswerReveal
@@ -367,4 +402,16 @@ function getInitialSessionPuzzles(
   sessionPuzzleCount?: number,
 ) {
   return puzzlesToPlay.slice(0, sessionPuzzleCount ?? puzzlesToPlay.length);
+}
+
+function getBrowserStorage(): Storage | undefined {
+  if (typeof window === "undefined") {
+    return undefined;
+  }
+
+  try {
+    return window.localStorage;
+  } catch {
+    return undefined;
+  }
 }
