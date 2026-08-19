@@ -59,3 +59,4 @@
 2026-08-19 04:40: Applied Partition C fix round 3: omitted the rejected Robots block, corrected the live source ledger, and documented the lexicalized-metaphor carve-out.
 2026-08-19 05:00: Applied Partition C fix round 4: removed visible phrase-answer metadata leaks and repaired Camping S'mores and Zion clue guessability.
 2026-08-19 05:10: Applied Partition C fix round 5: corrected Zion's fixed-metal-chain wording and simplified the visible Literal Phrases category boundary.
+2026-08-19 05:23: Added the 20-card Harry Potter category with normalized component bans, duplicate/Random Mix regressions, and source-backed Task 8 evidence.

@@ -47,6 +47,10 @@ As of 2026-08-18:
 - Shuffle should reorder the current round rather than select a different set of cards.
 - A future content pass should audit every existing category and card against `CONTENT_GENERATION_RULES.md`, expanding pools where the category supports additional high-quality cards.
 
+As of 2026-08-19:
+
+- Task 8 adds the balanced 20-card `Harry Potter` category from the core seven-book/eight-film saga. The integrated catalog now contains 60 source categories, 61 categories including Random Mix, and 710 source puzzles; fresh staged blind review remains required before the category is accepted as complete.
+
 The app should support many themed categories, including:
 
 - Disney Movies

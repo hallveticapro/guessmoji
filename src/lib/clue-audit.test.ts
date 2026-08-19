@@ -56,6 +56,18 @@ describe("clue audit helpers", () => {
     expect(answerEmojiBanlist["string cheese"]).toEqual(expect.arrayContaining(["🧵", "🧶", "🧀"]));
     expect(answerEmojiBanlist.muffin).toContain("🧁");
     expect(answerEmojiBanlist.cupcake).toContain("🍰");
+    expect(answerEmojiBanlist["harry potter"]).toEqual(expect.arrayContaining(["⚡", "🪄"]));
+    expect(answerEmojiBanlist.hogwarts).toContain("🏰");
+    expect(answerEmojiBanlist["golden snitch"]).toEqual(expect.arrayContaining(["🪽", "🟡"]));
+    expect(answerEmojiBanlist["the sorting hat"]).toContain("🎩");
+    expect(answerEmojiBanlist["the invisibility cloak"]).toContain("🧥");
+    expect(answerEmojiBanlist.dobby).toContain("🧝");
+    expect(answerEmojiBanlist.hedwig).toContain("🦉");
+    expect(answerEmojiBanlist.gryffindor).toContain("🦁");
+    expect(answerEmojiBanlist.patronus).toEqual(expect.arrayContaining(["✨", "🪄"]));
+    expect(answerEmojiBanlist["the deathly hallows"]).toEqual(
+      expect.arrayContaining(["🧥", "🪄", "🪨"]),
+    );
   });
 
   it("catches direct depiction variants for repaired strict-category answers", () => {

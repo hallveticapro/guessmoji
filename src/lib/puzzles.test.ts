@@ -129,6 +129,7 @@ describe("puzzle utilities", () => {
       "Astronaut",
       "Grand Canyon",
       "Yellowstone",
+      "Harry Potter",
     ]);
     const answersByName = new Map<string, string[]>();
 
@@ -177,6 +178,34 @@ describe("puzzle utilities", () => {
     expect(getRandomMixPuzzlePool(normalizedAnswerFixture).map((puzzle) => puzzle.id)).toEqual([
       "moana-first",
     ]);
+  });
+
+  it("documents the intentional Harry Potter character/title duplicate and Random Mix first-source behavior", () => {
+    const booksTitle = puzzles.find((puzzle) => puzzle.id === "books-harry-potter");
+    const characterCard = getPuzzlesByCategoryId("harry-potter").find(
+      (puzzle) => puzzle.answer === "Harry Potter",
+    );
+
+    expect(booksTitle).toBeDefined();
+    expect(characterCard).toBeDefined();
+    expect(normalizeAnswerForAudit(booksTitle?.answer ?? "")).toBe("harry potter");
+    expect(normalizeAnswerForAudit(characterCard?.answer ?? "")).toBe("harry potter");
+    expect(booksTitle?.categoryId).toBe("books");
+    expect(characterCard?.categoryId).toBe("harry-potter");
+    expect(booksTitle?.details).toContain("Published: 1997");
+    expect(characterCard?.details).toMatch(/Central protagonist|Gryffindor student/i);
+    expect(booksTitle?.emojis).not.toBe(characterCard?.emojis);
+    expect(getRandomMixPuzzlePool([booksTitle as Puzzle, characterCard as Puzzle]).map((puzzle) => puzzle.id)).toEqual([
+      "books-harry-potter",
+    ]);
+    expect(getRandomMixPuzzlePool([characterCard as Puzzle, booksTitle as Puzzle]).map((puzzle) => puzzle.id)).toEqual([
+      "harry-potter-harry-potter",
+    ]);
+    expect(
+      getRandomMixPuzzlePool().filter(
+        (puzzle) => normalizeAnswerForAudit(puzzle.answer) === "harry potter",
+      ).map((puzzle) => puzzle.id),
+    ).toEqual(["books-harry-potter"]);
   });
 
   it("preserves every Random Mix card whose normalized answer is empty", () => {

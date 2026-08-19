@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
+import { answerEmojiBanlist } from "@/data/answerEmojiBanlist";
 import { categories } from "@/data/categories";
 import { expandedPuzzles } from "@/data/expandedPacks";
 import { puzzles } from "@/data/puzzles";
+import { findDirectAnswerEmojiLeaks } from "@/lib/clue-audit";
 import { findContentInvariantViolations, getCategoryEmojiUsage } from "@/lib/content-audit";
 import type { Category, Puzzle } from "@/types/puzzle";
 
@@ -395,5 +397,117 @@ describe("content audit helpers", () => {
     expect(literalPhrases?.description).toMatch(/exclude|not include|belong in Idioms|not a conventional idiom/i);
     expect(idioms?.description).toMatch(/conventional|figurative|idiom/i);
     expect(idioms?.description).toMatch(/exclude|not include|not a literal phrase/i);
+  });
+
+  it("ships the exact balanced Harry Potter card block with complete reveal fields", () => {
+    const category = categories.find((item) => item.id === "harry-potter");
+    const harryPotterCards = expandedPuzzles.filter((puzzle) => puzzle.categoryId === "harry-potter");
+    const expectedAnswers = [
+      "Harry Potter",
+      "Hermione Granger",
+      "Ron Weasley",
+      "Albus Dumbledore",
+      "Rubeus Hagrid",
+      "Hogwarts",
+      "Diagon Alley",
+      "Hogsmeade",
+      "Platform Nine and Three-Quarters",
+      "The Hogwarts Express",
+      "The Sorting Hat",
+      "Golden Snitch",
+      "The Invisibility Cloak",
+      "Dobby",
+      "Hedwig",
+      "Quidditch",
+      "Gryffindor",
+      "Patronus",
+      "Triwizard Tournament",
+      "The Deathly Hallows",
+    ];
+
+    expect(category).toMatchObject({
+      id: "harry-potter",
+      name: "Harry Potter",
+      slug: "harry-potter",
+      description: "Recognizable characters, places, objects, creatures, and story ideas from the core Harry Potter saga.",
+      icon: "⚡",
+      colorTheme: "indigo",
+      recommendedGradeBand: "3-8",
+    });
+    expect(harryPotterCards.map((puzzle) => puzzle.answer)).toEqual(expectedAnswers);
+    expect(new Set(harryPotterCards.map((puzzle) => puzzle.id)).size).toBe(20);
+    expect(new Set(harryPotterCards.map((puzzle) => puzzle.answer))).toHaveLength(20);
+    expect(harryPotterCards.every((puzzle) =>
+      puzzle.answer.trim() &&
+      puzzle.emojis.trim() &&
+      puzzle.hint?.trim() &&
+      puzzle.details?.trim() &&
+      puzzle.explanation?.trim() &&
+      puzzle.funFact?.trim() &&
+      puzzle.tags?.length,
+    )).toBe(true);
+    expect(harryPotterCards.filter((puzzle) => puzzle.difficulty === "easy")).toHaveLength(13);
+    expect(harryPotterCards.filter((puzzle) => puzzle.difficulty === "medium")).toHaveLength(7);
+    expect(harryPotterCards.filter((puzzle) => puzzle.difficulty === "hard")).toHaveLength(0);
+
+    const subthemeCounts = new Map<string, number>();
+    for (const puzzle of harryPotterCards) {
+      const subtheme = puzzle.tags?.find((tag) =>
+        ["characters", "locations", "objects", "concepts"].includes(tag),
+      );
+      expect(subtheme, `${puzzle.id} should carry one Harry Potter subtheme`).toBeDefined();
+      subthemeCounts.set(subtheme as string, (subthemeCounts.get(subtheme as string) ?? 0) + 1);
+    }
+    expect(Object.fromEntries(subthemeCounts)).toEqual({
+      characters: 5,
+      locations: 5,
+      objects: 5,
+      concepts: 5,
+    });
+
+    const forbiddenScopeText = [
+      "fantastic beasts",
+      "cursed child",
+      "daniel radcliffe",
+      "emma watson",
+      "rupert grint",
+      "j. k. rowling",
+      "warner bros",
+      "film set",
+      "director",
+      "newt scamander",
+    ];
+    for (const puzzle of harryPotterCards) {
+      const searchableText = JSON.stringify(puzzle).toLowerCase();
+      for (const forbiddenTerm of forbiddenScopeText) {
+        expect(searchableText, `${puzzle.id} should remain inside the core saga scope`).not.toContain(
+          forbiddenTerm,
+        );
+      }
+    }
+  });
+
+  it("keeps Harry Potter clues free of category-context glyphs and direct/component leaks", () => {
+    const harryPotterCards = expandedPuzzles.filter((puzzle) => puzzle.categoryId === "harry-potter");
+    const categoryContextBans = ["⚡", "🪄", "🏰", "✨", "🧙", "🧙‍♂️", "🧙‍♀️"];
+
+    expect(findDirectAnswerEmojiLeaks(harryPotterCards, answerEmojiBanlist)).toEqual([]);
+    for (const puzzle of harryPotterCards) {
+      for (const bannedEmoji of categoryContextBans) {
+        expect(puzzle.emojis, `${puzzle.id} should not use category-context ${bannedEmoji}`).not.toContain(
+          bannedEmoji,
+        );
+      }
+    }
+  });
+
+  it("keeps Harry Potter clues distinct and within the normalized repetition budget", () => {
+    const harryPotterCards = expandedPuzzles.filter((puzzle) => puzzle.categoryId === "harry-potter");
+    const usage = getCategoryEmojiUsage(harryPotterCards);
+
+    expect(new Set(harryPotterCards.map((puzzle) => puzzle.emojis)).size).toBe(20);
+    expect([...usage.values()].every(({ count }) => count <= 4)).toBe(true);
+    expect(usage.get("🛡") ?? usage.get("🛡️")).toEqual({ count: 4, ratio: 0.2 });
+    expect(harryPotterCards.every((puzzle) => !puzzle.emojis.includes("\n"))).toBe(true);
   });
 });
