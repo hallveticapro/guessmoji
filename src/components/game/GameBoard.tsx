@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnswerReveal } from "@/components/game/AnswerReveal";
 import { EmojiClue } from "@/components/game/EmojiClue";
 import { GameControls } from "@/components/game/GameControls";
@@ -41,6 +41,7 @@ export function GameBoard({
 }: GameBoardProps) {
   const sourceRoundCount = sessionPuzzleCount ?? SOURCE_CATEGORY_ROUND_COUNT;
   const isSourceCategory = category.id !== "random-mix";
+  const timerResetCategoryIdRef = useRef<string | null>(null);
   const [puzzles, setPuzzles] = useState(() =>
     getInitialSessionPuzzles(
       initialPuzzles,
@@ -106,6 +107,11 @@ export function GameBoard({
   }, [preparePuzzleDeck]);
 
   useEffect(() => {
+    if (timerResetCategoryIdRef.current === category.id) {
+      return;
+    }
+
+    timerResetCategoryIdRef.current = category.id;
     resetTimer();
   }, [category.id, resetTimer]);
 

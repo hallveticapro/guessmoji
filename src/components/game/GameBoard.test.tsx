@@ -159,6 +159,49 @@ describe("GameBoard", () => {
     await unmountGameBoard(root, container);
   });
 
+  it("keeps the timer stopped when duration changes after revealing an answer", async () => {
+    vi.useFakeTimers();
+    const { container, root } = renderGameBoard(
+      categories[0],
+      sourcePuzzles,
+    );
+
+    try {
+      await flushFakeEffects();
+      await act(async () => {
+        clickButton(container, "Open game settings");
+      });
+      await act(async () => {
+        changeTimerInput(container, "30");
+        clickButton(container, "Apply");
+      });
+      await flushFakeEffects();
+
+      await act(async () => {
+        clickButton(container, "Reveal");
+      });
+      await act(async () => {
+        clickButton(container, "Open game settings");
+      });
+      await act(async () => {
+        changeTimerInput(container, "45");
+        clickButton(container, "Apply");
+      });
+
+      const timerBeforeTick = readDisplayedTimer(container);
+      expect(timerBeforeTick).not.toBeNull();
+
+      await act(async () => {
+        vi.advanceTimersByTime(1000);
+      });
+
+      expect(readDisplayedTimer(container)).toBe(timerBeforeTick);
+    } finally {
+      await unmountGameBoard(root, container);
+      vi.useRealTimers();
+    }
+  });
+
   it("restarts the current source round without consuming another block", async () => {
     const { container, root } = renderGameBoard(
       categories[0],
@@ -325,11 +368,23 @@ function readStoredCategoryIds(categoryId: string) {
   return storedDocument.categories?.[categoryId] ?? [];
 }
 
+function readDisplayedTimer(container: HTMLElement) {
+  return Array.from(container.querySelectorAll("p")).find((candidate) =>
+    /^\d+s$/.test(candidate.textContent?.trim() ?? ""),
+  )?.textContent?.trim();
+}
+
 async function flushEffects() {
   await act(async () => {
     await new Promise((resolve) => {
       window.setTimeout(resolve, 0);
     });
+  });
+}
+
+async function flushFakeEffects() {
+  await act(async () => {
+    vi.advanceTimersByTime(0);
   });
 }
 
