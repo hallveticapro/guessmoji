@@ -58,7 +58,7 @@ describe("clue audit helpers", () => {
     expect(answerEmojiBanlist.cupcake).toContain("🍰");
     expect(answerEmojiBanlist["harry potter"]).toEqual(expect.arrayContaining(["⚡", "🪄"]));
     expect(answerEmojiBanlist.hogwarts).toContain("🏰");
-    expect(answerEmojiBanlist["golden snitch"]).toEqual(expect.arrayContaining(["🪽", "🟡"]));
+    expect(answerEmojiBanlist["golden snitch"]).toEqual(["🟡"]);
     expect(answerEmojiBanlist["the sorting hat"]).toContain("🎩");
     expect(answerEmojiBanlist["the invisibility cloak"]).toContain("🧥");
     expect(answerEmojiBanlist.dobby).toContain("🧝");

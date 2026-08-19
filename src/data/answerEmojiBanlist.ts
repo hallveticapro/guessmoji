@@ -128,7 +128,7 @@ export const answerEmojiBanlist = {
   "great barrier reef": ["🪸"],
   "great wall of china": ["🧱", "🇨🇳"],
   grasshopper: ["🦗"],
-  "golden snitch": ["🪽", "🟡"],
+  "golden snitch": ["🟡"],
   gryffindor: ["🦁"],
   guitar: ["🎸"],
   gymnastics: ["🤸", "🤸‍♀️", "🤸‍♂️"],

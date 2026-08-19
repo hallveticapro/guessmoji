@@ -489,7 +489,7 @@ describe("content audit helpers", () => {
 
   it("keeps Harry Potter clues free of category-context glyphs and direct/component leaks", () => {
     const harryPotterCards = expandedPuzzles.filter((puzzle) => puzzle.categoryId === "harry-potter");
-    const categoryContextBans = ["⚡", "🪄", "🏰", "✨", "🧙", "🧙‍♂️", "🧙‍♀️"];
+    const categoryContextBans = ["⚡", "🪄", "🏰", "🧙", "🧙‍♂️", "🧙‍♀️"];
 
     expect(findDirectAnswerEmojiLeaks(harryPotterCards, answerEmojiBanlist)).toEqual([]);
     for (const puzzle of harryPotterCards) {
@@ -499,6 +499,9 @@ describe("content audit helpers", () => {
         );
       }
     }
+    const snitch = harryPotterCards.find((puzzle) => puzzle.id === "harry-potter-golden-snitch");
+    expect(snitch?.emojis).toContain("✨");
+    expect(snitch?.explanation).toContain("sparkling golden association");
   });
 
   it("keeps Harry Potter clues distinct and within the normalized repetition budget", () => {
@@ -509,5 +512,30 @@ describe("content audit helpers", () => {
     expect([...usage.values()].every(({ count }) => count <= 4)).toBe(true);
     expect(usage.get("🛡") ?? usage.get("🛡️")).toEqual({ count: 4, ratio: 0.2 });
     expect(harryPotterCards.every((puzzle) => !puzzle.emojis.includes("\n"))).toBe(true);
+  });
+
+  it("keeps the Task 8 fix-round facts and Snitch/Quidditch clues pairwise distinct", () => {
+    const puzzleById = new Map(expandedPuzzles.map((puzzle) => [puzzle.id, puzzle]));
+    const dumbledore = puzzleById.get("harry-potter-albus-dumbledore");
+    const snitch = puzzleById.get("harry-potter-golden-snitch");
+    const quidditch = puzzleById.get("harry-potter-quidditch");
+
+    expect(dumbledore?.funFact).toBe(
+      "Dumbledore was known for his alchemy work with Nicolas Flamel.",
+    );
+    expect(dumbledore?.funFact).not.toMatch(/develop.*Philosopher's Stone/i);
+    expect(snitch?.emojis).toBe("✨🪽🔎🤏");
+    expect(quidditch?.emojis).toBe("🧹7️⃣🥅📣");
+    expect(snitch?.explanation).toMatch(/150 points/i);
+    expect(snitch?.explanation).toMatch(/usually ends the match/i);
+    expect(snitch?.explanation).toMatch(/can still win without catching it/i);
+    expect(snitch?.explanation).not.toMatch(/match-winning|guarantee/i);
+    expect(quidditch?.explanation).not.toMatch(/search|Seeker|troph|Golden Snitch/i);
+    for (const emoji of ["🧹", "7️⃣", "🥅", "📣"]) {
+      expect(snitch?.emojis).not.toContain(emoji);
+    }
+    for (const emoji of ["✨", "🪽", "🔎", "🤏"]) {
+      expect(quidditch?.emojis).not.toContain(emoji);
+    }
   });
 });
