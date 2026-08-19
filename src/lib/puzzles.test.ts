@@ -5,9 +5,11 @@ import {
   getCategoryBySlug,
   getPuzzlesByCategoryId,
   getRandomMix,
+  getRandomMixPuzzlePool,
   getRandomizedPuzzles,
   RANDOM_MIX_SESSION_COUNT,
 } from "@/lib/puzzles";
+import { normalizeAnswerForAudit } from "@/lib/clue-audit";
 
 describe("puzzle utilities", () => {
   it("includes the expanded category catalog", () => {
@@ -133,8 +135,25 @@ describe("puzzle utilities", () => {
     expect(randomMix.every((puzzle) => puzzle.categoryId !== "random-mix")).toBe(true);
   });
 
+  it("deduplicates Random Mix by normalized answer and preserves the first source", () => {
+    const normalizedAnswer = normalizeAnswerForAudit("Moana");
+    const sourceDuplicates = puzzles.filter(
+      (puzzle) => normalizeAnswerForAudit(puzzle.answer) === normalizedAnswer,
+    );
+    const randomMixPool = getRandomMixPuzzlePool();
+    const randomMixDuplicates = randomMixPool.filter(
+      (puzzle) => normalizeAnswerForAudit(puzzle.answer) === normalizedAnswer,
+    );
+
+    expect(sourceDuplicates.length).toBeGreaterThanOrEqual(2);
+    expect(randomMixDuplicates).toHaveLength(1);
+    expect(randomMixDuplicates[0]?.id).toBe(sourceDuplicates[0]?.id);
+  });
+
   it("caps random mix at the available unique puzzle count", () => {
-    expect(getRandomMix(puzzles.length + 100)).toHaveLength(puzzles.length);
+    expect(getRandomMix(puzzles.length + 100)).toHaveLength(
+      getRandomMixPuzzlePool().length,
+    );
   });
 
   it("shuffles without losing or adding puzzles", () => {

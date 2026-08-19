@@ -1,5 +1,6 @@
 import { categories } from "@/data/categories";
 import { puzzles } from "@/data/puzzles";
+import { normalizeAnswerForAudit } from "@/lib/clue-audit";
 import type { Category, Puzzle } from "@/types/puzzle";
 
 const RANDOM_MIX_CATEGORY_ID = "random-mix";
@@ -33,7 +34,7 @@ export function getRandomizedPuzzles(puzzleList: readonly Puzzle[]): Puzzle[] {
 }
 
 export function getRandomMixPuzzlePool(): Puzzle[] {
-  return uniquePuzzlesById(
+  return uniquePuzzlesByNormalizedAnswer(
     puzzles.filter((puzzle) => puzzle.categoryId !== RANDOM_MIX_CATEGORY_ID),
   );
 }
@@ -45,6 +46,21 @@ export function getRandomMix(count = RANDOM_MIX_SESSION_COUNT): Puzzle[] {
   return getRandomizedPuzzles(uniquePuzzlePool).slice(0, safeCount);
 }
 
-function uniquePuzzlesById(puzzleList: readonly Puzzle[]): Puzzle[] {
-  return [...new Map(puzzleList.map((puzzle) => [puzzle.id, puzzle])).values()];
+function uniquePuzzlesByNormalizedAnswer(
+  puzzleList: readonly Puzzle[],
+): Puzzle[] {
+  const seenAnswers = new Set<string>();
+  const uniquePuzzles: Puzzle[] = [];
+
+  for (const puzzle of puzzleList) {
+    const normalizedAnswer = normalizeAnswerForAudit(puzzle.answer);
+    if (seenAnswers.has(normalizedAnswer)) {
+      continue;
+    }
+
+    seenAnswers.add(normalizedAnswer);
+    uniquePuzzles.push(puzzle);
+  }
+
+  return uniquePuzzles;
 }
