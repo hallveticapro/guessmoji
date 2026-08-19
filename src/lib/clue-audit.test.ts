@@ -278,6 +278,56 @@ describe("clue audit helpers", () => {
     ]);
   });
 
+  it("keeps round-three context and operator regressions out of Partition B", () => {
+    const puzzleById = new Map(expandedPuzzles.map((puzzle) => [puzzle.id, puzzle]));
+    const get = (id: string): Puzzle => {
+      const puzzle = puzzleById.get(id);
+      expect(puzzle, `${id} should exist`).toBeDefined();
+      return puzzle as Puzzle;
+    };
+
+    expect(get("science-cell").emojis).not.toContain("🔬");
+    expect(get("science-chemical-reaction").emojis).not.toContain("🧪");
+    expect(get("math-division").emojis).not.toContain("➗");
+    expect(get("math-subtraction").emojis).not.toContain("➖");
+    expect(get("math-multiplication").emojis).not.toContain("✖️");
+    expect(get("math-graph").emojis).not.toMatch(/[📊📈]/u);
+    expect(get("world-landmarks-eiffel-tower").emojis).not.toContain("📸");
+    expect(get("minecraft-diamond-sword").difficulty).toBe("medium");
+    expect(get("books-the-cat-in-the-hat").emojis).toContain("🌧️");
+    expect(get("world-geography-greenland").hint).not.toMatch(/Greenland/i);
+
+    const geographyIds = [
+      "world-geography-island",
+      "world-geography-peninsula",
+      "world-geography-equator",
+      "world-geography-compass-rose",
+      "world-geography-indian-ocean",
+      "world-geography-greenland",
+    ];
+    for (const id of geographyIds) {
+      expect(get(id).emojis, `${id} should not use generic map pins`).not.toContain("📍");
+    }
+
+    const geography = expandedPuzzles.filter((puzzle) => puzzle.categoryId === "world-geography");
+    expect(getCategoryEmojiUsage(geography).get("📍")?.count ?? 0).toBeLessThanOrEqual(4);
+
+    expect(answerEmojiBanlist.division).toContain("➗");
+    expect(answerEmojiBanlist.subtraction).toContain("➖");
+    expect(answerEmojiBanlist.multiplication).toContain("✖️");
+
+    const operatorLeaks: Puzzle[] = [
+      { id: "synthetic-division-leak", answer: "Division", emojis: "➗🍕", categoryId: "math", difficulty: "easy" },
+      { id: "synthetic-subtraction-leak", answer: "Subtraction", emojis: "➖🍎", categoryId: "math", difficulty: "easy" },
+      { id: "synthetic-multiplication-leak", answer: "Multiplication", emojis: "✖️📦", categoryId: "math", difficulty: "easy" },
+    ];
+    expect(findDirectAnswerEmojiLeaks(operatorLeaks, answerEmojiBanlist)).toEqual([
+      expect.objectContaining({ puzzleId: "synthetic-division-leak", forbiddenEmoji: "➗" }),
+      expect.objectContaining({ puzzleId: "synthetic-subtraction-leak", forbiddenEmoji: "➖" }),
+      expect.objectContaining({ puzzleId: "synthetic-multiplication-leak", forbiddenEmoji: "✖️" }),
+    ]);
+  });
+
   it("carries an explicit explanation through every partition A expanded card", () => {
     const partitionACategoryIds = new Set([
       "animals",
