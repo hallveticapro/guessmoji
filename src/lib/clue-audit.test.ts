@@ -224,6 +224,35 @@ describe("clue audit helpers", () => {
     expect(count("snacks", "🥣")).toBe(0);
   });
 
+  it("keeps round-two repaired clues distinctive", () => {
+    const byId = new Map(expandedPuzzles.map((puzzle) => [puzzle.id, puzzle]));
+    expect(byId.get("birds-eagle")?.emojis).not.toContain("🇺🇸");
+    expect(byId.get("birds-eagle")?.hint).toMatch(/talon|soaring|prey/i);
+    expect(byId.get("dinosaurs-pteranodon")?.hint).toMatch(/crest|jaw/i);
+    expect(byId.get("animals-chicken")?.hint).toMatch(/comb|cluck/i);
+    expect(byId.get("animals-crocodile")?.hint).toMatch(/V-shaped|lower teeth/i);
+    expect(byId.get("fruit-orange")?.hint).toMatch(/peel|segment/i);
+    expect(byId.get("snacks-animal-crackers")?.emojis).toContain("🐾");
+    expect(byId.get("snacks-gummy-bears")?.emojis).toContain("🐾");
+    expect(byId.get("snacks-crackers")?.hint).toMatch(/baked squares|cheese/i);
+    expect(byId.get("fruit-apple")?.emojis).toContain("✏️");
+    expect(byId.get("fruit-cherry")?.emojis).toContain("🪢");
+  });
+
+  it("keeps round-two generic filler at or below the review threshold", () => {
+    const count = (categoryId: string, emoji: string) =>
+      expandedPuzzles.filter(
+        (puzzle) => puzzle.categoryId === categoryId && puzzle.emojis.includes(emoji),
+      ).length;
+    expect(count("snacks", "📦")).toBeLessThanOrEqual(4);
+    expect(count("vegetables", "🪴")).toBeLessThanOrEqual(4);
+    expect(count("vegetables", "📏")).toBeLessThanOrEqual(4);
+    expect(count("breakfast", "🟫")).toBeLessThanOrEqual(4);
+    expect(count("desserts", "🍬")).toBeLessThanOrEqual(4);
+    expect(count("ocean-animals", "🏖️")).toBeLessThanOrEqual(4);
+    expect(count("dinosaurs", "📏")).toBeLessThanOrEqual(2);
+  });
+
   it("keeps expanded canonical repairs shipped", () => {
     const puzzleById = new Map(expandedPuzzles.map((puzzle) => [puzzle.id, puzzle]));
 
