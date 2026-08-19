@@ -271,4 +271,77 @@ describe("content audit helpers", () => {
       ),
     ).toBe(true);
   });
+
+  it("keeps every partition B expanded card fully populated", () => {
+    const partitionBCategoryIds = new Set([
+      "sports",
+      "outdoor-games",
+      "board-games",
+      "party-games",
+      "video-games",
+      "arcade-classics",
+      "pokemon",
+      "minecraft",
+      "science",
+      "space",
+      "weather",
+      "math",
+      "books",
+      "fairy-tales",
+      "myths",
+      "world-landmarks",
+      "us-landmarks",
+      "world-geography",
+      "vehicles",
+      "construction",
+    ]);
+    const partitionBPuzzles = expandedPuzzles.filter((puzzle) =>
+      partitionBCategoryIds.has(puzzle.categoryId),
+    );
+
+    expect(partitionBPuzzles).toHaveLength(240);
+    expect(
+      partitionBPuzzles.every(
+        (puzzle) =>
+          puzzle.answer.trim() &&
+          puzzle.emojis.trim() &&
+          puzzle.hint?.trim() &&
+          puzzle.details?.trim() &&
+          puzzle.explanation?.trim() &&
+          puzzle.funFact?.trim() &&
+          puzzle.tags?.length,
+      ),
+    ).toBe(true);
+  });
+
+  it("keeps only complete, accepted Partition B expansion blocks", () => {
+    const expectedCounts: Record<string, number> = {
+      sports: 10,
+      "outdoor-games": 10,
+      "board-games": 10,
+      "party-games": 10,
+      "video-games": 10,
+      "arcade-classics": 10,
+      pokemon: 10,
+      minecraft: 10,
+      science: 20,
+      space: 20,
+      weather: 10,
+      math: 10,
+      books: 10,
+      "fairy-tales": 10,
+      myths: 20,
+      "world-landmarks": 10,
+      "us-landmarks": 10,
+      "world-geography": 20,
+      vehicles: 10,
+      construction: 10,
+    };
+
+    for (const [categoryId, expectedCount] of Object.entries(expectedCounts)) {
+      const categoryPuzzles = expandedPuzzles.filter((puzzle) => puzzle.categoryId === categoryId);
+      expect(categoryPuzzles, `${categoryId} count`).toHaveLength(expectedCount);
+      expect(categoryPuzzles.length % 10).toBe(0);
+    }
+  });
 });

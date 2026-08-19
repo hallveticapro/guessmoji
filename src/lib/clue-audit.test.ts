@@ -118,6 +118,40 @@ describe("clue audit helpers", () => {
     expect(findDirectAnswerEmojiLeaks(expandedPuzzles, answerEmojiBanlist)).toEqual([]);
   });
 
+  it("keeps Partition B report regressions repaired", () => {
+    const puzzleById = new Map(expandedPuzzles.map((puzzle) => [puzzle.id, puzzle]));
+
+    expect(answerEmojiBanlist.tennis).toContain("🎾");
+    expect(answerEmojiBanlist.volleyball).toContain("🏐");
+    expect(answerEmojiBanlist["diamond sword"]).toEqual(
+      expect.arrayContaining(["💎", "🗡️"]),
+    );
+    expect(answerEmojiBanlist.pickaxe).toContain("⛏️");
+    expect(answerEmojiBanlist.volcano).toContain("🌋");
+    expect(answerEmojiBanlist.electricity).toContain("⚡");
+    expect(answerEmojiBanlist["eiffel tower"]).toContain("🗼");
+    expect(answerEmojiBanlist["statue of liberty"]).toContain("🗽");
+    expect(answerEmojiBanlist["liberty bell"]).toContain("🔔");
+    expect(answerEmojiBanlist.island).toContain("🏝️");
+
+    expect(puzzleById.get("sports-tennis")?.emojis).not.toContain("🏸");
+    expect(puzzleById.get("sports-volleyball")?.emojis).not.toContain("🥅");
+    expect(puzzleById.get("party-games-simon-says")?.emojis).not.toContain("🚦");
+    expect(puzzleById.get("arcade-classics-mortal-kombat")).toBeUndefined();
+    expect(puzzleById.get("arcade-classics-pinball")?.difficulty).toBe("medium");
+    expect(puzzleById.get("space-astronaut")?.emojis).toContain("🪖");
+    expect(puzzleById.get("weather-tornado")?.emojis).toContain("🌀");
+    expect(puzzleById.get("weather-fog")?.emojis).toContain("☁️");
+    expect(puzzleById.get("world-geography-peninsula")?.emojis).toContain("3️⃣");
+    expect(puzzleById.get("world-geography-compass-rose")?.emojis).toContain("✳️");
+    expect(puzzleById.get("vehicles-bicycle")?.emojis).toContain("⚙️");
+    expect(puzzleById.get("vehicles-motorcycle")?.emojis).toContain("↪️");
+    expect(puzzleById.get("construction-hard-hat")?.emojis).toContain("🧠");
+    expect(puzzleById.get("construction-blueprint")?.details).toContain(
+      "Construction plan",
+    );
+  });
+
   it("carries an explicit explanation through every partition A expanded card", () => {
     const partitionACategoryIds = new Set([
       "animals",
