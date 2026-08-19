@@ -389,7 +389,9 @@ describe("content audit helpers", () => {
 
     expect(literalPhrases?.description).toMatch(/compound|literal/i);
     expect(literalPhrases?.description).toMatch(/lexicalized|fixed expression/i);
-    expect(literalPhrases?.description).toMatch(/Couch Potato|Heart of Gold|Time Flies/i);
+    for (const answer of ["Couch Potato", "Heart of Gold", "Time Flies"]) {
+      expect(literalPhrases?.description).not.toMatch(new RegExp(answer, "i"));
+    }
     expect(literalPhrases?.description).toMatch(/exclude|not include|not a conventional idiom/i);
     expect(idioms?.description).toMatch(/conventional|figurative|idiom/i);
     expect(idioms?.description).toMatch(/exclude|not include|not a literal phrase/i);

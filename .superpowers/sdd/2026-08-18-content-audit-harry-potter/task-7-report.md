@@ -1,6 +1,6 @@
 # Task 7 Partition C implementation report
 
-Status: fix round 3/5 complete for objective content gates; fresh delta clean-context blind review is pending. This report is not a blind-review acceptance record.
+Status: fix round 4/5 complete for objective content gates; fresh two-card plus metadata blind review is pending. This report is not a blind-review acceptance record.
 
 Implementation was based on `dfa5701` (`content: finalize galaxy hint`). Before changing Partition C, the SDD ledger recorded Task 6 complete using the `a072e4d..dfa5701` evidence and final targeted blind JSON `task-6-round5-space-pair-blind.json` (2/2 pass). No Task 6 changes were reverted.
 
@@ -123,6 +123,8 @@ Source-register corrections: `national-parks-great-smoky-mountains` maps to the 
 
 The Literal Phrases/Idioms boundary is deliberate: lexicalized metaphors and standalone compound expressions (`Couch Potato`, `Heart of Gold`, `Time Flies`) remain in Literal Phrases when their everyday reading is a noun/quality/time expression, while conventional advice or action idioms belong in Idioms. Literal Phrases remains at ten with no expansion.
 
+Fix round 4 repairs exactly three blockers without changing accepted additions: the player-visible Literal Phrases description now states only the generalized lexicalized-metaphor versus conventional-action-idiom boundary and names no answer; `camping-s-mores` now uses `🙋➕1️⃣😋` with the hint “Its name sounds like asking for another helping.”; and `national-parks-zion` now uses `🟥🧗🪢🌊`, a hard hint about its cable-assisted summit route and narrow river canyon, and an NPS-stable Angels Landing/The Narrows fact.
+
 ## Validation evidence
 
 - RED focused run before data edits: the new C assertions failed as expected (4 failures).
@@ -136,4 +138,4 @@ The Literal Phrases/Idioms boundary is deliberate: lexicalized metaphors and sta
 
 ## Blind-review status and uncertainties
 
-`blind-c-final.json` and the preflight's 188/200 pass, 12/200 fail counts describe the pre-change source. This fix round does not create a fresh independent three-stage clean-context blind JSON. Therefore the two retained blocks and all changed current cards remain pending fresh delta blind review. In particular, the Jobs/Idioms additions, the lexicalized-metaphor boundary, and cross-partition S'mores should receive explicit fresh review. If any retained block fails, remove or replace the entire ten-card block; never ship a partial expansion.
+The prior staged evidence covers the accepted Jobs/Idioms additions and prior semantic changes. This round requires a fresh two-card review for `camping-s-mores` and `national-parks-zion`, plus metadata review confirming that the visible Literal Phrases description contains no shipped answer string. Those fresh checks remain pending. If any retained block fails, remove or replace the entire ten-card block; never ship a partial expansion.

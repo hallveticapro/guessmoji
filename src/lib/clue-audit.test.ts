@@ -329,7 +329,16 @@ describe("clue audit helpers", () => {
     expect(get("music-instruments-flute").emojis).not.toMatch(/[🎵🎶]/u);
     expect(get("art-supplies-colored-pencils").emojis).not.toContain("✏️");
     expect(get("art-supplies-scissors").emojis).not.toContain("✂️");
-    expect(get("camping-s-mores").emojis).not.toMatch(/[🔥🍫☁️🍪]/u);
+    for (const bannedEmoji of ["🔥", "🍫", "☁️", "🍪"]) {
+      expect(get("camping-s-mores").emojis).not.toContain(bannedEmoji);
+    }
+    expect(get("camping-s-mores").emojis).toBe("🙋➕1️⃣😋");
+    expect(get("camping-s-mores").hint).toMatch(/another helping/i);
+    expect(get("camping-s-mores").explanation).toMatch(/🙋|➕|1️⃣|😋/u);
+    expect(get("national-parks-zion").emojis).toContain("🧗");
+    expect(get("national-parks-zion").emojis).toContain("🟥");
+    expect(get("national-parks-zion").hint).not.toMatch(/Zion/i);
+    expect(get("national-parks-zion").hint).toMatch(/cable-assisted|narrow river/i);
     expect(get("desserts-s-mores").emojis).toContain("🪵");
     expect(get("desserts-s-mores").emojis).not.toMatch(/[🔥🍫☁️🍪]/u);
     expect(get("halloween-skeleton").emojis).not.toContain("💀");
