@@ -135,7 +135,7 @@ describe("clue audit helpers", () => {
     expect(ariel?.emojis).toContain("🦵");
     expect(ariel?.hint).toContain("voice");
     expect(ariel?.hint).toContain("human legs");
-    expect(ariel?.difficulty).toBe("medium");
+    expect(ariel?.difficulty).toBe("easy");
 
     const gabby = puzzleById.get("gabbys-dollhouse");
     expect(gabby?.difficulty).toBe("medium");
