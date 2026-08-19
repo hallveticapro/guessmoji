@@ -55,3 +55,4 @@
 2026-08-18 18:18: Added authoritative category and card generation rules plus future pool and round-history requirements.
 2026-08-19 03:22: Remediated all Partition C cards, added explicit explanations and clue-audit coverage, and retained only complete expansion blocks.
 2026-08-19 04:01: Applied Partition C fix round 1: omitted six blind-rejected expansion blocks, repaired remaining source-review findings, and added cross-partition S'mores regression coverage.
+2026-08-19 04:20: Applied Partition C fix round 2: omitted four rejected expansion blocks, repaired hint/source blockers, and documented the Literal Phrases/Idioms boundary.

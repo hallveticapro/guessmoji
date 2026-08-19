@@ -348,15 +348,15 @@ describe("content audit helpers", () => {
   it("keeps every Partition C category at an accepted complete-block count", () => {
     const expectedCounts: Record<string, number> = {
       jobs: 20,
-      "music-instruments": 20,
+      "music-instruments": 10,
       "music-genres": 10,
       "art-supplies": 10,
       "school-supplies": 10,
       camping: 10,
       "national-parks": 10,
-      holidays: 20,
+      holidays: 10,
       halloween: 10,
-      "winter-holidays": 20,
+      "winter-holidays": 10,
       "summer-fun": 10,
       "beach-day": 10,
       "amusement-park": 10,
@@ -364,7 +364,7 @@ describe("content audit helpers", () => {
       "kitchen-tools": 10,
       "literal-phrases": 10,
       idioms: 20,
-      emotions: 20,
+      emotions: 10,
       robots: 20,
       plants: 10,
     };
@@ -372,7 +372,7 @@ describe("content audit helpers", () => {
     const partitionCCategories = categories.filter((category) => category.id in expectedCounts);
     const partitionCPuzzles = expandedPuzzles.filter((puzzle) => puzzle.categoryId in expectedCounts);
 
-    expect(partitionCPuzzles).toHaveLength(270);
+    expect(partitionCPuzzles).toHaveLength(230);
     expect(partitionCPuzzles.every((puzzle) => puzzle.explanation?.trim())).toBe(true);
     expect(findContentInvariantViolations(partitionCCategories, partitionCPuzzles)).toEqual([]);
 
@@ -381,5 +381,15 @@ describe("content audit helpers", () => {
       expect(categoryPuzzles, `${categoryId} count`).toHaveLength(expectedCount);
       expect(categoryPuzzles.length % 10).toBe(0);
     }
+  });
+
+  it("documents the hard Literal Phrases and Idioms category boundary", () => {
+    const literalPhrases = categories.find((category) => category.id === "literal-phrases");
+    const idioms = categories.find((category) => category.id === "idioms");
+
+    expect(literalPhrases?.description).toMatch(/compound|literal/i);
+    expect(literalPhrases?.description).toMatch(/exclude|not include|not a conventional idiom/i);
+    expect(idioms?.description).toMatch(/conventional|figurative|idiom/i);
+    expect(idioms?.description).toMatch(/exclude|not include|not a literal phrase/i);
   });
 });

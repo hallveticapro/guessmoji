@@ -1,6 +1,6 @@
 # Task 7 Partition C implementation report
 
-Status: fix round 1/5 complete for objective content gates; fresh delta clean-context blind review is pending. This report is not a blind-review acceptance record.
+Status: fix round 2/5 complete for objective content gates; fresh delta clean-context blind review is pending. This report is not a blind-review acceptance record.
 
 Implementation was based on `dfa5701` (`content: finalize galaxy hint`). Before changing Partition C, the SDD ledger recorded Task 6 complete using the `a072e4d..dfa5701` evidence and final targeted blind JSON `task-6-round5-space-pair-blind.json` (2/2 pass). No Task 6 changes were reverted.
 
@@ -55,20 +55,20 @@ All 200 current cards were mapped by category and normalized answer. The table g
 
 ## Category counts and complete-block decisions
 
-Partition C ships 270 cards: 200 remediated existing cards plus 70 retained additions. Every category total is a multiple of ten.
+Partition C ships 230 cards: 200 remediated existing cards plus 30 retained additions. Every category total is a multiple of ten.
 
 | Category | Final count | Decision | New source IDs, when retained |
 | --- | ---: | --- | --- |
 | Jobs | 20 | Retain complete 10-card block | `jobs-nurse`, `jobs-police-officer`, `jobs-baker`, `jobs-plumber`, `jobs-electrician`, `jobs-scientist`, `jobs-librarian`, `jobs-photographer`, `jobs-farmer`, `jobs-judge` |
-| Musical Instruments | 20 | Retain complete 10-card block | `music-instruments-cello`, `music-instruments-clarinet`, `music-instruments-oboe`, `music-instruments-trombone`, `music-instruments-tuba`, `music-instruments-banjo`, `music-instruments-ukulele`, `music-instruments-recorder`, `music-instruments-maracas`, `music-instruments-xylophone` |
+| Musical Instruments | 10 | Omit proposed block in full (fix round 2) | None; delta blind review rejected the entire addition |
 | Music Genres | 10 | Omit proposed block in full (fix round 1) | None; blind review rejected the entire addition |
 | Art Supplies | 10 | Omit proposed block in full | None; flagged `Pencil Sharpener` collision required substitution, and no partial block was shipped |
 | School Supplies | 10 | Omit proposed block in full | None; flagged `Scissors`/`Compass` collisions required substitution, and no partial block was shipped |
 | Camping | 10 | Omit proposed block in full (fix round 1) | None; blind review rejected the entire addition |
 | National Parks | 10 | Omit proposed block in full (fix round 1) | None; blind review rejected the entire addition |
-| Holidays | 20 | Retain complete 10-card block | `holidays-martin-luther-king-jr-day`, `holidays-presidents-day`, `holidays-memorial-day`, `holidays-juneteenth`, `holidays-st-patrick-s-day`, `holidays-cinco-de-mayo`, `holidays-mother-s-day`, `holidays-father-s-day`, `holidays-rosh-hashanah`, `holidays-lunar-new-year` |
+| Holidays | 10 | Omit proposed block in full (fix round 2) | None; delta blind review rejected the entire addition |
 | Halloween | 10 | Omit proposed block in full | None; proposed `Pumpkin` duplicated `vegetables-pumpkin`, and no partial block was shipped |
-| Winter Holidays | 20 | Retain complete 10-card block | `winter-holidays-stocking`, `winter-holidays-santa-claus`, `winter-holidays-reindeer`, `winter-holidays-holiday-lights`, `winter-holidays-wreath`, `winter-holidays-latke`, `winter-holidays-new-year-s-eve`, `winter-holidays-kwanzaa`, `winter-holidays-christmas-carol`, `winter-holidays-ugly-sweater` |
+| Winter Holidays | 10 | Omit proposed block in full (fix round 2) | None; delta blind review rejected the entire addition |
 | Summer Fun | 10 | Omit proposed block in full | None; proposed `Frisbee`, `Kite Flying`, and `Popsicle` duplicated existing source cards |
 | Beach Day | 10 | Omit proposed block in full (fix round 1) | None; blind review rejected the entire addition |
 | Amusement Park | 10 | Omit proposed block in full | None; proposed `Pretzel` and `Popcorn` duplicated existing snack cards |
@@ -76,17 +76,19 @@ Partition C ships 270 cards: 200 remediated existing cards plus 70 retained addi
 | Kitchen Tools | 10 | Omit proposed block in full (fix round 1) | None; blind review rejected the entire addition |
 | Literal Phrases | 10 | Retain current block; no expansion | No proposal shipped until the metaphorical/compound-phrase boundary with Idioms is explicit |
 | Idioms | 20 | Retain complete 10-card block | `idioms-a-blessing-in-disguise`, `idioms-burn-the-midnight-oil`, `idioms-once-in-a-blue-moon`, `idioms-actions-speak-louder-than-words`, `idioms-best-of-both-worlds`, `idioms-go-the-extra-mile`, `idioms-in-hot-water`, `idioms-back-to-square-one`, `idioms-a-dime-a-dozen`, `idioms-through-thick-and-thin` |
-| Emotions | 20 | Retain complete 10-card block | `emotions-love`, `emotions-jealous`, `emotions-worried`, `emotions-embarrassed`, `emotions-grateful`, `emotions-hopeful`, `emotions-lonely`, `emotions-frustrated`, `emotions-bored`, `emotions-relieved` |
+| Emotions | 10 | Omit proposed block in full (fix round 2) | None; delta blind review rejected the entire addition |
 | Robots | 20 | Retain complete 10-card block | `robots-surgical-robot`, `robots-warehouse-robot`, `robots-delivery-robot`, `robots-robotic-lawn-mower`, `robots-self-driving-car`, `robots-search-and-rescue-robot`, `robots-space-drone`, `robots-robot-painter`, `robots-educational-robot`, `robots-robotic-exoskeleton` |
 | Plants | 10 | Omit proposed block in full (fix round 1) | None; blind review rejected the entire addition |
 
-The six flagged proposal blocks from the initial implementation were omitted in full, not partially padded: Art Supplies, School Supplies, Halloween, Summer Fun, Amusement Park, and Around the House. Fix round 1 also removed the six blind-rejected blocks Music Genres, Camping, National Parks, Beach Day, Kitchen Tools, and Plants. Literal Phrases was kept at ten pending its category boundary. The seven retained additions (Jobs, Musical Instruments, Holidays, Winter Holidays, Idioms, Emotions, and Robots) are all exact ten-card blocks.
+The six flagged proposal blocks from the initial implementation were omitted in full, not partially padded: Art Supplies, School Supplies, Halloween, Summer Fun, Amusement Park, and Around the House. Fix round 1 removed Music Genres, Camping, National Parks, Beach Day, Kitchen Tools, and Plants. Fix round 2 removed Musical Instruments, Holidays, Winter Holidays, and Emotions. Literal Phrases remains at ten. The three retained additions (Jobs, Idioms, and Robots) are exact ten-card blocks.
 
 ## Fix round 1 atomic decisions
 
 The fix round removed exactly these six complete ten-card blocks (60 cards): Music Genres (`music-genres-folk`, `music-genres-soul`, `music-genres-funk`, `music-genres-gospel`, `music-genres-metal`, `music-genres-punk`, `music-genres-ska`, `music-genres-opera`, `music-genres-bluegrass`, `music-genres-randb`); Camping (`camping-camp-stove`, `camping-lantern`, `camping-hammock`, `camping-sleeping-pad`, `camping-camp-chair`, `camping-first-aid-kit`, `camping-insect-repellent`, `camping-water-bottle`, `camping-firewood`, `camping-trail-sign`); National Parks (`national-parks-rocky-mountain-national-park`, `national-parks-grand-teton-national-park`, `national-parks-bryce-canyon-national-park`, `national-parks-olympic-national-park`, `national-parks-sequoia-national-park`, `national-parks-saguaro-national-park`, `national-parks-denali-national-park`, `national-parks-death-valley-national-park`, `national-parks-redwood-national-park`, `national-parks-hawai-i-volcanoes-national-park`); Beach Day (`beach-day-snorkeling`, `beach-day-sand-dunes`, `beach-day-beach-chair`, `beach-day-sun-hat`, `beach-day-beach-bag`, `beach-day-paddleboard`, `beach-day-seashell-hunt`, `beach-day-beach-cleanup`, `beach-day-ocean-wave`, `beach-day-boardwalk`); Kitchen Tools (`kitchen-tools-chef-s-knife`, `kitchen-tools-frying-pan`, `kitchen-tools-saucepan`, `kitchen-tools-grater`, `kitchen-tools-peeler`, `kitchen-tools-tongs`, `kitchen-tools-kitchen-timer`, `kitchen-tools-mixing-bowl`, `kitchen-tools-potato-masher`, `kitchen-tools-mortar-and-pestle`); and Plants (`plants-daisy`, `plants-tulip`, `plants-dandelion`, `plants-lavender`, `plants-maple-tree`, `plants-pine-tree`, `plants-aloe-vera`, `plants-tomato-plant`, `plants-mint`, `plants-basil`).
 
-The retained complete blocks are exactly 70 cards: Jobs (`jobs-nurse` through `jobs-judge`), Musical Instruments (`music-instruments-cello` through `music-instruments-xylophone`), Holidays (`holidays-martin-luther-king-jr-day` through `holidays-lunar-new-year`), Winter Holidays (`winter-holidays-stocking` through `winter-holidays-ugly-sweater`), Idioms (`idioms-a-blessing-in-disguise` through `idioms-through-thick-and-thin`), Emotions (`emotions-love` through `emotions-relieved`), and Robots (`robots-surgical-robot` through `robots-robotic-exoskeleton`).
+The retained complete blocks are exactly 30 cards: Jobs (`jobs-nurse` through `jobs-judge`), Idioms (`idioms-a-blessing-in-disguise` through `idioms-through-thick-and-thin`), and Robots (`robots-surgical-robot` through `robots-robotic-exoskeleton`).
+
+Fix round 2 removed exactly these four complete ten-card blocks (40 cards): Musical Instruments (`music-instruments-cello`, `music-instruments-clarinet`, `music-instruments-oboe`, `music-instruments-trombone`, `music-instruments-tuba`, `music-instruments-banjo`, `music-instruments-ukulele`, `music-instruments-recorder`, `music-instruments-maracas`, `music-instruments-xylophone`); Holidays (`holidays-martin-luther-king-jr-day`, `holidays-presidents-day`, `holidays-memorial-day`, `holidays-juneteenth`, `holidays-st-patrick-s-day`, `holidays-cinco-de-mayo`, `holidays-mother-s-day`, `holidays-father-s-day`, `holidays-rosh-hashanah`, `holidays-lunar-new-year`); Winter Holidays (`winter-holidays-stocking`, `winter-holidays-santa-claus`, `winter-holidays-reindeer`, `winter-holidays-holiday-lights`, `winter-holidays-wreath`, `winter-holidays-latke`, `winter-holidays-new-year-s-eve`, `winter-holidays-kwanzaa`, `winter-holidays-christmas-carol`, `winter-holidays-ugly-sweater`); and Emotions (`emotions-love`, `emotions-jealous`, `emotions-worried`, `emotions-embarrassed`, `emotions-grateful`, `emotions-hopeful`, `emotions-lonely`, `emotions-frustrated`, `emotions-bored`, `emotions-relieved`). Only Jobs, Idioms, and Robots additions remain.
 
 ## Remediation coverage
 
@@ -110,14 +112,20 @@ No URLs were added to player-facing data. The authoritative per-card source regi
 
 ### Retained-addition source mapping
 
-The retained additions use the authoritative source families above: BLS occupation pages and NASA astronaut context for Jobs; Britannica instrument pages for Musical Instruments; Britannica, National Archives, Department of Labor, EarthDay.org, Smithsonian, and NMAAHC for Holidays; Britannica seasonal references and NMAAHC Kwanzaa context for Winter Holidays; Merriam-Webster idiom definitions for Idioms; APA emotion guidance for Emotions; and Britannica/NASA robotics references for Robots. These mappings cover the factual claims in the 70 retained cards; omitted blocks have no remaining source obligations.
+Each retained addition has a repeatable card-level source and assessment. Jobs: `jobs-nurse` → [BLS registered nurses](https://www.bls.gov/ooh/healthcare/registered-nurses.htm), `jobs-police-officer` → [BLS police and detectives](https://www.bls.gov/ooh/protective-service/police-and-detectives.htm), `jobs-baker` → [BLS bakers](https://www.bls.gov/ooh/production/bakers.htm), `jobs-plumber` → [BLS plumbers](https://www.bls.gov/ooh/construction-and-extraction/plumbers-pipefitters-and-steamfitters.htm), `jobs-electrician` → [BLS electricians](https://www.bls.gov/ooh/construction-and-extraction/electricians.htm), `jobs-scientist` → [BLS life, physical, and social science occupations](https://www.bls.gov/ooh/life-physical-and-social-science/home.htm), `jobs-librarian` → [BLS librarians](https://www.bls.gov/ooh/education-training-and-library/librarians.htm), `jobs-photographer` → [BLS photographers](https://www.bls.gov/ooh/media-and-communication/photographers.htm), `jobs-farmer` → [BLS farmers and agricultural managers](https://www.bls.gov/ooh/management/farmers-ranchers-and-other-agricultural-managers.htm), and `jobs-judge` → [BLS judges and hearing officers](https://www.bls.gov/ooh/legal/judges-and-hearing-officers.htm). Assessment for every Jobs card: complete explanation, safe K+ recognition, no direct/component leak; block retained only as a complete ten.
+
+Idioms: `idioms-a-blessing-in-disguise`, `idioms-burn-the-midnight-oil`, `idioms-once-in-a-blue-moon`, `idioms-actions-speak-louder-than-words`, `idioms-best-of-both-worlds`, `idioms-go-the-extra-mile`, `idioms-in-hot-water`, `idioms-back-to-square-one`, `idioms-a-dime-a-dozen`, and `idioms-through-thick-and-thin` each map to [Merriam-Webster idiom](https://www.merriam-webster.com/dictionary/idiom) and the card's literal rebus assessment: emoji show the words while the hint supplies a distinct figurative meaning; no direct answer glyphs; complete ten retained.
+
+Robots: `robots-surgical-robot`, `robots-warehouse-robot`, `robots-delivery-robot`, `robots-robotic-lawn-mower`, `robots-self-driving-car`, `robots-search-and-rescue-robot`, `robots-space-drone`, `robots-robot-painter`, `robots-educational-robot`, and `robots-robotic-exoskeleton` each map to [Britannica robot technology](https://www.britannica.com/technology/robot-technology) plus [NASA robotics](https://www.nasa.gov/robotics/), with subtype-specific assessment in each explanation; no direct robot glyphs; complete ten retained.
+
+Source-register corrections: `national-parks-great-smoky-mountains` now maps to the [NPS Nature page](https://www.nps.gov/grsm/learn/nature/index.htm) for its old-growth wording; `summer-fun-lemonade-stand` maps to [PBS LearningMedia's lemonade stand activity](https://www.pbslearningmedia.org/resource/lem-stand/lemonade-stand/); `literal-phrases-starstruck` maps to [Merriam-Webster starstruck](https://www.merriam-webster.com/dictionary/starstruck); and `literal-phrases-time-flies` maps to [Merriam-Webster time flies](https://www.merriam-webster.com/dictionary/time%20flies). Omitted blocks have no remaining source obligations.
 
 ## Validation evidence
 
 - RED focused run before data edits: the new C assertions failed as expected (4 failures).
-- `npm run test -- src/lib/clue-audit.test.ts src/lib/content-audit.test.ts`: 2 files, 48 tests passed.
+- `npm run test -- src/lib/clue-audit.test.ts src/lib/content-audit.test.ts`: 2 files, 49 tests passed.
 - `npm run test -- src/lib/puzzles.test.ts`: 1 file, 18 tests passed.
-- `npm run test`: 14 files, 119 tests passed. No additional failure was observed in this worktree; the Task 9 packet-balance gate remains an integrated review concern.
+- `npm run test`: 13 files, 119 tests passed; the known Task 9 packet-balance assertion remains the sole failure (`content-audit-packets.test.ts`, 20-card partition spread versus the ≤10 gate).
 - `npm run typecheck`: passed.
 - `npm run lint`: passed.
 - `npm run build`: passed. Next.js emitted only the existing multiple-lockfile workspace-root warning.
@@ -125,4 +133,4 @@ The retained additions use the authoritative source families above: BLS occupati
 
 ## Blind-review status and uncertainties
 
-`blind-c-final.json` and the preflight's 188/200 pass, 12/200 fail counts describe the pre-change source. This fix round does not create a fresh independent three-stage clean-context blind JSON. Therefore the seven retained blocks and all changed current cards remain pending fresh delta blind review. In particular, the specialized instrument additions, robot subtypes, culturally specific holiday cards, and the Literal Phrases/Idioms boundary should receive explicit fresh review. If any retained block fails, remove or replace the entire ten-card block; never ship a partial expansion.
+`blind-c-final.json` and the preflight's 188/200 pass, 12/200 fail counts describe the pre-change source. This fix round does not create a fresh independent three-stage clean-context blind JSON. Therefore the three retained blocks and all changed current cards remain pending fresh delta blind review. In particular, the Jobs/Idioms/Robots additions, the phrase boundary, and cross-partition S'mores should receive explicit fresh review. If any retained block fails, remove or replace the entire ten-card block; never ship a partial expansion.

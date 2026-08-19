@@ -366,11 +366,7 @@ describe("clue audit helpers", () => {
       "camping-trail-map": /\bmap\b/i,
       "national-parks-grand-canyon": /canyon/i,
       "national-parks-arches": /arches/i,
-      "holidays-presidents-day": /presidents/i,
       "winter-holidays-kwanzaa-kinara": /Kwanzaa/i,
-      "winter-holidays-holiday-lights": /lights/i,
-      "winter-holidays-christmas-carol": /Christmas/i,
-      "winter-holidays-ugly-sweater": /sweater/i,
       "beach-day-beach-ball": /ball/i,
       "beach-day-tide-pool": /tide|pool/i,
       "beach-day-beach-towel": /towel/i,
@@ -385,6 +381,37 @@ describe("clue audit helpers", () => {
     for (const [id, pattern] of Object.entries(embeddedHints)) {
       expect(get(id).hint, `${id} hint`).not.toMatch(pattern);
     }
+
+    const removedDeltaBlocks = [
+      "music-instruments-cello",
+      "music-instruments-clarinet",
+      "music-instruments-oboe",
+      "holidays-martin-luther-king-jr-day",
+      "holidays-juneteenth",
+      "holidays-lunar-new-year",
+      "winter-holidays-stocking",
+      "winter-holidays-reindeer",
+      "winter-holidays-new-year-s-eve",
+      "emotions-love",
+      "emotions-grateful",
+    ];
+    for (const id of removedDeltaBlocks) {
+      expect(puzzleById.has(id), `${id} should be omitted as a rejected addition`).toBe(false);
+    }
+
+    expect(get("art-supplies-colored-pencils").hint).not.toMatch(/pencil/i);
+    expect(get("school-supplies-glue-stick").hint).not.toMatch(/glue/i);
+    expect(get("national-parks-glacier").hint).not.toMatch(/glacier/i);
+    expect(get("halloween-jack-o-lantern").hint).not.toMatch(/pumpkin/i);
+    expect(get("halloween-black-cat").hint).not.toMatch(/cat/i);
+    expect(get("winter-holidays-christmas-tree").hint).not.toMatch(/tree/i);
+    expect(get("music-genres-pop").hint).not.toMatch(/popular/i);
+    expect(get("halloween-candy-corn").hint).not.toMatch(/Halloween candy/i);
+    expect(get("halloween-haunted-house").hint).not.toMatch(/spooky house/i);
+
+    expect(get("idioms-spill-the-beans").hint).not.toBe(get("idioms-let-the-cat-out-of-the-bag").hint);
+    expect(get("idioms-spill-the-beans").emojis).not.toEqual(get("idioms-let-the-cat-out-of-the-bag").emojis);
+
   });
 
   it("keeps source-review context and delta-blind direct leaks out of Partition B", () => {
