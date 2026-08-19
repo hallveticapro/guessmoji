@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { answerEmojiBanlist } from "@/data/answerEmojiBanlist";
 import { categories } from "@/data/categories";
+import { expandedPuzzles } from "@/data/expandedPacks";
 import {
   findDirectAnswerEmojiLeaks,
   normalizeAnswerForAudit,
@@ -29,6 +30,10 @@ describe("clue audit helpers", () => {
     expect(answerEmojiBanlist.giraffe).toContain("🦒");
     expect(answerEmojiBanlist.apple).toEqual(expect.arrayContaining(["🍎", "🍏"]));
     expect(answerEmojiBanlist.carrot).toContain("🥕");
+    expect(answerEmojiBanlist.zebra).toContain("🦓");
+    expect(answerEmojiBanlist["tyrannosaurus rex"]).toContain("🦖");
+    expect(answerEmojiBanlist["sea lion"]).toContain("🦭");
+    expect(answerEmojiBanlist["string cheese"]).toContain("🧀");
   });
 
   it("reports structured direct-answer emoji leaks", () => {
@@ -54,6 +59,30 @@ describe("clue audit helpers", () => {
     const leaks = findDirectAnswerEmojiLeaks(puzzles, answerEmojiBanlist);
 
     expect(leaks).toEqual([]);
+  });
+
+  it("keeps expanded-pack clues free of direct-answer emoji leaks", () => {
+    expect(findDirectAnswerEmojiLeaks(expandedPuzzles, answerEmojiBanlist)).toEqual([]);
+  });
+
+  it("carries an explicit explanation through every partition A expanded card", () => {
+    const partitionACategoryIds = new Set([
+      "animals",
+      "ocean-animals",
+      "dinosaurs",
+      "birds",
+      "bugs",
+      "fruit",
+      "vegetables",
+      "desserts",
+      "snacks",
+      "breakfast",
+    ]);
+    expect(
+      expandedPuzzles
+        .filter((puzzle) => partitionACategoryIds.has(puzzle.categoryId))
+        .every((puzzle) => puzzle.explanation?.trim()),
+    ).toBe(true);
   });
 
   it("keeps known animal and food regression clues clean", () => {
@@ -111,6 +140,41 @@ describe("clue audit helpers", () => {
         Math.floor(getPuzzlesByCategoryId(categoryId).length * 0.2),
       );
     }
+  });
+
+  it("keeps audited expanded category-context clues clean", () => {
+    const categoryContextBans: Record<string, string[]> = {
+      "ocean-animals": ["🌊"],
+      dinosaurs: ["🦖", "🦕"],
+      birds: ["🐦"],
+      vegetables: ["🌱"],
+    };
+
+    for (const [categoryId, bannedEmojis] of Object.entries(categoryContextBans)) {
+      for (const puzzle of expandedPuzzles.filter((item) => item.categoryId === categoryId)) {
+        for (const bannedEmoji of bannedEmojis) {
+          expect(puzzle.emojis, `${puzzle.id} should not repeat ${bannedEmoji}`).not.toContain(
+            bannedEmoji,
+          );
+        }
+      }
+    }
+  });
+
+  it("keeps expanded canonical repairs shipped", () => {
+    const puzzleById = new Map(expandedPuzzles.map((puzzle) => [puzzle.id, puzzle]));
+
+    expect(puzzleById.get("dinosaurs-tyrannosaurus-rex")?.answer).toBe(
+      "Tyrannosaurus rex",
+    );
+    expect(puzzleById.get("snacks-string-cheese")?.answer).toBe("String Cheese");
+    expect(puzzleById.get("animals-penguin")?.emojis).toContain("🧊");
+    expect(puzzleById.get("animals-penguin")?.emojis).not.toContain("🐧");
+    expect(puzzleById.get("animals-fox")?.emojis).toContain("👂");
+    expect(puzzleById.get("animals-fox")?.emojis).not.toContain("🦊");
+    expect(puzzleById.get("ocean-animals-crab")?.emojis).toContain("↔️");
+    expect(puzzleById.get("ocean-animals-crab")?.emojis).not.toContain("🦀");
+    expect(puzzleById.get("desserts-cupcake")?.emojis).toContain("🍥");
   });
 
   it("keeps canonical entertainment answers and blind-review repairs shipped", () => {

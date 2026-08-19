@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { categories } from "@/data/categories";
+import { expandedPuzzles } from "@/data/expandedPacks";
 import { puzzles } from "@/data/puzzles";
 import { findContentInvariantViolations, getCategoryEmojiUsage } from "@/lib/content-audit";
 import type { Category, Puzzle } from "@/types/puzzle";
@@ -221,5 +222,53 @@ describe("content audit helpers", () => {
     );
 
     expect(coreFindings).toEqual([]);
+  });
+
+  it("keeps each partition A expanded pool in accepted ten-card blocks", () => {
+    const expectedCounts: Record<string, number> = {
+      animals: 30,
+      "ocean-animals": 20,
+      dinosaurs: 20,
+      birds: 20,
+      bugs: 20,
+      fruit: 20,
+      vegetables: 20,
+      desserts: 20,
+      snacks: 20,
+      breakfast: 20,
+    };
+
+    for (const [categoryId, count] of Object.entries(expectedCounts)) {
+      const categoryPuzzles = expandedPuzzles.filter((puzzle) => puzzle.categoryId === categoryId);
+      expect(categoryPuzzles, `${categoryId} count`).toHaveLength(count);
+      expect(categoryPuzzles.length % 10).toBe(0);
+    }
+  });
+
+  it("keeps every partition A expanded card fully populated", () => {
+    const partitionACategoryIds = new Set([
+      "animals",
+      "ocean-animals",
+      "dinosaurs",
+      "birds",
+      "bugs",
+      "fruit",
+      "vegetables",
+      "desserts",
+      "snacks",
+      "breakfast",
+    ]);
+    expect(
+      expandedPuzzles.filter((puzzle) => partitionACategoryIds.has(puzzle.categoryId)).every(
+        (puzzle) =>
+          puzzle.answer.trim() &&
+          puzzle.emojis.trim() &&
+          puzzle.hint?.trim() &&
+          puzzle.details?.trim() &&
+          puzzle.explanation?.trim() &&
+          puzzle.funFact?.trim() &&
+          puzzle.tags?.length,
+      ),
+    ).toBe(true);
   });
 });
