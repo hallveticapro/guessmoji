@@ -13,11 +13,14 @@ describe("content audit packet builder", () => {
     const sourceCategoryIds = categories
       .filter((category) => category.id !== "random-mix")
       .map((category) => category.id);
+    const expectedCardCount = puzzles.filter(
+      (puzzle) => puzzle.categoryId !== "random-mix",
+    ).length;
 
     expect(partitions).toHaveLength(3);
-    expect(blindCards).toHaveLength(600);
-    expect(fullCards).toHaveLength(600);
-    expect(new Set(fullCards.map((card) => card.opaqueId)).size).toBe(600);
+    expect(blindCards).toHaveLength(expectedCardCount);
+    expect(fullCards).toHaveLength(expectedCardCount);
+    expect(new Set(fullCards.map((card) => card.opaqueId)).size).toBe(expectedCardCount);
     expect(JSON.stringify(blindCards)).not.toContain('"answer"');
     expect(JSON.stringify(blindCards)).not.toContain('"id"');
     expect(partitions.flatMap((partition) => partition.categoryIds)).not.toContain("random-mix");

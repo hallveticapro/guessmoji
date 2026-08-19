@@ -145,6 +145,29 @@ describe("clue audit helpers", () => {
     expect(puzzleById.get("secret-life-of-pets")?.hint).not.toMatch(
       /pets.*people leave|people leave.*pets/i,
     );
+
+    const mulan = puzzleById.get("mulan-movie");
+    expect(mulan?.emojis).not.toContain("🏯");
+    expect(mulan?.explanation).not.toContain("imperial China");
+    expect(mulan?.explanation).toContain("Chinese setting");
+
+    const merida = puzzleById.get("merida");
+    expect(merida?.emojis).not.toContain("🏴");
+    expect(merida?.explanation).not.toContain("Scottish setting");
+    expect(merida?.explanation).toContain("Highland landscape");
+  });
+
+  it("keeps audited core facts specific and non-generic", () => {
+    const puzzleById = new Map(puzzles.map((puzzle) => [puzzle.id, puzzle]));
+    expect(puzzleById.get("belle")?.funFact).toContain("Best Picture");
+    expect(puzzleById.get("madagascar")?.funFact).toContain("penguins");
+    expect(puzzleById.get("croods")?.funFact).toContain("Best Animated Feature");
+    expect(puzzleById.get("minecraft-movie")?.funFact).toContain("2014");
+    expect(puzzleById.get("pokemon-i-choose-you")?.funFact).toContain("20th anniversary");
+    expect(puzzleById.get("peppa-pig")?.funFact).toContain("Muddy Puddles");
+    expect(puzzleById.get("secret-life-of-pets")?.funFact).toContain(
+      "original animated film",
+    );
   });
 
   it("keeps source categories aligned with shipped puzzle coverage", () => {
