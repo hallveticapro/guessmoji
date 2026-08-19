@@ -130,7 +130,11 @@ describe("clue audit helpers", () => {
 
     const ariel = puzzleById.get("ariel");
     expect(ariel?.emojis).toContain("🦀");
-    expect(ariel?.hint).toContain("red-haired princess");
+    expect(ariel?.emojis).toContain("🦰");
+    expect(ariel?.emojis).toContain("🔱");
+    expect(ariel?.emojis).toContain("🦵");
+    expect(ariel?.hint).toContain("voice");
+    expect(ariel?.hint).toContain("human legs");
     expect(ariel?.difficulty).toBe("medium");
 
     const gabby = puzzleById.get("gabbys-dollhouse");
