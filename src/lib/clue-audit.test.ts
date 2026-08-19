@@ -221,6 +221,137 @@ describe("clue audit helpers", () => {
     expect(get("world-geography-mediterranean-sea").explanation).toContain("🌊");
   });
 
+  it("keeps Partition C clues free of direct and component emoji leaks", () => {
+    const partitionCCategoryIds = new Set([
+      "jobs",
+      "music-instruments",
+      "music-genres",
+      "art-supplies",
+      "school-supplies",
+      "camping",
+      "national-parks",
+      "holidays",
+      "halloween",
+      "winter-holidays",
+      "summer-fun",
+      "beach-day",
+      "amusement-park",
+      "around-the-house",
+      "kitchen-tools",
+      "literal-phrases",
+      "idioms",
+      "emotions",
+      "robots",
+      "plants",
+    ]);
+    const partitionCPuzzles = expandedPuzzles.filter((puzzle) =>
+      partitionCCategoryIds.has(puzzle.categoryId),
+    );
+
+    expect(findDirectAnswerEmojiLeaks(partitionCPuzzles, answerEmojiBanlist)).toEqual([]);
+    expect(answerEmojiBanlist.doctor).toEqual(expect.arrayContaining(["👩‍⚕️", "👨‍⚕️", "🧑‍⚕️"]));
+    expect(answerEmojiBanlist.firefighter).toEqual(expect.arrayContaining(["🚒", "🔥"]));
+    expect(answerEmojiBanlist.chef).toContain("👨‍🍳");
+    expect(answerEmojiBanlist.pilot).toContain("👩‍✈️");
+    expect(answerEmojiBanlist["colored pencils"]).toContain("✏️");
+    expect(answerEmojiBanlist.scissors).toContain("✂️");
+    expect(answerEmojiBanlist.smores).toEqual(
+      expect.arrayContaining(["🔥", "🍫", "☁️", "🍪"]),
+    );
+    expect(answerEmojiBanlist["water balloon"]).toEqual(expect.arrayContaining(["🎈", "💧"]));
+    expect(answerEmojiBanlist["ice cream truck"]).toEqual(
+      expect.arrayContaining(["🚚", "🍦"]),
+    );
+    expect(answerEmojiBanlist["road trip"]).toEqual(expect.arrayContaining(["🚗", "🗺️"]));
+    expect(answerEmojiBanlist["beach umbrella"]).toContain("⛱️");
+    expect(answerEmojiBanlist["roller coaster"]).toContain("🎢");
+    expect(answerEmojiBanlist["bumper cars"]).toContain("🚗");
+    expect(answerEmojiBanlist.mirror).toContain("🪞");
+    expect(answerEmojiBanlist.fireplace).toContain("🔥");
+    expect(answerEmojiBanlist["robot arm"]).toContain("🦾");
+    expect(answerEmojiBanlist["vacuum robot"]).toContain("🤖");
+    expect(answerEmojiBanlist.android).toContain("🤖");
+    expect(answerEmojiBanlist["factory robot"]).toContain("🤖");
+    expect(answerEmojiBanlist["oak tree"]).toContain("🌳");
+    expect(answerEmojiBanlist.bamboo).toContain("🎍");
+  });
+
+  it("keeps Partition C category-context glyphs out of every clue", () => {
+    const bannedByCategory: Record<string, string[]> = {
+      "music-instruments": ["🎵", "🎶"],
+      "art-supplies": ["🎨"],
+      "school-supplies": ["📄"],
+      camping: ["🌲", "🌙"],
+      "national-parks": ["🌲", "🏜️", "⛰️"],
+      holidays: ["📅", "🎆"],
+      halloween: ["🌙"],
+      "winter-holidays": ["❄️"],
+      "summer-fun": ["☀️"],
+      "beach-day": ["🏖️", "🌊", "☀️"],
+      "amusement-park": ["🎟️"],
+      "around-the-house": ["🏠"],
+      robots: ["🤖"],
+      plants: ["🌱", "🌿"],
+    };
+
+    for (const [categoryId, bannedEmojis] of Object.entries(bannedByCategory)) {
+      const categoryPuzzles = expandedPuzzles.filter((puzzle) => puzzle.categoryId === categoryId);
+      for (const puzzle of categoryPuzzles) {
+        for (const bannedEmoji of bannedEmojis) {
+          expect(puzzle.emojis, `${puzzle.id} should not use ${bannedEmoji}`).not.toContain(
+            bannedEmoji,
+          );
+        }
+      }
+    }
+  });
+
+  it("keeps Partition C repairs distinct and fact-safe", () => {
+    const puzzleById = new Map(expandedPuzzles.map((puzzle) => [puzzle.id, puzzle]));
+    const get = (id: string): Puzzle => {
+      const puzzle = puzzleById.get(id);
+      expect(puzzle, `${id} should exist`).toBeDefined();
+      return puzzle as Puzzle;
+    };
+
+    expect(get("jobs-doctor").emojis).not.toContain("👩‍⚕️");
+    expect(get("jobs-firefighter").emojis).not.toContain("🚒");
+    expect(get("jobs-chef").emojis).not.toContain("👨‍🍳");
+    expect(get("jobs-pilot").emojis).not.toContain("👩‍✈️");
+    expect(get("music-instruments-guitar").emojis).not.toMatch(/[🎵🎶]/u);
+    expect(get("music-instruments-drums").emojis).not.toMatch(/[🎵🎶]/u);
+    expect(get("music-instruments-trumpet").emojis).not.toMatch(/[🎵🎶]/u);
+    expect(get("music-instruments-flute").emojis).not.toMatch(/[🎵🎶]/u);
+    expect(get("art-supplies-colored-pencils").emojis).not.toContain("✏️");
+    expect(get("art-supplies-scissors").emojis).not.toContain("✂️");
+    expect(get("camping-s-mores").emojis).not.toMatch(/[🔥🍫☁️🍪]/u);
+    expect(get("halloween-skeleton").emojis).not.toContain("💀");
+    expect(get("halloween-candy-corn").emojis).not.toContain("🌽");
+    expect(get("summer-fun-water-balloon").emojis).not.toMatch(/[🎈💧]/u);
+    expect(get("summer-fun-ice-cream-truck").emojis).not.toMatch(/[🚚🍦]/u);
+    expect(get("beach-day-sandcastle").emojis).not.toContain("🏰");
+    expect(get("amusement-park-bumper-cars").emojis).not.toContain("🚗");
+    expect(get("around-the-house-mirror").emojis).not.toContain("🪞");
+    expect(get("robots-robot-arm").emojis).not.toContain("🦾");
+    expect(get("plants-oak-tree").emojis).not.toContain("🌳");
+    expect(get("plants-bamboo").emojis).not.toContain("🎍");
+
+    expect(get("winter-holidays-menorah").details).toContain("hanukkiah");
+    expect(get("winter-holidays-menorah").funFact).not.toMatch(/eight nights plus a helper/i);
+    expect(get("robots-robot").details).toMatch(/physical machine/i);
+    expect(get("robots-robot").funFact).not.toMatch(/software agents/i);
+    expect(get("national-parks-great-smoky-mountains").funFact).not.toMatch(/most visited/i);
+    expect(get("holidays-valentine-s-day").funFact).not.toMatch(/1800s/i);
+    expect(get("halloween-ghost").funFact).not.toMatch(/simple white fabric/i);
+    expect(get("halloween-haunted-house").funFact).not.toMatch(/became popular/i);
+    expect(get("winter-holidays-gift-wrap").funFact).not.toMatch(/early 1900s/i);
+    expect(get("summer-fun-lemonade-stand").funFact).not.toMatch(/first business idea/i);
+    expect(get("summer-fun-picnic").funFact).not.toMatch(/became popular/i);
+    expect(get("literal-phrases-starstruck").funFact).not.toMatch(/celebrity culture/i);
+    expect(get("literal-phrases-time-flies").funFact).not.toMatch(/Latin expression/i);
+    expect(get("plants-rose").funFact).not.toMatch(/thousands of years/i);
+  });
+
   it("keeps source-review context and delta-blind direct leaks out of Partition B", () => {
     const puzzleById = new Map(expandedPuzzles.map((puzzle) => [puzzle.id, puzzle]));
     const get = (id: string): Puzzle => {
