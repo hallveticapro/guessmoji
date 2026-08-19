@@ -338,7 +338,8 @@ describe("clue audit helpers", () => {
     expect(get("national-parks-zion").emojis).toContain("🧗");
     expect(get("national-parks-zion").emojis).toContain("🟥");
     expect(get("national-parks-zion").hint).not.toMatch(/Zion/i);
-    expect(get("national-parks-zion").hint).toMatch(/cable-assisted|narrow river/i);
+    expect(get("national-parks-zion").hint).toMatch(/fixed chain|narrow river/i);
+    expect(get("national-parks-zion").hint).not.toMatch(/cable/i);
     expect(get("desserts-s-mores").emojis).toContain("🪵");
     expect(get("desserts-s-mores").emojis).not.toMatch(/[🔥🍫☁️🍪]/u);
     expect(get("halloween-skeleton").emojis).not.toContain("💀");

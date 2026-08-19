@@ -387,12 +387,12 @@ describe("content audit helpers", () => {
     const literalPhrases = categories.find((category) => category.id === "literal-phrases");
     const idioms = categories.find((category) => category.id === "idioms");
 
-    expect(literalPhrases?.description).toMatch(/compound|literal/i);
-    expect(literalPhrases?.description).toMatch(/lexicalized|fixed expression/i);
+    expect(literalPhrases?.description).toMatch(/familiar|pictured word for word|playful/i);
+    expect(literalPhrases?.description).not.toMatch(/lexicalized|carve-out|standalone noun/i);
     for (const answer of ["Couch Potato", "Heart of Gold", "Time Flies"]) {
       expect(literalPhrases?.description).not.toMatch(new RegExp(answer, "i"));
     }
-    expect(literalPhrases?.description).toMatch(/exclude|not include|not a conventional idiom/i);
+    expect(literalPhrases?.description).toMatch(/exclude|not include|belong in Idioms|not a conventional idiom/i);
     expect(idioms?.description).toMatch(/conventional|figurative|idiom/i);
     expect(idioms?.description).toMatch(/exclude|not include|not a literal phrase/i);
   });

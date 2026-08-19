@@ -900,7 +900,7 @@ const expandedPackSeeds: PackSeed[] = [
       ["Yellowstone", "♨️🐻🌋🦬", "A park famous for geysers and wildlife.", "Established: 1872", "Yellowstone was the first U.S. national park.", "medium", "♨️ represents geysers, 🐻 and 🦬 show wildlife, and 🌋 evokes the volcanic forces beneath the park."],
       ["Yosemite", "🪨💧🧗🌄", "A park known for cliffs and waterfalls.", "Established: 1890", "Yosemite includes the famous El Capitan rock formation.", "medium", "🪨 evokes granite cliffs, 💧 represents waterfalls, 🧗 shows climbers, and 🌄 suggests the valley landscape."],
       ["Grand Canyon", "🌊🪨🌅🧭", "A vast river-carved landscape with colorful layers.", "Established: 1919", "The Colorado River flows through the Grand Canyon.", "easy", "🌊 represents the Colorado River, 🪨 shows layered rock, 🌅 evokes the deep scenic view, and 🧭 marks a famous landscape destination."],
-      ["Zion", "🟥🧗🪢🌊", "A red-rock park with a cable-assisted summit route and a narrow river canyon.", "Established: 1919", "Angels Landing and The Narrows are two well-known destinations in this red-rock park.", "hard", "🟥 signals the park's red rock, 🧗 represents the Angels Landing climb, 🪢 evokes its fixed chains, and 🌊 points to the river route through The Narrows."],
+      ["Zion", "🟥🧗🪢🌊", "A red-rock park with a famous climb that follows a fixed chain above a narrow river canyon.", "Established: 1919", "Angels Landing and The Narrows are two well-known destinations in this red-rock park.", "hard", "🟥 signals the park's red rock, 🧗 represents the Angels Landing climb, 🪢 evokes its fixed metal chain, and 🌊 points to the river route through The Narrows."],
       ["Acadia", "🌊🪨🦞🗺️", "A coastal park in Maine.", "Established: 1919", "Acadia includes rocky shorelines and Cadillac Mountain.", "medium", "🌊 and 🪨 show the rocky coast, 🦞 evokes Maine, and 🗺️ identifies a protected place to explore."],
       ["Everglades", "🐊🌾💧🛶", "A wetland park with alligators.", "Established: 1947", "Everglades is the largest subtropical wilderness in the United States.", "medium", "🐊 identifies an alligator, 🌾 represents wetland grasses, 💧 shows waterways, and 🛶 evokes slow travel through the marsh."],
       ["Great Smoky Mountains", "🌫️🐻🌧️🛣️", "A misty mountain park.", "Established: 1934", "The park protects one of the largest blocks of deciduous, temperate, old-growth forests remaining in North America.", "easy", "🌫️ creates the smoky haze, 🐻 represents wildlife, 🌧️ evokes the wet climate, and 🛣️ suggests the park's scenic roads."],
@@ -1080,7 +1080,7 @@ const expandedPackSeeds: PackSeed[] = [
   {
     id: "literal-phrases",
     name: "Literal Phrases",
-    description: "Compound or metaphorical phrases shown as direct emoji pictures. A deliberate lexicalized-metaphor carve-out keeps common standalone noun, quality, and time expressions here; exclude conventional advice or action idioms whose meaning is a fixed instruction or event.",
+    description: "Familiar short expressions pictured word for word, including playful nickname-style phrases; longer advice or action sayings belong in Idioms.",
     icon: "💬",
     colorTheme: "indigo",
     recommendedGradeBand: "2+",

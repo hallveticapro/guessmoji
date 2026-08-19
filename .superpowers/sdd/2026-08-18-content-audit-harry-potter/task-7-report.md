@@ -1,6 +1,6 @@
 # Task 7 Partition C implementation report
 
-Status: fix round 4/5 complete for objective content gates; fresh two-card plus metadata blind review is pending. This report is not a blind-review acceptance record.
+Status: fix round 5/5 complete for objective content gates; fresh two-card plus metadata blind review is pending. This report is not a blind-review acceptance record.
 
 Implementation was based on `dfa5701` (`content: finalize galaxy hint`). Before changing Partition C, the SDD ledger recorded Task 6 complete using the `a072e4d..dfa5701` evidence and final targeted blind JSON `task-6-round5-space-pair-blind.json` (2/2 pass). No Task 6 changes were reverted.
 
@@ -123,7 +123,7 @@ Source-register corrections: `national-parks-great-smoky-mountains` maps to the 
 
 The Literal Phrases/Idioms boundary is deliberate: lexicalized metaphors and standalone compound expressions (`Couch Potato`, `Heart of Gold`, `Time Flies`) remain in Literal Phrases when their everyday reading is a noun/quality/time expression, while conventional advice or action idioms belong in Idioms. Literal Phrases remains at ten with no expansion.
 
-Fix round 4 repairs exactly three blockers without changing accepted additions: the player-visible Literal Phrases description now states only the generalized lexicalized-metaphor versus conventional-action-idiom boundary and names no answer; `camping-s-mores` now uses `🙋➕1️⃣😋` with the hint “Its name sounds like asking for another helping.”; and `national-parks-zion` now uses `🟥🧗🪢🌊`, a hard hint about its cable-assisted summit route and narrow river canyon, and an NPS-stable Angels Landing/The Narrows fact.
+Fix round 4 repaired exactly three blockers without changing accepted additions: the player-visible Literal Phrases description now states a concise child-friendly word-picture versus Idioms boundary and names no answer; `camping-s-mores` uses `🙋➕1️⃣😋` with the hint “Its name sounds like asking for another helping.”; and `national-parks-zion` uses `🟥🧗🪢🌊`, a hard hint about its fixed-chain summit route and narrow river canyon, and an NPS-stable Angels Landing/The Narrows fact. Final fix round 5 corrected “cable-assisted” to “fixed chain” and removed the remaining metadata jargon.
 
 ## Validation evidence
 
@@ -138,4 +138,4 @@ Fix round 4 repairs exactly three blockers without changing accepted additions: 
 
 ## Blind-review status and uncertainties
 
-The prior staged evidence covers the accepted Jobs/Idioms additions and prior semantic changes. This round requires a fresh two-card review for `camping-s-mores` and `national-parks-zion`, plus metadata review confirming that the visible Literal Phrases description contains no shipped answer string. Those fresh checks remain pending. If any retained block fails, remove or replace the entire ten-card block; never ship a partial expansion.
+The prior staged evidence covers the accepted Jobs/Idioms additions and prior semantic changes. Final review requires a fresh two-card check for `camping-s-mores` and `national-parks-zion`, plus metadata review confirming that the visible Literal Phrases description is child-friendly and contains no shipped answer string. Those fresh checks remain pending. If any retained block fails, remove or replace the entire ten-card block; never ship a partial expansion.
