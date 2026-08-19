@@ -217,6 +217,67 @@ describe("clue audit helpers", () => {
     expect(get("world-geography-mediterranean-sea").explanation).toContain("🌊");
   });
 
+  it("keeps source-review context and delta-blind direct leaks out of Partition B", () => {
+    const puzzleById = new Map(expandedPuzzles.map((puzzle) => [puzzle.id, puzzle]));
+    const get = (id: string): Puzzle => {
+      const puzzle = puzzleById.get(id);
+      expect(puzzle, `${id} should exist`).toBeDefined();
+      return puzzle as Puzzle;
+    };
+
+    expect(get("arcade-classics-street-fighter").emojis).not.toContain("🕹️");
+    expect(get("space-milky-way").emojis).not.toContain("🌌");
+    expect(get("space-neptune").emojis).not.toContain("🌌");
+    expect(get("math-addition").emojis).not.toContain("➕");
+    expect(get("math-fraction").emojis).not.toContain("➗");
+    expect(get("math-graph").emojis).not.toMatch(/[📊📈]/u);
+    expect(get("us-landmarks-white-house").emojis).not.toContain("🇺🇸");
+    expect(get("us-landmarks-gateway-arch").emojis).not.toContain("🇺🇸");
+    expect(get("world-geography-equator").emojis).not.toContain("🌍");
+    expect(get("science-atom").emojis).not.toContain("🔬");
+    expect(get("weather-thunderstorm").emojis).not.toContain("☁️");
+    expect(
+      getCategoryEmojiUsage(expandedPuzzles.filter((puzzle) => puzzle.categoryId === "books"))
+        .get("📚")?.count ?? 0,
+    ).toBe(0);
+
+    expect(getCategoryEmojiUsage(expandedPuzzles.filter((puzzle) => puzzle.categoryId === "math")).get("🧮")?.count ?? 0).toBeLessThanOrEqual(2);
+    expect(getCategoryEmojiUsage(expandedPuzzles.filter((puzzle) => puzzle.categoryId === "world-geography")).get("🌊")?.count ?? 0).toBeLessThanOrEqual(4);
+    expect(getCategoryEmojiUsage(expandedPuzzles.filter((puzzle) => puzzle.categoryId === "world-geography")).get("❄️")?.count ?? 0).toBeLessThanOrEqual(4);
+    expect(getCategoryEmojiUsage(expandedPuzzles.filter((puzzle) => puzzle.categoryId === "us-landmarks")).get("🇺🇸")?.count ?? 0).toBeLessThanOrEqual(2);
+    expect(getCategoryEmojiUsage(expandedPuzzles.filter((puzzle) => puzzle.categoryId === "construction")).get("🧱")?.count ?? 0).toBeLessThanOrEqual(2);
+
+    expect(answerEmojiBanlist.addition).toContain("➕");
+    expect(answerEmojiBanlist.graph).toEqual(expect.arrayContaining(["📊", "📈"]));
+    expect(answerEmojiBanlist.equator).toEqual(
+      expect.arrayContaining(["🌍", "🌎", "🌏"]),
+    );
+    expect(answerEmojiBanlist["the cat in the hat"]).toEqual(expect.arrayContaining(["🐱", "🎩"]));
+    expect(answerEmojiBanlist["the three little pigs"]).toContain("🐷");
+
+    const normalizedCompoundLeaks: Puzzle[] = [
+      {
+        id: "synthetic-cat-in-hat-leak",
+        answer: "The Cat in the Hat",
+        emojis: "🐱🎩",
+        categoryId: "books",
+        difficulty: "easy",
+      },
+      {
+        id: "synthetic-three-pigs-leak",
+        answer: "The Three Little Pigs",
+        emojis: "🐷🌾",
+        categoryId: "fairy-tales",
+        difficulty: "easy",
+      },
+    ];
+    expect(findDirectAnswerEmojiLeaks(normalizedCompoundLeaks, answerEmojiBanlist)).toEqual([
+      expect.objectContaining({ puzzleId: "synthetic-cat-in-hat-leak", forbiddenEmoji: "🐱" }),
+      expect.objectContaining({ puzzleId: "synthetic-cat-in-hat-leak", forbiddenEmoji: "🎩" }),
+      expect.objectContaining({ puzzleId: "synthetic-three-pigs-leak", forbiddenEmoji: "🐷" }),
+    ]);
+  });
+
   it("carries an explicit explanation through every partition A expanded card", () => {
     const partitionACategoryIds = new Set([
       "animals",
