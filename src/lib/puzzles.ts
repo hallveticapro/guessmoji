@@ -4,7 +4,7 @@ import { normalizeAnswerForAudit } from "@/lib/clue-audit";
 import type { Category, Puzzle } from "@/types/puzzle";
 
 const RANDOM_MIX_CATEGORY_ID = "random-mix";
-export const RANDOM_MIX_SESSION_COUNT = 20;
+export const RANDOM_MIX_SESSION_COUNT = 10;
 
 export function getAllCategories(): Category[] {
   return categories;

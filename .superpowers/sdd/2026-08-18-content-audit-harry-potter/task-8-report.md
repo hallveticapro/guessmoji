@@ -3,8 +3,8 @@
 Date: 2026-08-19  
 Worktree: `/Users/andrew/code/github/hallveticapro/guessmoji/.worktrees/content-audit-harry-potter`  
 Scope: the core seven-book/eight-film Harry Potter saga only.  
-Status: **implemented; pending fresh independent staged blind review**.
-Implementation commit: `455f6e3` (`content: add Harry Potter category`); fix round 1/5 is pending commit after validation.
+Status: **complete; staged blind and source/rules review approved**.
+Implementation commit: `455f6e3` (`content: add Harry Potter category`); fix round 1/5 commit: `5d5a28c` (`content: remediate Harry Potter fix round one`).
 
 ## Fix round 1/5
 
@@ -185,20 +185,16 @@ Implementation-time red/green evidence:
 - `git diff --check`: passed.
 
 The integrated source catalog after this implementation is 60 non-Random-Mix
-categories, 61 total categories, and 710 source puzzles. Fresh clean-context
-staged blind review remains mandatory and is not satisfied by the preflight's
-author self-blind table.
+categories, 61 total categories, and 730 source puzzles. The fresh staged delta
+review plus carried-forward results cover all 20 cards, and the independent
+source/rules review approves the complete block.
 
-## Pending acceptance items
+## Acceptance closeout
 
-- Build answer-hidden, hint, and full packets for all 20 cards.
-- Have an independent clean-context reviewer process all Stage 1 clues before
-  any hints, all Stage 2 hints before any answers, then Stage 3 adjudication.
-- Pay special attention to Hogsmeade vs Diagon Alley, Platform vs Hogwarts
-  Express, the revised Golden Snitch vs Quidditch pair, Sorting Hat clarity, the retained Dobby
-  sock component, Hedwig's indirect owl clue, Patronus, and the Deathly Hallows
-  title/legend role.
-- Re-run focused tests plus full test, typecheck, lint, build, and
-  `git diff --check` after any blind-review revision.
-- Fresh staged delta blind review is pending for Dumbledore, Golden Snitch,
-  and Quidditch.
+- Answer-hidden, hint, and full packet views cover all 20 cards with matching opaque IDs.
+- The independent staged delta review passes 3/3 changed cards; carried-forward evidence
+  passes the remaining 17 cards for 20/20 total coverage.
+- The independent source/rules review approves the revised facts, clue pair distinction,
+  category scope, and retained semantic components.
+- Focused tests, full tests, typecheck, lint, build, and `git diff --check` passed at
+  `5d5a28c`.

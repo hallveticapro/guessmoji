@@ -91,6 +91,24 @@ describe("category round history", () => {
     );
   });
 
+  it("deals three exact ten-card blocks before a deterministic wrap", () => {
+    const pool = createPuzzlePool(30);
+
+    const firstRound = selectCategoryRound(pool, [], 10, () => 0);
+    const secondRound = selectCategoryRound(pool, firstRound.seenIds, 10, () => 0);
+    const thirdRound = selectCategoryRound(pool, secondRound.seenIds, 10, () => 0);
+    const wrappedRound = selectCategoryRound(pool, thirdRound.seenIds, 10, () => 0);
+
+    expect(firstRound.puzzles).toEqual(pool.slice(0, 10));
+    expect(secondRound.puzzles).toEqual(pool.slice(10, 20));
+    expect(thirdRound.puzzles).toEqual(pool.slice(20, 30));
+    expect(new Set(thirdRound.puzzles.map((puzzle) => puzzle.id)).size).toBe(10);
+    expect(thirdRound.seenIds).toEqual(pool.map((puzzle) => puzzle.id));
+    expect(wrappedRound.didResetCycle).toBe(true);
+    expect(wrappedRound.puzzles).toEqual(pool.slice(0, 10));
+    expect(wrappedRound.seenIds).toEqual(pool.slice(0, 10).map((puzzle) => puzzle.id));
+  });
+
   it("does not mutate the pool or stored history inputs", () => {
     const pool = createPuzzlePool(20);
     const seenIds = [pool[1].id, pool[3].id];

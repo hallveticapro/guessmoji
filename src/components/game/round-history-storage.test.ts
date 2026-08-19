@@ -39,6 +39,32 @@ describe("round-history storage", () => {
     expect(readCategoryRoundHistory(storage, "animals")).toEqual(["cat", "dog"]);
   });
 
+  it("keeps histories isolated by category", () => {
+    const storage = createMemoryStorage();
+
+    writeCategoryRoundHistory(storage, "animals", ["cat"]);
+    writeCategoryRoundHistory(storage, "space", ["moon"]);
+
+    expect(readCategoryRoundHistory(storage, "animals")).toEqual(["cat"]);
+    expect(readCategoryRoundHistory(storage, "space")).toEqual(["moon"]);
+  });
+
+  it("handles unavailable and quota-limited storage", () => {
+    expect(readCategoryRoundHistory(undefined, "animals")).toEqual([]);
+    expect(() => writeCategoryRoundHistory(undefined, "animals", ["cat"])).not.toThrow();
+
+    const quotaStorage = {
+      getItem() {
+        return null;
+      },
+      setItem() {
+        throw new Error("quota exceeded");
+      },
+    };
+
+    expect(() => writeCategoryRoundHistory(quotaStorage, "animals", ["cat"])).not.toThrow();
+  });
+
   it("swallows storage read and write errors", () => {
     const throwingStorage = {
       getItem() {

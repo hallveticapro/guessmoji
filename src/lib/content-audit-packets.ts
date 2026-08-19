@@ -144,34 +144,50 @@ function getContiguousCategoryRanges(
     prefixCardCounts.push(prefixCardCounts[prefixCardCounts.length - 1] + cardCount);
   }
 
-  const totalCardCount = prefixCardCounts[prefixCardCounts.length - 1];
-  const ranges: CategoryRange[] = [];
-  let start = 0;
+  // Category ownership is intentionally contiguous, so a large category can
+  // make a perfectly even split impossible. Enumerate the small set of valid
+  // contiguous boundary combinations and choose the one with the smallest
+  // largest packet, then the smallest residual spread. This is deterministic,
+  // adapts to any supplied category sizes, and avoids a catalog-specific
+  // balance threshold.
+  let bestRanges: CategoryRange[] | undefined;
+  let bestMaxCardCount = Number.POSITIVE_INFINITY;
+  let bestSpread = Number.POSITIVE_INFINITY;
 
-  for (let partitionIndex = 0; partitionIndex < partitionCount - 1; partitionIndex += 1) {
-    const remainingPartitions = partitionCount - partitionIndex;
-    const minimumEnd = start + 1;
-    const maximumEnd = categoryCount - (remainingPartitions - 1);
-    const targetCumulativeCount = (totalCardCount * (partitionIndex + 1)) / partitionCount;
-    let bestEnd = minimumEnd;
-    let bestDistance = Number.POSITIVE_INFINITY;
-
-    for (let candidateEnd = minimumEnd; candidateEnd <= maximumEnd; candidateEnd += 1) {
-      const candidateDistance = Math.abs(
-        prefixCardCounts[candidateEnd] - targetCumulativeCount,
+  function searchRanges(
+    partitionIndex: number,
+    start: number,
+    ranges: CategoryRange[],
+  ): void {
+    if (partitionIndex === partitionCount - 1) {
+      const candidateRanges = [...ranges, { start, end: categoryCount }];
+      const candidateCounts = candidateRanges.map(
+        (range) => prefixCardCounts[range.end] - prefixCardCounts[range.start],
       );
-      if (candidateDistance < bestDistance) {
-        bestEnd = candidateEnd;
-        bestDistance = candidateDistance;
+      const candidateMaxCardCount = Math.max(...candidateCounts);
+      const candidateSpread =
+        candidateMaxCardCount - Math.min(...candidateCounts);
+
+      if (
+        candidateMaxCardCount < bestMaxCardCount ||
+        (candidateMaxCardCount === bestMaxCardCount && candidateSpread < bestSpread)
+      ) {
+        bestRanges = candidateRanges;
+        bestMaxCardCount = candidateMaxCardCount;
+        bestSpread = candidateSpread;
       }
+      return;
     }
 
-    ranges.push({ start, end: bestEnd });
-    start = bestEnd;
+    const remainingPartitions = partitionCount - partitionIndex - 1;
+    const maximumEnd = categoryCount - remainingPartitions;
+    for (let end = start + 1; end <= maximumEnd; end += 1) {
+      searchRanges(partitionIndex + 1, end, [...ranges, { start, end }]);
+    }
   }
 
-  ranges.push({ start, end: categoryCount });
-  return ranges;
+  searchRanges(0, 0, []);
+  return bestRanges ?? [];
 }
 
 function createFullCard(baseCard: ContentAuditCard, puzzle: Puzzle): FullContentAuditCard {

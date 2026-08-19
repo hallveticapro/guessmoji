@@ -279,7 +279,6 @@ export function GameBoard({
 
   const answerCategoryName =
     categoryNamesById.get(currentPuzzle.categoryId) ?? category.name;
-  const shouldShowSourceCategory = category.id === "random-mix";
 
   if (isComplete) {
     return (
@@ -355,11 +354,6 @@ export function GameBoard({
             )}
           >
             <EmojiClue emojis={currentPuzzle.emojis} />
-            {shouldShowSourceCategory && (
-              <p className="mt-5 rounded-full border-2 border-[#8bc9c3] bg-[#e1f5ef] px-5 py-2 text-sm font-black uppercase tracking-normal text-[#00778d]">
-                From: {answerCategoryName}
-              </p>
-            )}
           </div>
 
           <AnswerReveal

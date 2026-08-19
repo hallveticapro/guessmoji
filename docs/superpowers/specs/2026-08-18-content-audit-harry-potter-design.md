@@ -17,7 +17,9 @@ The work is complete only after the pull request is merged and the Arcane-manage
 - Subagents receive clean, bounded context and must not spawn their own subagents.
 - `CONTENT_GENERATION_RULES.md` is authoritative for category and card quality.
 - `TASKS.md` remains authoritative for project scope and status.
-- Audit all 59 current source categories and all 600 current cards; Random Mix remains derived.
+- Audit the planning-baseline set of 59 source categories and 600 cards; final
+  documentation must derive the post-remediation catalog counts from source arrays,
+  and Random Mix remains derived.
 - Fix confirmed issues rather than producing a report-only audit.
 - Selectively expand a category only when ten additional cards can pass all rules as a block.
 - Never pad a category to meet a target.
@@ -121,7 +123,9 @@ All 20 cards require explicit hint, explanation, details, fun fact, difficulty, 
 ### Behavior
 
 - Normal source categories use a session size of 10, regardless of pool size.
-- Random Mix preserves its separately configured session count unless the implementation plan explicitly aligns it with the 10-card product rule and updates the specification first.
+- Random Mix uses the same 10-card session rule as source categories. Its pool remains
+  derived and normalized-answer-unique, and source-category metadata stays hidden until
+  answer reveal.
 - A new category start or Play Again draws unseen cards for that category.
 - A round never contains a duplicate card.
 - Shuffle reorders only the current round and does not mutate seen history.

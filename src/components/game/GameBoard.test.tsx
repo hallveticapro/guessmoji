@@ -58,7 +58,7 @@ describe("GameBoard", () => {
     window.localStorage.clear();
   });
 
-  it("shows the source category before revealing a Random Mix card", async () => {
+  it("hides the Random Mix source category until answer reveal", async () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -74,7 +74,7 @@ describe("GameBoard", () => {
       );
     });
 
-    expect(container.textContent).toContain("From: Pixar");
+    expect(container.textContent).not.toContain("Pixar");
     expect(container.textContent).not.toContain("Toy Story");
 
     await act(async () => {
@@ -87,7 +87,8 @@ describe("GameBoard", () => {
       window.dispatchEvent(new KeyboardEvent("keydown", { key: " " }));
     });
 
-    expect(container.textContent).toContain("From: Pixar");
+    expect(container.textContent).toContain("Category");
+    expect(container.textContent).toContain("Pixar");
     expect(container.textContent).toContain("Toy Story");
 
     await act(async () => {
@@ -300,7 +301,7 @@ describe("GameBoard", () => {
     await unmountGameBoard(root, container);
   });
 
-  it("keeps Random Mix at its full requested session count", async () => {
+  it("keeps Random Mix at its configured ten-card session count", async () => {
     const randomMixPuzzles = Array.from({ length: 25 }, (_, index) => ({
       ...puzzle,
       id: `mix-${index + 1}`,
@@ -310,12 +311,12 @@ describe("GameBoard", () => {
     const { container, root } = renderGameBoard(
       categories[1],
       randomMixPuzzles,
-      20,
+      10,
     );
 
     await flushEffects();
 
-    expect(container.textContent).toContain("1 / 20");
+    expect(container.textContent).toContain("1 / 10");
     expect(window.localStorage.getItem(ROUND_HISTORY_STORAGE_KEY)).toBeNull();
 
     await unmountGameBoard(root, container);

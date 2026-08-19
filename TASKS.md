@@ -16,7 +16,8 @@ As of 2026-06-05:
 - The app should remain safe, readable, and useful for classroom environments, but it should not sound classroom-exclusive.
 - The README must remain neutral and generic, with no personal usernames, profile links, or owner-specific deployment values.
 - The current live app URL is `https://guessmoji.mrhallsclass.com/`.
-- The current content target is 60 total categories and 600 playable puzzles.
+- The original MVP content target was 60 total categories and 600 playable puzzles
+  (historical baseline; the current catalog is recorded below).
 - Game play should center on the emoji card, with Hint and Reveal actions before answer reveal and a Next/Finish action after reveal.
 - Timer controls should live in a settings dialog behind a gear button.
 
@@ -49,7 +50,7 @@ As of 2026-08-18:
 
 As of 2026-08-19:
 
-- Task 8 adds the balanced 20-card `Harry Potter` category from the core seven-book/eight-film saga. The integrated catalog now contains 60 source categories, 61 categories including Random Mix, and 710 source puzzles; fresh staged blind review remains required before the category is accepted as complete.
+- Task 8 adds the balanced 20-card `Harry Potter` category from the core seven-book/eight-film saga. Commit `5d5a28c` closes its staged 20/20 blind evidence and source/rules approval. The integrated catalog now contains 60 source categories, 61 categories including Random Mix, and 730 source puzzles.
 
 The app should support many themed categories, including:
 
@@ -63,6 +64,7 @@ The app should support many themed categories, including:
 - Video Game Movies
 - Kid TV Shows
 - Holidays
+- Harry Potter
 - Animals
 - Books
 - Science
@@ -389,7 +391,8 @@ Random Mix should pull puzzles from multiple categories.
 Requirements:
 
 - Randomized order.
-- Avoid immediate duplicates.
+- Ten-card session selected from a normalized-answer-unique derived pool.
+- Avoid duplicate normalized answers and preserve the first source occurrence.
 - Show the category only after answer reveal.
 - Include a broad mix of kid-friendly content.
 
@@ -1694,7 +1697,10 @@ git push origin main
 
 **Status:** Complete.
 
-**Implementation note:** Added 50 additional themed categories with 10 cards each, bringing the app to 60 total categories including Random Mix and 600 playable puzzles. Added puzzle `details` support and ensured every puzzle has hint, details, and fun fact reveal content through explicit generated data or safe fallbacks.
+**Implementation note:** Historical MVP expansion added 50 additional themed categories
+with 10 cards each, bringing the app to 60 total categories including Random Mix and
+600 playable puzzles at that milestone. Later content-audit tasks selectively expanded
+strong source pools and added explicit reveal metadata.
 
 Required:
 
@@ -1815,13 +1821,16 @@ Required:
 
 **Status:** Complete.
 
-**Implementation note:** Added explicit details and fun facts for the original 100 entertainment puzzles and added a regression test that fails if generic fallback reveal facts are exposed.
+**Implementation note:** Added explicit details and fun facts for the original 100
+entertainment puzzles and added a regression test that fails if generic fallback reveal
+facts are exposed. The 600-puzzle value below is historical; the current catalog is
+documented by the content-audit closeout.
 
 Required:
 
 - Improve generic details and fun facts for preexisting cards.
 - Keep reveal metadata classroom-friendly and broadly recognizable.
-- Preserve the 600-puzzle seed set.
+- Preserve the historical 600-puzzle seed set while keeping later audited additions intact.
 - Add or update tests to guard against generic fallback reveal copy.
 
 ---
@@ -1854,6 +1863,33 @@ Required:
 - Keep the README neutral/generic.
 - Do not mention personal usernames, profile links, live URLs, or owner-specific deployment values.
 - Include local development, checks, Docker, GHCR, reverse proxy, Unraid, social preview, troubleshooting, and security notes.
+
+---
+
+## Content Audit Task 9 — Final Invariants, Documentation, And Verification
+
+**Status:** Complete.
+
+**Current catalog evidence:** The source arrays derive 60 source categories, 61
+category choices including Random Mix, 730 source puzzles, and a 719-card
+normalized-answer-unique Random Mix pool. Every source category is a complete multiple
+of ten; Harry Potter contains 20 cards.
+
+**Implementation note:** Final closeout keeps exactly three deterministic,
+category-aligned answer-hidden/full audit packets; packet balancing minimizes the
+largest packet and then residual spread while preserving whole-category ownership.
+Source category sessions and Random Mix use 10 cards. Per-category unseen-card
+history is retained in versioned localStorage, resets after exhaustion, and is not
+consumed by timer changes, Restart, or Shuffle. Random Mix source-category metadata
+appears only after answer reveal, and normalized-answer deduplication preserves the
+first source occurrence.
+
+**Required closeout evidence:**
+
+- `findContentInvariantViolations(categories, puzzles)` returns no findings.
+- All source category counts are derived and satisfy `count >= 10` and `count % 10 === 0`.
+- Every source card appears exactly once in each packet view with blind/full/hint ID parity.
+- Focused and full Vitest suites, lint, typecheck, build, Docker build, and diff-check pass.
 
 ---
 

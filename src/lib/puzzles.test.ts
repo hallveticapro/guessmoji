@@ -48,7 +48,10 @@ const emptyNormalizedAnswerFixture = [
 
 describe("puzzle utilities", () => {
   it("includes the expanded category catalog", () => {
-    expect(categories.length).toBeGreaterThanOrEqual(60);
+    const sourceCategories = categories.filter((category) => category.id !== "random-mix");
+
+    expect(sourceCategories.length).toBeGreaterThan(0);
+    expect(categories).toHaveLength(sourceCategories.length + 1);
   });
 
   it("keeps every playable category at ten or more puzzles", () => {
@@ -169,6 +172,17 @@ describe("puzzle utilities", () => {
     expect(randomMix).toHaveLength(RANDOM_MIX_SESSION_COUNT);
     expect(uniqueIds.size).toBe(randomMix.length);
     expect(randomMix.every((puzzle) => puzzle.categoryId !== "random-mix")).toBe(true);
+  });
+
+  it("keeps the derived Random Mix pool unique by normalized answer", () => {
+    const randomMixPool = getRandomMixPuzzlePool();
+    const nonEmptyNormalizedAnswers = randomMixPool
+      .map((puzzle) => normalizeAnswerForAudit(puzzle.answer))
+      .filter(Boolean);
+
+    expect(randomMixPool.every((puzzle) => puzzle.categoryId !== "random-mix")).toBe(true);
+    expect(new Set(nonEmptyNormalizedAnswers).size).toBe(nonEmptyNormalizedAnswers.length);
+    expect(randomMixPool.length).toBeGreaterThanOrEqual(RANDOM_MIX_SESSION_COUNT);
   });
 
   it("deduplicates Random Mix by normalized answer and preserves the first source", () => {

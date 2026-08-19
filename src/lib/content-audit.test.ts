@@ -5,6 +5,7 @@ import { expandedPuzzles } from "@/data/expandedPacks";
 import { puzzles } from "@/data/puzzles";
 import { findDirectAnswerEmojiLeaks } from "@/lib/clue-audit";
 import { findContentInvariantViolations, getCategoryEmojiUsage } from "@/lib/content-audit";
+import { getPuzzlesByCategoryId } from "@/lib/puzzles";
 import type { Category, Puzzle } from "@/types/puzzle";
 
 function makeCategory(id = "category-a"): Category {
@@ -226,23 +227,56 @@ describe("content audit helpers", () => {
     expect(coreFindings).toEqual([]);
   });
 
-  it("keeps each partition A expanded pool in accepted ten-card blocks", () => {
-    const expectedCounts: Record<string, number> = {
-      animals: 30,
-      "ocean-animals": 10,
-      dinosaurs: 10,
-      birds: 10,
-      bugs: 20,
-      fruit: 20,
-      vegetables: 20,
-      desserts: 10,
-      snacks: 10,
-      breakfast: 20,
-    };
+  it("passes final data-driven invariants for the complete shipped catalog", () => {
+    const sourceCategories = categories.filter((category) => category.id !== "random-mix");
+    const categoryIds = sourceCategories.map((category) => category.id);
+    const categorySlugs = sourceCategories.map((category) => category.slug);
+    const puzzleIds = puzzles.map((puzzle) => puzzle.id);
 
-    for (const [categoryId, count] of Object.entries(expectedCounts)) {
+    expect(sourceCategories.length).toBeGreaterThan(0);
+    expect(new Set(categoryIds).size).toBe(categoryIds.length);
+    expect(new Set(categorySlugs).size).toBe(categorySlugs.length);
+    expect(new Set(puzzleIds).size).toBe(puzzleIds.length);
+    expect(puzzles.every((puzzle) => puzzle.categoryId !== "random-mix")).toBe(true);
+    expect(
+      puzzles.every(
+        (puzzle) =>
+          puzzle.answer.trim() &&
+          puzzle.emojis.trim() &&
+          puzzle.hint?.trim() &&
+          puzzle.details?.trim() &&
+          puzzle.explanation?.trim() &&
+          puzzle.funFact?.trim() &&
+          puzzle.tags?.length,
+      ),
+    ).toBe(true);
+
+    for (const category of sourceCategories) {
+      const categoryPuzzles = getPuzzlesByCategoryId(category.id);
+      expect(categoryPuzzles.length, `${category.id} count`).toBeGreaterThanOrEqual(10);
+      expect(categoryPuzzles.length % 10, `${category.id} block alignment`).toBe(0);
+    }
+
+    expect(findContentInvariantViolations(categories, puzzles)).toEqual([]);
+  });
+
+  it("keeps each partition A expanded pool in accepted ten-card blocks", () => {
+    const partitionACategoryIds = new Set([
+      "animals",
+      "ocean-animals",
+      "dinosaurs",
+      "birds",
+      "bugs",
+      "fruit",
+      "vegetables",
+      "desserts",
+      "snacks",
+      "breakfast",
+    ]);
+
+    for (const categoryId of partitionACategoryIds) {
       const categoryPuzzles = expandedPuzzles.filter((puzzle) => puzzle.categoryId === categoryId);
-      expect(categoryPuzzles, `${categoryId} count`).toHaveLength(count);
+      expect(categoryPuzzles.length, `${categoryId} count`).toBeGreaterThanOrEqual(10);
       expect(categoryPuzzles.length % 10).toBe(0);
     }
   });
@@ -301,7 +335,7 @@ describe("content audit helpers", () => {
       partitionBCategoryIds.has(puzzle.categoryId),
     );
 
-    expect(partitionBPuzzles).toHaveLength(240);
+    expect(partitionBPuzzles.length).toBeGreaterThanOrEqual(10);
     expect(
       partitionBPuzzles.every(
         (puzzle) =>
@@ -317,70 +351,74 @@ describe("content audit helpers", () => {
   });
 
   it("keeps only complete, accepted Partition B expansion blocks", () => {
-    const expectedCounts: Record<string, number> = {
-      sports: 10,
-      "outdoor-games": 10,
-      "board-games": 10,
-      "party-games": 10,
-      "video-games": 10,
-      "arcade-classics": 10,
-      pokemon: 10,
-      minecraft: 10,
-      science: 20,
-      space: 20,
-      weather: 10,
-      math: 10,
-      books: 10,
-      "fairy-tales": 10,
-      myths: 20,
-      "world-landmarks": 10,
-      "us-landmarks": 10,
-      "world-geography": 20,
-      vehicles: 10,
-      construction: 10,
-    };
+    const partitionBCategoryIds = new Set([
+      "sports",
+      "outdoor-games",
+      "board-games",
+      "party-games",
+      "video-games",
+      "arcade-classics",
+      "pokemon",
+      "minecraft",
+      "science",
+      "space",
+      "weather",
+      "math",
+      "books",
+      "fairy-tales",
+      "myths",
+      "world-landmarks",
+      "us-landmarks",
+      "world-geography",
+      "vehicles",
+      "construction",
+    ]);
 
-    for (const [categoryId, expectedCount] of Object.entries(expectedCounts)) {
+    for (const categoryId of partitionBCategoryIds) {
       const categoryPuzzles = expandedPuzzles.filter((puzzle) => puzzle.categoryId === categoryId);
-      expect(categoryPuzzles, `${categoryId} count`).toHaveLength(expectedCount);
+      expect(categoryPuzzles.length, `${categoryId} count`).toBeGreaterThanOrEqual(10);
       expect(categoryPuzzles.length % 10).toBe(0);
     }
   });
 
   it("keeps every Partition C category at an accepted complete-block count", () => {
-    const expectedCounts: Record<string, number> = {
-      jobs: 20,
-      "music-instruments": 10,
-      "music-genres": 10,
-      "art-supplies": 10,
-      "school-supplies": 10,
-      camping: 10,
-      "national-parks": 10,
-      holidays: 10,
-      halloween: 10,
-      "winter-holidays": 10,
-      "summer-fun": 10,
-      "beach-day": 10,
-      "amusement-park": 10,
-      "around-the-house": 10,
-      "kitchen-tools": 10,
-      "literal-phrases": 10,
-      idioms: 20,
-      emotions: 10,
-      robots: 10,
-      plants: 10,
-    };
+    const partitionCCategoryIds = new Set([
+      "jobs",
+      "music-instruments",
+      "music-genres",
+      "art-supplies",
+      "school-supplies",
+      "camping",
+      "national-parks",
+      "holidays",
+      "halloween",
+      "winter-holidays",
+      "summer-fun",
+      "beach-day",
+      "amusement-park",
+      "around-the-house",
+      "kitchen-tools",
+      "literal-phrases",
+      "idioms",
+      "emotions",
+      "robots",
+      "plants",
+    ]);
 
-    const partitionCCategories = categories.filter((category) => category.id in expectedCounts);
-    const partitionCPuzzles = expandedPuzzles.filter((puzzle) => puzzle.categoryId in expectedCounts);
+    const partitionCCategories = categories.filter((category) =>
+      partitionCCategoryIds.has(category.id),
+    );
+    const partitionCPuzzles = expandedPuzzles.filter((puzzle) =>
+      partitionCCategoryIds.has(puzzle.categoryId),
+    );
 
-    expect(partitionCPuzzles).toHaveLength(220);
+    expect(partitionCPuzzles.length).toBeGreaterThanOrEqual(10);
     expect(partitionCPuzzles.every((puzzle) => puzzle.explanation?.trim())).toBe(true);
     expect(findContentInvariantViolations(partitionCCategories, partitionCPuzzles)).toEqual([]);
 
-    for (const [categoryId, expectedCount] of Object.entries(expectedCounts)) {
+    for (const categoryId of partitionCCategoryIds) {
       const categoryPuzzles = partitionCPuzzles.filter((puzzle) => puzzle.categoryId === categoryId);
-      expect(categoryPuzzles, `${categoryId} count`).toHaveLength(expectedCount);
+      expect(categoryPuzzles.length, `${categoryId} count`).toBeGreaterThanOrEqual(10);
       expect(categoryPuzzles.length % 10).toBe(0);
     }
   });

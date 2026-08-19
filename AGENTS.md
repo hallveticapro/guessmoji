@@ -74,7 +74,10 @@ docker compose ps
 - `Puzzle`: answer, emoji clue, category, difficulty, optional hint, details, explanation, fun fact, tags
 - `Category`: id, name, slug, description, icon, theme, grade band
 
-The shipped seed set has 600 puzzles across 60 categories, including Random Mix. Random Mix should pull from multiple safe categories and avoid duplicates.
+The shipped seed set has 730 source puzzles across 60 source categories, plus the
+derived Random Mix option (61 category choices total). Random Mix currently derives
+a 719-card pool by normalized-answer deduplication and preserves the first source
+occurrence.
 
 Keep default puzzles broadly friendly, recognizable, and free of mature or horror content unless a future opt-in pack is explicitly added. Do not ship generic fallback reveal copy for default puzzles.
 
@@ -92,6 +95,11 @@ Follow `CONTENT_GENERATION_RULES.md` for category scope, answer selection, clue 
 - Hide Random Mix category metadata until answer reveal.
 - Keep controls large, high-contrast, and keyboard accessible.
 - Store only safe local browser preferences such as last category and timer length.
+- Start every source category and Random Mix session with exactly 10 cards; source
+  sessions prefer unseen cards and reset after the pool is exhausted.
+- Store unseen-card history per category in versioned localStorage. Timer changes,
+  restart, and Shuffle do not consume another round; Shuffle only reorders the
+  current round.
 - Shuffle cards automatically on each category start and keep the Shuffle button available.
 - Timer choices are local only and stop when an answer is revealed.
 
@@ -100,6 +108,11 @@ Follow `CONTENT_GENERATION_RULES.md` for category scope, answer selection, clue 
 - Timer bounds live in `src/components/game/timer.ts` and use the shared `0-999` second policy.
 - Last-category saved-slug resolution lives in `src/components/categories/last-category.ts`; stale saved slugs should be hidden and cleared.
 - Emoji clue fitting lives in `src/components/game/emoji-fit.ts`; browsers without `ResizeObserver` should keep a no-wrap fallback instead of throwing.
+- Content invariant checks live in `src/lib/content-audit.ts`; deterministic answer-hidden
+  audit packets live in `src/lib/content-audit-packets.ts`.
+- Pure unseen-round selection and safe storage live in
+  `src/components/game/round-history.ts` and
+  `src/components/game/round-history-storage.ts`.
 - Shared class helpers live in `src/components/ui/styles.ts`; keep them small and specific.
 
 ## Brand And Public Assets

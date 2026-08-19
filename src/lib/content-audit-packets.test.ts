@@ -4,6 +4,35 @@ import { describe, expect, it } from "vitest";
 import { categories } from "@/data/categories";
 import { puzzles } from "@/data/puzzles";
 import { buildContentAuditPartitions } from "@/lib/content-audit-packets";
+import type { Category, Puzzle } from "@/types/puzzle";
+
+const unevenCategories: Category[] = [
+  "alpha",
+  "beta",
+  "gamma",
+  "delta",
+].map((id) => ({
+  id,
+  name: id,
+  slug: id,
+  description: "Synthetic category for packet balancing.",
+}));
+
+const unevenCategoryCardCounts = [10, 30, 10, 20];
+const unevenPuzzles: Puzzle[] = unevenCategories.flatMap((category, categoryIndex) =>
+  Array.from({ length: unevenCategoryCardCounts[categoryIndex] }, (_, cardIndex) => ({
+    id: `${category.id}-card-${cardIndex + 1}`,
+    answer: `${category.name} answer ${cardIndex + 1}`,
+    emojis: `${categoryIndex + 1}️⃣${cardIndex + 1}️⃣`,
+    categoryId: category.id,
+    difficulty: "easy",
+    hint: `Hint for ${category.name} ${cardIndex + 1}`,
+    details: `Details for ${category.name} ${cardIndex + 1}`,
+    explanation: `Explanation for ${category.name} ${cardIndex + 1}`,
+    funFact: `Fact for ${category.name} ${cardIndex + 1}`,
+    tags: [category.id],
+  })),
+);
 
 describe("content audit packet builder", () => {
   it("partitions every source card into balanced answer-hidden and full views", () => {
@@ -31,11 +60,58 @@ describe("content audit packet builder", () => {
     expect(partitions.flatMap((partition) => partition.categoryIds)).toHaveLength(
       sourceCategoryIds.length,
     );
-    expect(
+    const sourceCategoryCounts = sourceCategoryIds.map(
+      (categoryId) => puzzles.filter((puzzle) => puzzle.categoryId === categoryId).length,
+    );
+    const largestCategoryCount = Math.max(...sourceCategoryCounts);
+    const partitionSpread =
       Math.max(...partitions.map((partition) => partition.fullCards.length)) -
-        Math.min(...partitions.map((partition) => partition.fullCards.length)),
-    ).toBeLessThanOrEqual(10);
+      Math.min(...partitions.map((partition) => partition.fullCards.length));
+
+    // A packet cannot split a category. The largest category is therefore the
+    // natural upper bound for the residual imbalance, rather than a stale
+    // catalog-specific constant.
+    expect(partitionSpread).toBeLessThanOrEqual(largestCategoryCount);
     expect(fullCards.every((card) => /^audit-card-\d+$/.test(card.opaqueId))).toBe(true);
+  });
+
+  it("balances an uneven category expansion while retaining whole-category ownership", () => {
+    const partitions = buildContentAuditPartitions(unevenCategories, unevenPuzzles, 3);
+    const partitionCardCounts = partitions.map((partition) => partition.fullCards.length);
+    const allCategoryIds = partitions.flatMap((partition) => partition.categoryIds);
+    const allPuzzleIds = partitions.flatMap((partition) =>
+      partition.fullCards.map((card) => card.opaqueId),
+    );
+
+    expect(partitions).toHaveLength(3);
+    expect(partitionCardCounts).toEqual([10, 30, 30]);
+    expect(allCategoryIds).toEqual(unevenCategories.map((category) => category.id));
+    expect(new Set(allCategoryIds)).toHaveLength(unevenCategories.length);
+    expect(allPuzzleIds).toHaveLength(70);
+    expect(new Set(allPuzzleIds)).toHaveLength(70);
+    expect(JSON.stringify(partitions.flatMap((partition) => partition.blindCards))).not.toContain(
+      '"answer"',
+    );
+    expect(JSON.stringify(partitions.flatMap((partition) => partition.blindCards))).not.toContain(
+      "alpha-card-1",
+    );
+
+    for (const partition of partitions) {
+      expect(partition.blindCards.map((card) => card.opaqueId)).toEqual(
+        partition.fullCards.map((card) => card.opaqueId),
+      );
+      expect(partition.fullCards).toEqual(
+        partition.blindCards.map((card, index) =>
+          expect.objectContaining({
+            ...card,
+            answer: partition.fullCards[index].answer,
+          }),
+        ),
+      );
+      expect(Object.keys(partition.hintsByOpaqueId).sort()).toEqual(
+        partition.blindCards.map((card) => card.opaqueId).sort(),
+      );
+    }
   });
 
   it("preserves category and puzzle source order inside each partition", () => {

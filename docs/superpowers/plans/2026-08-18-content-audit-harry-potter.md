@@ -17,7 +17,9 @@
 - Subagents receive clean, bounded context and must not spawn their own subagents.
 - CONTENT_GENERATION_RULES.md is authoritative for category and card quality.
 - TASKS.md remains authoritative for project scope and status.
-- Audit all 59 current source categories and all 600 current cards; Random Mix remains derived.
+- Audit the planning-baseline set of 59 source categories and 600 cards; final
+  integrated counts are derived from the accepted source arrays, and Random Mix
+  remains derived.
 - Fix confirmed issues rather than producing a report-only audit.
 - Selectively expand a category only when ten additional cards can pass all rules as a block.
 - Never pad a category to meet a target.
@@ -124,11 +126,14 @@ Expected: PASS for fixture behavior. Do not assert that the legacy shipped catal
 const partitions = buildContentAuditPartitions(categories, puzzles, 3);
 const blindCards = partitions.flatMap((item) => item.blindCards);
 const fullCards = partitions.flatMap((item) => item.fullCards);
+const expectedSourceCardCount = puzzles.filter(
+  (puzzle) => puzzle.categoryId !== "random-mix",
+).length;
 
 expect(partitions).toHaveLength(3);
-expect(blindCards).toHaveLength(600);
-expect(fullCards).toHaveLength(600);
-expect(new Set(fullCards.map((card) => card.opaqueId)).size).toBe(600);
+expect(blindCards).toHaveLength(expectedSourceCardCount);
+expect(fullCards).toHaveLength(expectedSourceCardCount);
+expect(new Set(fullCards.map((card) => card.opaqueId)).size).toBe(expectedSourceCardCount);
 expect(JSON.stringify(blindCards)).not.toContain('"answer"');
 expect(partitions.flatMap((item) => item.categoryIds)).not.toContain("random-mix");
 ~~~
@@ -208,7 +213,7 @@ The orchestrator dispatches three Luna/max blind reviewers in parallel, one per 
 
 Then dispatch three different Luna/max rules/fact auditors in parallel. Each receives one full packet, matching blind report, CONTENT_GENERATION_RULES.md, and the report schema from the spec. Each auditor covers direct/component leaks, category filler, repetition, interchangeable clues, associations, difficulty, hints, explanation coverage, reveal-field quality, safety, facts with sources, answer concentration, and expansion potential.
 
-Mechanically compare packet IDs with report IDs before Task 2. Missing IDs return to the same auditor. Remediation cannot start until all 600 original cards and all 59 source categories have blind and rules/fact evidence.
+Mechanically compare packet IDs with report IDs before Task 2. Missing IDs return to the same auditor. Remediation cannot start until every baseline card and source category has blind and rules/fact evidence; the final packet ledger derives coverage from the accepted arrays.
 
 ### Task 2: Pure Unseen-Round Selection
 

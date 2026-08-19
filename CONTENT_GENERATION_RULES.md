@@ -43,7 +43,10 @@ Category icons may communicate the theme on selection screens, but they should n
 - Plan three to six subthemes before selecting answers and distribute cards across them.
 - Avoid letting one franchise, character family, species group, era, or subtype dominate unless that is the category's stated purpose.
 
-A game round contains 10 unique cards sampled from the category pool. Product behavior for unseen-card history and round cycling is tracked in `TASKS.md`.
+A game round contains 10 unique cards sampled from the category pool. Product behavior
+for unseen-card history and round cycling is tracked in `TASKS.md`. The derived Random
+Mix mode also deals a 10-card session, deduplicates normalized answers before dealing,
+and keeps each card's source category hidden until answer reveal.
 
 ## Answer Selection
 
@@ -250,4 +253,3 @@ Before shipping a category or card batch, confirm:
 - Safety rules are satisfied.
 - Automated checks pass.
 - Clean-context blind review passes.
-
