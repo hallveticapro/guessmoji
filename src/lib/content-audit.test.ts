@@ -365,14 +365,14 @@ describe("content audit helpers", () => {
       "literal-phrases": 10,
       idioms: 20,
       emotions: 10,
-      robots: 20,
+      robots: 10,
       plants: 10,
     };
 
     const partitionCCategories = categories.filter((category) => category.id in expectedCounts);
     const partitionCPuzzles = expandedPuzzles.filter((puzzle) => puzzle.categoryId in expectedCounts);
 
-    expect(partitionCPuzzles).toHaveLength(230);
+    expect(partitionCPuzzles).toHaveLength(220);
     expect(partitionCPuzzles.every((puzzle) => puzzle.explanation?.trim())).toBe(true);
     expect(findContentInvariantViolations(partitionCCategories, partitionCPuzzles)).toEqual([]);
 
@@ -388,6 +388,8 @@ describe("content audit helpers", () => {
     const idioms = categories.find((category) => category.id === "idioms");
 
     expect(literalPhrases?.description).toMatch(/compound|literal/i);
+    expect(literalPhrases?.description).toMatch(/lexicalized|fixed expression/i);
+    expect(literalPhrases?.description).toMatch(/Couch Potato|Heart of Gold|Time Flies/i);
     expect(literalPhrases?.description).toMatch(/exclude|not include|not a conventional idiom/i);
     expect(idioms?.description).toMatch(/conventional|figurative|idiom/i);
     expect(idioms?.description).toMatch(/exclude|not include|not a literal phrase/i);

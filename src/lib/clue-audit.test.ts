@@ -375,8 +375,6 @@ describe("clue audit helpers", () => {
       "amusement-park-haunted-ride": /ride/i,
       "amusement-park-midway-game": /game/i,
       "robots-robot-arm": /arm/i,
-      "robots-warehouse-robot": /warehouse/i,
-      "robots-space-drone": /space/i,
     };
     for (const [id, pattern] of Object.entries(embeddedHints)) {
       expect(get(id).hint, `${id} hint`).not.toMatch(pattern);
@@ -394,6 +392,7 @@ describe("clue audit helpers", () => {
       "winter-holidays-new-year-s-eve",
       "emotions-love",
       "emotions-grateful",
+      "robots-space-drone",
     ];
     for (const id of removedDeltaBlocks) {
       expect(puzzleById.has(id), `${id} should be omitted as a rejected addition`).toBe(false);
