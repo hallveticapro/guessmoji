@@ -274,6 +274,11 @@ describe("clue audit helpers", () => {
     expect(answerEmojiBanlist["factory robot"]).toContain("🤖");
     expect(answerEmojiBanlist["oak tree"]).toContain("🌳");
     expect(answerEmojiBanlist.bamboo).toContain("🎍");
+    expect(answerEmojiBanlist["gingerbread house"]).toEqual(
+      expect.arrayContaining(["🏠", "🍪"]),
+    );
+    expect(answerEmojiBanlist["kwanzaa kinara"]).toContain("🕯️");
+    expect(answerEmojiBanlist.doorbell).toEqual(expect.arrayContaining(["🚪", "🔔"]));
   });
 
   it("keeps Partition C category-context glyphs out of every clue", () => {
@@ -281,14 +286,14 @@ describe("clue audit helpers", () => {
       "music-instruments": ["🎵", "🎶"],
       "art-supplies": ["🎨"],
       "school-supplies": ["📄"],
-      camping: ["🌲", "🌙"],
-      "national-parks": ["🌲", "🏜️", "⛰️"],
+      camping: ["🌲", "🌙", "⛺"],
+      "national-parks": ["🌲", "🏜️", "⛰️", "🏞️"],
       holidays: ["📅", "🎆"],
       halloween: ["🌙"],
       "winter-holidays": ["❄️"],
       "summer-fun": ["☀️"],
       "beach-day": ["🏖️", "🌊", "☀️"],
-      "amusement-park": ["🎟️"],
+      "amusement-park": ["🎟️", "🎡"],
       "around-the-house": ["🏠"],
       robots: ["🤖"],
       plants: ["🌱", "🌿"],
@@ -325,6 +330,8 @@ describe("clue audit helpers", () => {
     expect(get("art-supplies-colored-pencils").emojis).not.toContain("✏️");
     expect(get("art-supplies-scissors").emojis).not.toContain("✂️");
     expect(get("camping-s-mores").emojis).not.toMatch(/[🔥🍫☁️🍪]/u);
+    expect(get("desserts-s-mores").emojis).toContain("🪵");
+    expect(get("desserts-s-mores").emojis).not.toMatch(/[🔥🍫☁️🍪]/u);
     expect(get("halloween-skeleton").emojis).not.toContain("💀");
     expect(get("halloween-candy-corn").emojis).not.toContain("🌽");
     expect(get("summer-fun-water-balloon").emojis).not.toMatch(/[🎈💧]/u);
@@ -335,6 +342,11 @@ describe("clue audit helpers", () => {
     expect(get("robots-robot-arm").emojis).not.toContain("🦾");
     expect(get("plants-oak-tree").emojis).not.toContain("🌳");
     expect(get("plants-bamboo").emojis).not.toContain("🎍");
+    expect(get("winter-holidays-gingerbread-house").emojis).not.toMatch(/[🏠🍪]/u);
+    expect(get("winter-holidays-kwanzaa-kinara").emojis).not.toContain("🕯️");
+    expect(get("around-the-house-doorbell").emojis).not.toContain("🚪");
+    expect(get("beach-day-sunscreen").emojis).not.toEqual(expect.stringMatching(/🧴.*🧴/u));
+    expect(get("amusement-park-cotton-candy").emojis).not.toContain("🎡");
 
     expect(get("winter-holidays-menorah").details).toContain("hanukkiah");
     expect(get("winter-holidays-menorah").funFact).not.toMatch(/eight nights plus a helper/i);
@@ -350,6 +362,29 @@ describe("clue audit helpers", () => {
     expect(get("literal-phrases-starstruck").funFact).not.toMatch(/celebrity culture/i);
     expect(get("literal-phrases-time-flies").funFact).not.toMatch(/Latin expression/i);
     expect(get("plants-rose").funFact).not.toMatch(/thousands of years/i);
+    const embeddedHints: Record<string, RegExp> = {
+      "camping-trail-map": /\bmap\b/i,
+      "national-parks-grand-canyon": /canyon/i,
+      "national-parks-arches": /arches/i,
+      "holidays-presidents-day": /presidents/i,
+      "winter-holidays-kwanzaa-kinara": /Kwanzaa/i,
+      "winter-holidays-holiday-lights": /lights/i,
+      "winter-holidays-christmas-carol": /Christmas/i,
+      "winter-holidays-ugly-sweater": /sweater/i,
+      "beach-day-beach-ball": /ball/i,
+      "beach-day-tide-pool": /tide|pool/i,
+      "beach-day-beach-towel": /towel/i,
+      "amusement-park-ferris-wheel": /wheel/i,
+      "amusement-park-bumper-cars": /cars/i,
+      "amusement-park-haunted-ride": /ride/i,
+      "amusement-park-midway-game": /game/i,
+      "robots-robot-arm": /arm/i,
+      "robots-warehouse-robot": /warehouse/i,
+      "robots-space-drone": /space/i,
+    };
+    for (const [id, pattern] of Object.entries(embeddedHints)) {
+      expect(get(id).hint, `${id} hint`).not.toMatch(pattern);
+    }
   });
 
   it("keeps source-review context and delta-blind direct leaks out of Partition B", () => {
