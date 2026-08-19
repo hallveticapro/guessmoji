@@ -10,6 +10,41 @@ import {
   RANDOM_MIX_SESSION_COUNT,
 } from "@/lib/puzzles";
 import { normalizeAnswerForAudit } from "@/lib/clue-audit";
+import type { Puzzle } from "@/types/puzzle";
+
+const normalizedAnswerFixture = [
+  {
+    id: "moana-first",
+    answer: "Moana",
+    emojis: "🌊",
+    categoryId: "fixture-a",
+    difficulty: "easy",
+  },
+  {
+    id: "moana-second",
+    answer: "MOANA!",
+    emojis: "🌊✨",
+    categoryId: "fixture-b",
+    difficulty: "easy",
+  },
+] satisfies Puzzle[];
+
+const emptyNormalizedAnswerFixture = [
+  {
+    id: "empty-answer-first",
+    answer: "!!!",
+    emojis: "❗",
+    categoryId: "fixture-a",
+    difficulty: "easy",
+  },
+  {
+    id: "empty-answer-second",
+    answer: "???",
+    emojis: "❓",
+    categoryId: "fixture-b",
+    difficulty: "easy",
+  },
+] satisfies Puzzle[];
 
 describe("puzzle utilities", () => {
   it("includes the expanded category catalog", () => {
@@ -136,18 +171,21 @@ describe("puzzle utilities", () => {
   });
 
   it("deduplicates Random Mix by normalized answer and preserves the first source", () => {
-    const normalizedAnswer = normalizeAnswerForAudit("Moana");
-    const sourceDuplicates = puzzles.filter(
-      (puzzle) => normalizeAnswerForAudit(puzzle.answer) === normalizedAnswer,
+    expect(normalizeAnswerForAudit("Moana")).toBe(
+      normalizeAnswerForAudit("MOANA!"),
     );
-    const randomMixPool = getRandomMixPuzzlePool();
-    const randomMixDuplicates = randomMixPool.filter(
-      (puzzle) => normalizeAnswerForAudit(puzzle.answer) === normalizedAnswer,
-    );
+    expect(getRandomMixPuzzlePool(normalizedAnswerFixture).map((puzzle) => puzzle.id)).toEqual([
+      "moana-first",
+    ]);
+  });
 
-    expect(sourceDuplicates.length).toBeGreaterThanOrEqual(2);
-    expect(randomMixDuplicates).toHaveLength(1);
-    expect(randomMixDuplicates[0]?.id).toBe(sourceDuplicates[0]?.id);
+  it("preserves every Random Mix card whose normalized answer is empty", () => {
+    expect(normalizeAnswerForAudit("!!!")).toBe("");
+    expect(normalizeAnswerForAudit("???")).toBe("");
+    expect(getRandomMixPuzzlePool(emptyNormalizedAnswerFixture).map((puzzle) => puzzle.id)).toEqual([
+      "empty-answer-first",
+      "empty-answer-second",
+    ]);
   });
 
   it("caps random mix at the available unique puzzle count", () => {

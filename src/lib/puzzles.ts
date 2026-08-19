@@ -33,9 +33,11 @@ export function getRandomizedPuzzles(puzzleList: readonly Puzzle[]): Puzzle[] {
   return shuffled;
 }
 
-export function getRandomMixPuzzlePool(): Puzzle[] {
+export function getRandomMixPuzzlePool(
+  puzzleList: readonly Puzzle[] = puzzles,
+): Puzzle[] {
   return uniquePuzzlesByNormalizedAnswer(
-    puzzles.filter((puzzle) => puzzle.categoryId !== RANDOM_MIX_CATEGORY_ID),
+    puzzleList.filter((puzzle) => puzzle.categoryId !== RANDOM_MIX_CATEGORY_ID),
   );
 }
 
@@ -54,6 +56,11 @@ function uniquePuzzlesByNormalizedAnswer(
 
   for (const puzzle of puzzleList) {
     const normalizedAnswer = normalizeAnswerForAudit(puzzle.answer);
+    if (!normalizedAnswer) {
+      uniquePuzzles.push(puzzle);
+      continue;
+    }
+
     if (seenAnswers.has(normalizedAnswer)) {
       continue;
     }
