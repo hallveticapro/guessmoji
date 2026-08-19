@@ -42,7 +42,15 @@ describe("clue audit helpers", () => {
     expect(answerEmojiBanlist["apple pie"]).toContain("🥧");
     expect(answerEmojiBanlist["lemon tart"]).toContain("🥧");
     expect(answerEmojiBanlist["banana split"]).toContain("🍨");
+    expect(answerEmojiBanlist["banana split"]).toEqual(expect.arrayContaining(["🍌", "🍨", "🍒"]));
+    expect(answerEmojiBanlist.chips).toContain("🥔");
+    expect(answerEmojiBanlist["trail mix"]).toEqual(expect.arrayContaining(["🥜", "🍫", "🍇"]));
+    expect(answerEmojiBanlist["granola bar"]).toEqual(expect.arrayContaining(["🌾", "🍯", "🥜"]));
+    expect(answerEmojiBanlist["rice cakes"]).toContain("🍚");
+    expect(answerEmojiBanlist["sunflower seeds"]).toContain("🥜");
+    expect(answerEmojiBanlist["seaweed snacks"]).toContain("🌊");
     expect(answerEmojiBanlist.muffin).toContain("🧁");
+    expect(answerEmojiBanlist.cupcake).toContain("🍰");
   });
 
   it("catches direct depiction variants for repaired strict-category answers", () => {
@@ -266,8 +274,7 @@ describe("clue audit helpers", () => {
     expect(puzzleById.get("animals-fox")?.emojis).not.toContain("🦊");
     expect(puzzleById.get("ocean-animals-crab")?.emojis).toContain("↔️");
     expect(puzzleById.get("ocean-animals-crab")?.emojis).not.toContain("🦀");
-    expect(puzzleById.get("desserts-cupcake")?.emojis).toContain("🍰");
-    expect(puzzleById.get("desserts-cupcake")?.emojis).not.toMatch(/🍥|🎉|🕯️/u);
+    expect(puzzleById.get("desserts-cupcake")?.emojis).not.toMatch(/🍰|🧁|🍥|🎉|🕯️/u);
     expect(puzzleById.get("birds-robin")?.emojis).toContain("🎵");
     expect(puzzleById.get("birds-robin")?.hint).toContain("orange-red");
     expect(puzzleById.get("breakfast-muffin")?.emojis).not.toMatch(/🧁|🫐/u);
@@ -283,6 +290,13 @@ describe("clue audit helpers", () => {
       "desserts-s-mores": ["🍫", "🍪"],
       "desserts-lemon-tart": ["🍋", "🥧"],
       "desserts-banana-split": ["🍌", "🍨", "🍒"],
+      "snacks-chips": ["🥔"],
+      "snacks-trail-mix": ["🥜", "🍫", "🍇"],
+      "snacks-granola-bar": ["🌾", "🍯", "🥜"],
+      "snacks-string-cheese": ["🧵", "🥛"],
+      "snacks-rice-cakes": ["🍚", "🍘"],
+      "snacks-sunflower-seeds": ["🌞", "🥜"],
+      "snacks-seaweed-snacks": ["🌊", "🌿"],
     };
     for (const [puzzleId, forbiddenEmojis] of Object.entries(componentRepairs)) {
       for (const forbiddenEmoji of forbiddenEmojis) {
