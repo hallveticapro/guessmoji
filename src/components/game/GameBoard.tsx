@@ -98,13 +98,16 @@ export function GameBoard({
       setIsAnswerVisible(false);
       setIsHintVisible(false);
       setIsSettingsOpen(false);
-      resetTimer();
     }, 0);
 
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, [preparePuzzleDeck, resetTimer]);
+  }, [preparePuzzleDeck]);
+
+  useEffect(() => {
+    resetTimer();
+  }, [category.id, resetTimer]);
 
   const resetPuzzleState = useCallback(() => {
     setIsAnswerVisible(false);
@@ -168,6 +171,12 @@ export function GameBoard({
   }, [resetPuzzleState]);
 
   const restartCategory = useCallback(() => {
+    setCurrentIndex(0);
+    setIsComplete(false);
+    resetPuzzleState();
+  }, [resetPuzzleState]);
+
+  const startNextRound = useCallback(() => {
     setPuzzles(preparePuzzleDeck());
     setCurrentIndex(0);
     setIsComplete(false);
@@ -282,7 +291,7 @@ export function GameBoard({
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <button
               type="button"
-              onClick={restartCategory}
+              onClick={startNextRound}
               className={cx(primaryPillActionClassName, "px-7")}
             >
               Play Again
