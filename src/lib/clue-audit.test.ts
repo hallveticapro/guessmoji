@@ -6,6 +6,7 @@ import {
   findDirectAnswerEmojiLeaks,
   normalizeAnswerForAudit,
 } from "@/lib/clue-audit";
+import { getCategoryEmojiUsage } from "@/lib/content-audit";
 import { getPuzzlesByCategoryId } from "@/lib/puzzles";
 import { puzzles } from "@/data/puzzles";
 import type { Puzzle } from "@/types/puzzle";
@@ -150,6 +151,70 @@ describe("clue audit helpers", () => {
     expect(puzzleById.get("construction-blueprint")?.details).toContain(
       "Construction plan",
     );
+  });
+
+  it("keeps the Partition B fix-round blind regressions distinct and leak-free", () => {
+    const puzzleById = new Map(expandedPuzzles.map((puzzle) => [puzzle.id, puzzle]));
+    const get = (id: string): Puzzle => {
+      const puzzle = puzzleById.get(id);
+      expect(puzzle, `${id} should exist`).toBeDefined();
+      return puzzle as Puzzle;
+    };
+
+    const milkyWay = get("space-milky-way");
+    const galaxy = get("space-galaxy");
+    expect(milkyWay.emojis).toContain("🏠");
+    expect(galaxy.emojis).toContain("🌫️");
+    expect(["⭐", "🌀", "🔭", "🌌"].filter((emoji) =>
+      milkyWay.emojis.includes(emoji) && galaxy.emojis.includes(emoji),
+    )).toEqual([]);
+
+    const geography = expandedPuzzles.filter((puzzle) => puzzle.categoryId === "world-geography");
+    const geographyEmojiUsage = getCategoryEmojiUsage(geography);
+    expect(geographyEmojiUsage.get("🗺️")?.count ?? 0).toBeLessThanOrEqual(4);
+    expect(geographyEmojiUsage.get("🧭")?.count ?? 0).toBeLessThanOrEqual(4);
+
+    const weather = expandedPuzzles.filter((puzzle) => puzzle.categoryId === "weather");
+    const math = expandedPuzzles.filter((puzzle) => puzzle.categoryId === "math");
+    expect(getCategoryEmojiUsage(weather).get("💨")?.count ?? 0).toBeLessThanOrEqual(3);
+    expect(getCategoryEmojiUsage(math).get("🔢")?.count ?? 0).toBeLessThanOrEqual(2);
+
+    expect(answerEmojiBanlist.moon).toContain("🌒");
+    expect(answerEmojiBanlist.saturn).toContain("🪐");
+    expect(answerEmojiBanlist["milky way"]).toContain("🥛");
+    expect(answerEmojiBanlist["indian ocean"]).toContain("🇮🇳");
+    expect(answerEmojiBanlist["compass rose"]).toContain("🧭");
+    expect(answerEmojiBanlist.triangle).toContain("🔺");
+    expect(answerEmojiBanlist.circle).toEqual(expect.arrayContaining(["⭕", "🟢"]));
+    expect(answerEmojiBanlist.pi).toEqual(expect.arrayContaining(["π", "🥧"]));
+
+    expect(get("space-moon").emojis).not.toContain("🌒");
+    expect(get("space-saturn").emojis).not.toContain("🪐");
+    expect(get("world-geography-indian-ocean").emojis).not.toContain("🇮🇳");
+    expect(get("world-geography-compass-rose").emojis).not.toContain("🧭");
+    expect(get("math-triangle").emojis).not.toContain("🔺");
+    expect(get("math-circle").emojis).not.toContain("⭕");
+    expect(get("math-circle").emojis).not.toContain("🟢");
+    expect(get("math-pi").emojis).not.toContain("π");
+    expect(get("math-pi").emojis).not.toContain("🥧");
+
+    expect(get("outdoor-games-four-square").emojis).not.toContain("4️⃣");
+    expect(get("outdoor-games-four-square").emojis).not.toContain("⬜");
+    expect(get("party-games-rock-paper-scissors").emojis).not.toMatch(/[✊✋✌️]/u);
+    expect(get("world-landmarks-great-wall-of-china").emojis).not.toContain("🧱");
+    expect(get("world-landmarks-pyramids-of-giza").emojis).not.toContain("🔺");
+    expect(get("us-landmarks-white-house").emojis).not.toContain("⚪");
+    expect(get("us-landmarks-gateway-arch").emojis).not.toContain("🚪");
+    expect(get("books-the-cat-in-the-hat").emojis).not.toContain("🐱");
+    expect(get("books-the-cat-in-the-hat").emojis).not.toContain("🎩");
+    expect(get("books-magic-tree-house").emojis).not.toContain("🌳");
+    expect(get("books-magic-tree-house").emojis).not.toContain("🏠");
+
+    expect(get("minecraft-diamond-sword").explanation).toContain("sword");
+    expect(get("minecraft-diamond-sword").hint).toContain("blue blade");
+    expect(get("minecraft-crafting-table").explanation).toContain("3×3");
+    expect(get("books-dog-man").explanation).toContain("🦴");
+    expect(get("world-geography-mediterranean-sea").explanation).toContain("🌊");
   });
 
   it("carries an explicit explanation through every partition A expanded card", () => {
