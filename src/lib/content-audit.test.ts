@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { categories } from "@/data/categories";
+import { puzzles } from "@/data/puzzles";
 import { findContentInvariantViolations, getCategoryEmojiUsage } from "@/lib/content-audit";
 import type { Category, Puzzle } from "@/types/puzzle";
 
@@ -199,5 +201,25 @@ describe("content audit helpers", () => {
 
   it("returns no findings for a complete ten-card category", () => {
     expect(findContentInvariantViolations([makeCategory()], makePuzzles(10))).toEqual([]);
+  });
+
+  it("keeps every core entertainment source pool in a complete ten-card block", () => {
+    const coreCategoryIds = new Set([
+      "disney-movies",
+      "disney-princesses",
+      "pixar",
+      "marvel",
+      "star-wars",
+      "dreamworks",
+      "video-game-movies",
+      "kid-tv-shows",
+      "animated-classics",
+    ]);
+
+    const coreFindings = findContentInvariantViolations(categories, puzzles).filter(
+      (finding) => finding.categoryId && coreCategoryIds.has(finding.categoryId),
+    );
+
+    expect(coreFindings).toEqual([]);
   });
 });
