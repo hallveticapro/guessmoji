@@ -258,7 +258,7 @@ const expandedPackSeeds: PackSeed[] = [
       ["Crackers", "⬜🟨🧀🕳️", "Small baked squares that snap when broken and pair well with cheese.", "Type: Baked snack", "Crackers can be leavened or unleavened.", "easy", "⬜ shows the classic square, 🟨 suggests a baked golden bite, 🧀 gives a familiar pairing, and 🕳️ signals the perforated crisp surface."],
       ["Rice Cakes", "☁️🔲🟨🥜", "Light, crunchy puffed-grain rounds often served with a topping.", "Type: Puffed grain snack", "Puffed rice expands when heat and pressure are released.", "medium", "☁️ evokes a light texture, 🔲 suggests a pressed shape, 🟨 signals a golden bite, and 🥜 shows a possible topping."],
       ["Hummus", "🫘🫙🥄🍋", "A smooth chickpea dip blended with tahini and lemon.", "Type: Dip", "Hummus is traditionally made from cooked chickpeas, tahini, lemon juice, and garlic.", "easy", "🫘 signals the chickpea base, 🫙 suggests a dip container, 🥄 shows its scoopable texture, and 🍋 evokes lemon flavor."],
-      ["Jerky", "🔥〰️🟤", "Thin strips of meat preserved by drying.", "Type: Dried meat snack", "Drying meat reduces moisture and helps preserve it; safe preparation also requires proper heat treatment.", "easy", "🔥 signals drying and heat, 〰️ shows the thin strips, and 🟤 evokes the browned finished snack."],
+      ["Jerky", "🔥〰️🟤", "Thin strips of meat preserved by drying.", "Type: Dried meat snack", "Drying meat reduces moisture and helps preserve it; safe preparation also requires proper heat treatment.", "medium", "🔥 signals drying and heat, 〰️ shows the thin strips, and 🟤 evokes the browned finished snack."],
     ],
   },
   {

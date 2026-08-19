@@ -276,6 +276,7 @@ describe("clue audit helpers", () => {
     );
     expect(puzzleById.get("snacks-hummus")?.answer).toBe("Hummus");
     expect(puzzleById.get("snacks-jerky")?.answer).toBe("Jerky");
+    expect(puzzleById.get("snacks-jerky")?.difficulty).toBe("medium");
     expect(puzzleById.get("animals-penguin")?.emojis).toContain("🧊");
     expect(puzzleById.get("animals-penguin")?.emojis).not.toContain("🐧");
     expect(puzzleById.get("animals-fox")?.emojis).toContain("👂");
