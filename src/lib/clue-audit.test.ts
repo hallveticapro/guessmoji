@@ -34,6 +34,47 @@ describe("clue audit helpers", () => {
     expect(answerEmojiBanlist["tyrannosaurus rex"]).toContain("🦖");
     expect(answerEmojiBanlist["sea lion"]).toContain("🦭");
     expect(answerEmojiBanlist["string cheese"]).toContain("🧀");
+    expect(answerEmojiBanlist.monkey).toEqual(expect.arrayContaining(["🐒", "🙈"]));
+    expect(answerEmojiBanlist.horse).toContain("🏇");
+    expect(answerEmojiBanlist["breakfast burrito"]).toContain("🌯");
+    expect(answerEmojiBanlist["chocolate chip cookie"]).toContain("🍫");
+    expect(answerEmojiBanlist.cheesecake).toContain("🧀");
+    expect(answerEmojiBanlist["apple pie"]).toContain("🥧");
+    expect(answerEmojiBanlist["lemon tart"]).toContain("🥧");
+    expect(answerEmojiBanlist["banana split"]).toContain("🍨");
+    expect(answerEmojiBanlist.muffin).toContain("🧁");
+  });
+
+  it("catches direct depiction variants for repaired strict-category answers", () => {
+    const variantPuzzles: Puzzle[] = [
+      {
+        id: "synthetic-monkey-variant",
+        answer: "Monkey",
+        emojis: "🙈🌴",
+        categoryId: "animals",
+        difficulty: "easy",
+      },
+      {
+        id: "synthetic-horse-variant",
+        answer: "Horse",
+        emojis: "🏇🌾",
+        categoryId: "animals",
+        difficulty: "easy",
+      },
+      {
+        id: "synthetic-burrito-variant",
+        answer: "Breakfast Burrito",
+        emojis: "🌯🥚",
+        categoryId: "breakfast",
+        difficulty: "easy",
+      },
+    ];
+
+    expect(findDirectAnswerEmojiLeaks(variantPuzzles, answerEmojiBanlist)).toEqual([
+      expect.objectContaining({ puzzleId: "synthetic-monkey-variant", forbiddenEmoji: "🙈" }),
+      expect.objectContaining({ puzzleId: "synthetic-horse-variant", forbiddenEmoji: "🏇" }),
+      expect.objectContaining({ puzzleId: "synthetic-burrito-variant", forbiddenEmoji: "🌯" }),
+    ]);
   });
 
   it("reports structured direct-answer emoji leaks", () => {
@@ -161,6 +202,28 @@ describe("clue audit helpers", () => {
     }
   });
 
+  it("keeps expanded context fillers out of strict clue pools", () => {
+    const count = (categoryId: string, emoji: string) =>
+      expandedPuzzles.filter(
+        (puzzle) => puzzle.categoryId === categoryId && puzzle.emojis.includes(emoji),
+      ).length;
+
+    expect(count("animals", "🌿")).toBe(0);
+    expect(count("ocean-animals", "🫧")).toBe(0);
+    expect(count("ocean-animals", "🪨")).toBe(0);
+    expect(count("dinosaurs", "🪨")).toBeLessThanOrEqual(2);
+    expect(count("dinosaurs", "🦷")).toBeLessThanOrEqual(2);
+    expect(count("dinosaurs", "🌿")).toBe(0);
+    expect(count("fruit", "🌳")).toBe(0);
+    expect(count("fruit", "🌿")).toBe(0);
+    expect(count("vegetables", "🥗")).toBe(0);
+    expect(count("vegetables", "🟢")).toBe(0);
+    expect(count("vegetables", "🌿")).toBe(0);
+    expect(count("desserts", "🌀")).toBeLessThanOrEqual(2);
+    expect(count("snacks", "🧂")).toBeLessThanOrEqual(2);
+    expect(count("snacks", "🥣")).toBe(0);
+  });
+
   it("keeps expanded canonical repairs shipped", () => {
     const puzzleById = new Map(expandedPuzzles.map((puzzle) => [puzzle.id, puzzle]));
 
@@ -174,7 +237,31 @@ describe("clue audit helpers", () => {
     expect(puzzleById.get("animals-fox")?.emojis).not.toContain("🦊");
     expect(puzzleById.get("ocean-animals-crab")?.emojis).toContain("↔️");
     expect(puzzleById.get("ocean-animals-crab")?.emojis).not.toContain("🦀");
-    expect(puzzleById.get("desserts-cupcake")?.emojis).toContain("🍥");
+    expect(puzzleById.get("desserts-cupcake")?.emojis).toContain("🍰");
+    expect(puzzleById.get("desserts-cupcake")?.emojis).not.toMatch(/🍥|🎉|🕯️/u);
+    expect(puzzleById.get("birds-robin")?.emojis).toContain("🎵");
+    expect(puzzleById.get("birds-robin")?.hint).toContain("orange-red");
+    expect(puzzleById.get("breakfast-muffin")?.emojis).not.toMatch(/🧁|🫐/u);
+    expect(puzzleById.get("breakfast-breakfast-burrito")?.emojis).not.toContain("🌯");
+    expect(puzzleById.get("animals-monkey")?.emojis).not.toContain("🙈");
+    expect(puzzleById.get("animals-horse")?.emojis).not.toContain("🏇");
+    expect(puzzleById.get("fruit-grapes")?.emojis).not.toContain("🍷");
+
+    const componentRepairs: Record<string, string[]> = {
+      "desserts-chocolate-chip-cookie": ["🍫", "🍪"],
+      "desserts-cheesecake": ["🍰", "🧀"],
+      "desserts-apple-pie": ["🍎", "🍏", "🥧"],
+      "desserts-s-mores": ["🍫", "🍪"],
+      "desserts-lemon-tart": ["🍋", "🥧"],
+      "desserts-banana-split": ["🍌", "🍨", "🍒"],
+    };
+    for (const [puzzleId, forbiddenEmojis] of Object.entries(componentRepairs)) {
+      for (const forbiddenEmoji of forbiddenEmojis) {
+        expect(puzzleById.get(puzzleId)?.emojis, `${puzzleId} should not use ${forbiddenEmoji}`).not.toContain(
+          forbiddenEmoji,
+        );
+      }
+    }
   });
 
   it("keeps canonical entertainment answers and blind-review repairs shipped", () => {

@@ -228,7 +228,7 @@ describe("content audit helpers", () => {
     const expectedCounts: Record<string, number> = {
       animals: 30,
       "ocean-animals": 20,
-      dinosaurs: 20,
+      dinosaurs: 10,
       birds: 20,
       bugs: 20,
       fruit: 20,
