@@ -117,6 +117,8 @@ describe("clue audit helpers", () => {
     const puzzleById = new Map(puzzles.map((puzzle) => [puzzle.id, puzzle]));
 
     expect(puzzleById.get("minecraft-movie")?.answer).toBe("A Minecraft Movie");
+    expect(puzzleById.get("minecraft-movie")?.emojis).toContain("🌀");
+    expect(puzzleById.get("minecraft-movie")?.hint).toContain("four misfits");
     expect(puzzleById.get("pokemon-first-movie")?.answer).toBe(
       "Pokémon: The First Movie",
     );
@@ -125,6 +127,11 @@ describe("clue audit helpers", () => {
     );
     expect(puzzleById.get("pokemon-tv")?.answer).toBe("Pokémon");
     expect(puzzleById.get("paw-patrol")?.answer).toBe("PAW Patrol");
+
+    const ariel = puzzleById.get("ariel");
+    expect(ariel?.emojis).toContain("🦀");
+    expect(ariel?.hint).toContain("red-haired princess");
+    expect(ariel?.difficulty).toBe("medium");
 
     const gabby = puzzleById.get("gabbys-dollhouse");
     expect(gabby?.difficulty).toBe("medium");
