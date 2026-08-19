@@ -41,16 +41,17 @@ As of 2026-06-07:
 
 As of 2026-08-18:
 
-- `CONTENT_GENERATION_RULES.md` is the authoritative standard for future category and card generation and for the planned audit of existing content.
+- `CONTENT_GENERATION_RULES.md` is the authoritative standard for category and card generation, the completed 2026-08 content audit, and future maintenance.
 - Category pools must contain a multiple of 10 cards. Target 30 strong cards, prefer at least 20, and allow 10 when a narrow category cannot support more without obscure answers or weak clues.
 - A round should draw 10 unique cards from its category pool.
 - Store per-category seen-card history as safe local browser data. New rounds should prefer unseen cards, and the round after a pool is exhausted should begin a fresh cycle.
 - Shuffle should reorder the current round rather than select a different set of cards.
-- A future content pass should audit every existing category and card against `CONTENT_GENERATION_RULES.md`, expanding pools where the category supports additional high-quality cards.
+- The 2026-08-18–19 content audit reviewed every existing category and card against `CONTENT_GENERATION_RULES.md`, applied confirmed remediations, and expanded only pools that supported complete blocks of high-quality cards.
+- Future content maintenance should apply these rules to new or changed cards, update `src/data/answerEmojiBanlist.ts` when direct answer emoji are introduced, and run the clue-audit and catalog-invariant tests before release. Any further pool expansion remains selective and quality-gated.
 
 As of 2026-08-19:
 
-- Task 8 adds the balanced 20-card `Harry Potter` category from the core seven-book/eight-film saga. Commit `5d5a28c` closes its staged 20/20 blind evidence and source/rules approval. The integrated catalog now contains 60 source categories, 61 categories including Random Mix, and 730 source puzzles.
+- Tasks 8 and 9 close the content audit. The balanced 20-card `Harry Potter` category comes from the core seven-book/eight-film saga; commit `5d5a28c` closes its staged 20/20 blind evidence and source/rules approval. The integrated catalog now contains 60 source categories, 61 categories including Random Mix, and 730 source puzzles.
 
 The app should support many themed categories, including:
 

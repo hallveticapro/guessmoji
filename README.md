@@ -199,8 +199,30 @@ NEXT_PUBLIC_APP_NAME="Guessmoji"
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ```
 
-To build locally instead of pulling an image, uncomment the `build` block in
-`docker-compose.yml`.
+The URL used for Open Graph and Twitter metadata is baked into an image during its
+build. Runtime `NEXT_PUBLIC_APP_URL` keeps container configuration consistent, but it
+does not rewrite metadata in an already-built image. To build a local production image
+for a deployment URL, pass the build argument explicitly:
+
+```bash
+docker build --build-arg NEXT_PUBLIC_APP_URL=https://guessmoji.example.com -t guessmoji:local .
+```
+
+To build with Compose instead of pulling an image, uncomment the `build` block in
+`docker-compose.yml`; its commented `args` entry passes the value from `.env` to the
+Docker build.
+
+To update an existing Compose deployment that uses the published image, pull the new
+image and recreate the service:
+
+```bash
+docker compose pull
+docker compose up -d --force-recreate
+docker compose ps
+```
+
+The example Compose file tracks the convenient `latest` tag. For reproducible
+deployments, replace it with an immutable commit-SHA or release tag before pulling.
 
 ## Use a Published GHCR Image
 
@@ -228,7 +250,7 @@ Typical proxy settings:
 
 - Forward hostname: the container host or Docker service name.
 - Forward port: `3000`.
-- Public URL: set `NEXT_PUBLIC_APP_URL` to your public HTTPS URL.
+- Public URL: build the image with `NEXT_PUBLIC_APP_URL` set to your public HTTPS URL.
 - WebSocket support: not required for the MVP.
 
 HTTPS is recommended for public deployments and for clean social preview metadata.
@@ -258,9 +280,11 @@ Unraid notes:
 
 - Use any open host port if `3000` is already taken.
 - Point your reverse proxy to the chosen host port or to container port `3000`.
-- Set `NEXT_PUBLIC_APP_URL` to the public URL for your deployment. Production
-  values must include the full `https://` scheme, such as
-  `https://guessmoji.example.com`.
+- When building your own production image, pass `NEXT_PUBLIC_APP_URL` as a Docker
+  build argument set to the public URL. Production values must include the full
+  `https://` scheme, such as `https://guessmoji.example.com`.
+- A prebuilt GHCR image carries the metadata URL from its build; setting this variable
+  only at container runtime cannot change that image's social preview tags.
 - Keep `.env` limited to safe public values unless you intentionally add secrets later.
 
 ## Social Preview Metadata
@@ -272,9 +296,10 @@ The app uses local assets for social previews and install metadata:
 - Web manifest: `public/site.webmanifest`
 - Favicons: files in `public/`
 
-Update `NEXT_PUBLIC_APP_URL` before building a production image so Open Graph and
-Twitter metadata resolve against the correct deployment URL. Use an absolute URL
-with `https://` for public deployments.
+Pass `NEXT_PUBLIC_APP_URL` before building a production image so Open Graph and Twitter
+metadata resolve against the correct deployment URL. Use an absolute URL with
+`https://` for public deployments. A prebuilt image must be rebuilt and republished if
+its metadata URL needs to change.
 
 ## Troubleshooting
 

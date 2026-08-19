@@ -62,3 +62,4 @@
 2026-08-19 05:23: Added the 20-card Harry Potter category with normalized component bans, duplicate/Random Mix regressions, and source-backed Task 8 evidence.
 2026-08-19 05:45: Applied Harry Potter fix round 1: corrected Dumbledore's alchemy fact and separated Golden Snitch/Quidditch clues; fresh staged delta blind review pending.
 2026-08-19 06:05: Closed the Harry Potter audit and added dynamic catalog invariants, category-aligned audit packet balancing, ten-card round history, and final generic count documentation.
+2026-08-19 06:30: Hardened Docker build metadata, added pull-request validation and GHCR update guidance, and cleaned tracked temporary audit evidence.
