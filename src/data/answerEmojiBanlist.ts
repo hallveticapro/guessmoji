@@ -271,6 +271,8 @@ export const answerEmojiBanlist = {
   "seaweed snacks": ["🌿", "🌊"],
   "string cheese": ["🧀", "🧵", "🧶", "🪢"],
   "animal crackers": ["🐾", "🍪", "🍘"],
+  hummus: ["🧆"],
+  jerky: ["🥩", "🍖"],
   "french toast": ["🍞"],
   "hash browns": ["🥔"],
   "eggs benedict": ["🍳"],

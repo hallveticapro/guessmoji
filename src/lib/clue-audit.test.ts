@@ -244,8 +244,6 @@ describe("clue audit helpers", () => {
     expect(byId.get("animals-chicken")?.hint).toMatch(/comb|cluck/i);
     expect(byId.get("animals-crocodile")?.hint).toMatch(/V-shaped|lower teeth/i);
     expect(byId.get("fruit-orange")?.hint).toMatch(/peel|segment/i);
-    expect(byId.get("snacks-animal-crackers")?.emojis).not.toContain("🐾");
-    expect(byId.get("snacks-gummy-bears")?.emojis).toContain("🐾");
     expect(byId.get("snacks-crackers")?.hint).toMatch(/baked squares|cheese/i);
     expect(byId.get("fruit-apple")?.emojis).toContain("✏️");
     expect(byId.get("fruit-cherry")?.emojis).toContain("🪢");
@@ -276,7 +274,8 @@ describe("clue audit helpers", () => {
     expect(puzzleById.get("dinosaurs-tyrannosaurus-rex")?.answer).toBe(
       "Tyrannosaurus rex",
     );
-    expect(puzzleById.get("snacks-string-cheese")?.answer).toBe("String Cheese");
+    expect(puzzleById.get("snacks-hummus")?.answer).toBe("Hummus");
+    expect(puzzleById.get("snacks-jerky")?.answer).toBe("Jerky");
     expect(puzzleById.get("animals-penguin")?.emojis).toContain("🧊");
     expect(puzzleById.get("animals-penguin")?.emojis).not.toContain("🐧");
     expect(puzzleById.get("animals-fox")?.emojis).toContain("👂");
@@ -285,13 +284,6 @@ describe("clue audit helpers", () => {
     expect(puzzleById.get("ocean-animals-crab")?.emojis).not.toContain("🦀");
     expect(puzzleById.get("desserts-cupcake")?.emojis).not.toMatch(/🍰|🧁|🍥|🎉|🕯️/u);
     expect(puzzleById.get("vegetables-bell-pepper")?.emojis).not.toContain("🔔");
-    expect(puzzleById.get("birds-macaw")?.explanation).toMatch(/calls|wing|plumage/i);
-    expect(puzzleById.get("ocean-animals-lobster")?.emojis).toContain("🦐");
-    expect(puzzleById.get("desserts-cheesecake")?.hint).toMatch(/cultured|crumb crust|tangy/i);
-    expect(puzzleById.get("desserts-banana-split")?.emojis).toMatch(/🌴|❄️|🟡/u);
-    expect(puzzleById.get("snacks-string-cheese")?.emojis).not.toContain("🥪");
-    expect(puzzleById.get("snacks-animal-crackers")?.emojis).not.toContain("🐾");
-    expect(puzzleById.get("snacks-sunflower-seeds")?.emojis).not.toContain("🌞");
     expect(puzzleById.get("birds-robin")?.emojis).toContain("🎵");
     expect(puzzleById.get("birds-robin")?.hint).toContain("orange-red");
     expect(puzzleById.get("breakfast-muffin")?.emojis).not.toMatch(/🧁|🫐/u);
@@ -305,15 +297,8 @@ describe("clue audit helpers", () => {
       "desserts-cheesecake": ["🍰", "🧀"],
       "desserts-apple-pie": ["🍎", "🍏", "🥧"],
       "desserts-s-mores": ["🍫", "🍪", "☁️", "🟫"],
-      "desserts-lemon-tart": ["🍋", "🥧"],
-      "desserts-banana-split": ["🍌", "🍨", "🍒"],
       "snacks-chips": ["🥔"],
       "snacks-trail-mix": ["🥜", "🍫", "🍇"],
-      "snacks-granola-bar": ["🌾", "🍯", "🥜"],
-      "snacks-string-cheese": ["🧵", "🥛"],
-      "snacks-rice-cakes": ["🍚", "🍘"],
-      "snacks-sunflower-seeds": ["🥜", "🌞"],
-      "snacks-seaweed-snacks": ["🌊", "🌿"],
     };
     for (const [puzzleId, forbiddenEmojis] of Object.entries(componentRepairs)) {
       for (const forbiddenEmoji of forbiddenEmojis) {

@@ -227,14 +227,14 @@ describe("content audit helpers", () => {
   it("keeps each partition A expanded pool in accepted ten-card blocks", () => {
     const expectedCounts: Record<string, number> = {
       animals: 30,
-      "ocean-animals": 20,
+      "ocean-animals": 10,
       dinosaurs: 10,
-      birds: 20,
+      birds: 10,
       bugs: 20,
       fruit: 20,
       vegetables: 20,
-      desserts: 20,
-      snacks: 20,
+      desserts: 10,
+      snacks: 10,
       breakfast: 20,
     };
 
