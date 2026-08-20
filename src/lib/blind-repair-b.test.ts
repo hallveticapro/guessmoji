@@ -526,9 +526,9 @@ const repairedCards = [
     "categoryId": "books",
     "answer": "The BFG",
     "difficulty": "medium",
-    "emojis": "👧👣💭🫙🌙",
-    "hint": "A towering visitor enters a child's dreams and stores them in jars for a nighttime mission.",
-    "explanation": "👧 is the child; 👣 suggest the visitor's giant footsteps; 💭 are the dreams; 🫙 evokes the dream jars; 🌙 sets the nighttime mission."
+    "emojis": "🧍‍♂️📏💭🫙🗣️",
+    "hint": "A kind, towering visitor collects dreams in jars and speaks in playful made-up words.",
+    "explanation": "🧍‍♂️📏 show the visitor's unusual height; 💭 are the dreams; 🫙 holds them; 🗣️ signals the visitor's playful invented speech."
   },
   {
     "id": "myths-loki",
@@ -589,9 +589,9 @@ const repairedCards = [
     "categoryId": "world-landmarks",
     "answer": "Victoria Memorial",
     "difficulty": "medium",
-    "emojis": "🏛️👑🤍🖼️🇮🇳",
-    "hint": "A Kolkata museum with white marble and formal gardens honors a British queen.",
-    "explanation": "🏛️ is the landmark building; 👑 honors the British queen; 🤍 gives the white marble; 🖼️ supplies the museum function; 🇮🇳 locates Kolkata in India."
+    "emojis": "🏛️🖼️🇬🇧🇮🇳🌆",
+    "hint": "A Kolkata museum in formal gardens commemorates a British monarch.",
+    "explanation": "🏛️ is the landmark building; 🖼️ signals its museum; 🇬🇧 gives the British royal connection; 🇮🇳 locates India; 🌆 gives the Kolkata city setting."
   },
   {
     "id": "us-landmarks-white-house",
@@ -634,9 +634,9 @@ const repairedCards = [
     "categoryId": "us-landmarks",
     "answer": "Mount Vernon",
     "difficulty": "medium",
-    "emojis": "🌊🌳🏡🛶🪶",
-    "hint": "A Virginia riverside estate preserves the home of America's first president.",
-    "explanation": "🌊 gives the Potomac setting; 🌳 gives the estate grounds; 🏡 makes the answer a residence rather than a civic memorial; 🛶 reinforces the riverside setting; 🪶 evokes the founding-era history."
+    "emojis": "🌊🌳🏡🪖1️⃣",
+    "hint": "A Virginia estate beside the Potomac preserves the home of the nation's first president.",
+    "explanation": "🌊 is the Potomac setting; 🌳 are the estate grounds; 🏡 is the preserved residence; 🪖 recalls its owner's Revolutionary-era military service; 1️⃣ marks his role as the nation's first president."
   },
   {
     "id": "us-landmarks-mammoth-cave",

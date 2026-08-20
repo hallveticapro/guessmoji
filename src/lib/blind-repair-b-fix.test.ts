@@ -221,9 +221,9 @@ const repairManifest = [
     categoryId: "world-landmarks",
     answer: "Victoria Memorial",
     difficulty: "medium",
-    emojis: "🏛️👑🤍🖼️🇮🇳",
-    hint: "A Kolkata museum with white marble and formal gardens honors a British queen.",
-    explanation: "🏛️ is the landmark building; 👑 honors the British queen; 🤍 gives the white marble; 🖼️ supplies the museum function; 🇮🇳 locates Kolkata in India.",
+    emojis: "🏛️🖼️🇬🇧🇮🇳🌆",
+    hint: "A Kolkata museum in formal gardens commemorates a British monarch.",
+    explanation: "🏛️ is the landmark building; 🖼️ signals its museum; 🇬🇧 gives the British royal connection; 🇮🇳 locates India; 🌆 gives the Kolkata city setting.",
   },
   {
     id: "world-geography-nile-river",
