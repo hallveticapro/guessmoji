@@ -227,8 +227,8 @@ describe("clue audit helpers", () => {
     expect(get("books-magic-tree-house").emojis).not.toContain("🌳");
     expect(get("books-magic-tree-house").emojis).not.toContain("🏠");
 
-    expect(get("minecraft-diamond-sword").explanation).toContain("close-range fighter");
-    expect(get("minecraft-diamond-sword").hint).toContain("blue-edged melee weapon");
+    expect(get("minecraft-diamond-sword").explanation).toContain("close combat");
+    expect(get("minecraft-diamond-sword").hint).toContain("high-tier Minecraft melee item");
     expect(get("minecraft-crafting-table").explanation).toContain("three-by-three");
     expect(get("books-dog-man").explanation).toContain("🦴");
     expect(get("world-geography-mediterranean-sea").explanation).toContain("🌊");
@@ -452,7 +452,7 @@ describe("clue audit helpers", () => {
     expect(
       getCategoryEmojiUsage(expandedPuzzles.filter((puzzle) => puzzle.categoryId === "books"))
         .get("📚")?.count ?? 0,
-    ).toBe(1);
+    ).toBe(0);
 
     expect(getCategoryEmojiUsage(expandedPuzzles.filter((puzzle) => puzzle.categoryId === "math")).get("🧮")?.count ?? 0).toBeLessThanOrEqual(2);
     expect(getCategoryEmojiUsage(expandedPuzzles.filter((puzzle) => puzzle.categoryId === "world-geography")).get("🌊")?.count ?? 0).toBeLessThanOrEqual(6);
@@ -507,7 +507,8 @@ describe("clue audit helpers", () => {
     expect(get("math-graph").emojis).not.toMatch(/[📊📈]/u);
     expect(get("world-landmarks-eiffel-tower").emojis).not.toContain("📸");
     expect(get("minecraft-diamond-sword").difficulty).toBe("medium");
-    expect(get("books-the-cat-in-the-hat").emojis).toContain("🌀");
+    expect(get("books-the-cat-in-the-hat").emojis).not.toContain("🌀");
+    expect(get("books-the-cat-in-the-hat").emojis).toContain("1️⃣");
     expect(get("world-geography-greenland").hint).not.toMatch(/Greenland/i);
 
     const geographyIds = [

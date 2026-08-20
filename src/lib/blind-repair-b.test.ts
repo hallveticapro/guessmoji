@@ -16,10 +16,10 @@ const repairedCards = [
     "id": "sports-track-and-field",
     "categoryId": "sports",
     "answer": "Track and Field",
-    "difficulty": "easy",
-    "emojis": "🏃‍♂️↗️🪨📏",
-    "hint": "One competition combines track races with jumping and throwing events.",
-    "explanation": "🏃‍♂️ is the running program; ↗️ marks a jump; 🪨 is a thrown implement; 📏 records measured distance."
+    "difficulty": "medium",
+    "emojis": "🏃‍♂️↗️🥏📏",
+    "hint": "A multi-event program combines races with measured jumps and throws.",
+    "explanation": "🏃‍♂️ gives the races; ↗️ marks a jump; 🥏 evokes a discus throw; 📏 records the measured mark."
   },
   {
     "id": "sports-wrestling",
@@ -34,10 +34,10 @@ const repairedCards = [
     "id": "sports-skateboarding",
     "categoryId": "sports",
     "answer": "Skateboarding",
-    "difficulty": "easy",
-    "emojis": "🛝🪖↗️🌀",
-    "hint": "A rider links turns and tricks on a board at streets, ramps, or parks.",
-    "explanation": "🛝 is a ramp; 🪖 is protective gear; ↗️ shows an airborne trick; 🌀 is a spin."
+    "difficulty": "medium",
+    "emojis": "🛝🪖↗️🧱",
+    "hint": "An action sport sends a rider over ramps and ledges on a small wheeled platform.",
+    "explanation": "🛝 is the ramp; 🪖 is protective gear; ↗️ shows an airborne trick; 🧱 is an urban ledge or park feature."
   },
   {
     "id": "sports-bowling",
@@ -52,10 +52,10 @@ const repairedCards = [
     "id": "sports-snowboarding",
     "categoryId": "sports",
     "answer": "Snowboarding",
-    "difficulty": "easy",
-    "emojis": "1️⃣🪖↔️🌀🏔️",
-    "hint": "A winter rider links turns and tricks on one broad surface.",
-    "explanation": "1️⃣ signals one broad runner; 🪖 is protective gear; ↔️ shows linked turns; 🌀 is a trick; 🏔️ is the mountain slope."
+    "difficulty": "medium",
+    "emojis": "🏔️🪖↔️🌀🧊",
+    "hint": "A winter action sport uses sideways carving, jumps, and rails on a single runner.",
+    "explanation": "🏔️ is the slope; 🪖 is safety gear; ↔️ shows sideways carving; 🌀 is a trick; 🧊 marks the icy course."
   },
   {
     "id": "outdoor-games-four-square",
@@ -106,10 +106,10 @@ const repairedCards = [
     "id": "party-games-simon-says",
     "categoryId": "party-games",
     "answer": "Simon Says",
-    "difficulty": "easy",
-    "emojis": "📣👂🫡👣🔁",
-    "hint": "Copy a caller's movement only when the command begins with the permission phrase.",
-    "explanation": "📣 is the caller; 👂 means listen; 🫡 signals obeying a valid command; 👣 are copied steps; 🔁 repeats turns."
+    "difficulty": "medium",
+    "emojis": "📣👂🛑👣🫡",
+    "hint": "Players move only when a leader begins an instruction with a special two-word cue.",
+    "explanation": "📣 is the leader; 👂 means listen; 🛑 marks waiting for the cue; 👣 are the movements; 🫡 shows following a valid instruction."
   },
   {
     "id": "party-games-rock-paper-scissors",
@@ -170,9 +170,9 @@ const repairedCards = [
     "categoryId": "arcade-classics",
     "answer": "Track & Field",
     "difficulty": "medium",
-    "emojis": "🕹️🔘🔘↗️🎯",
-    "hint": "Mash buttons through running, jumping, and throwing events in one arcade title.",
-    "explanation": "🕹️ starts the cabinet; 🔘🔘 show rapid button mashing; ↗️ is a jump; 🎯 is a throwing target."
+    "emojis": "🕹️🔘🔘🏃‍♂️🥏",
+    "hint": "A classic arcade sports title rewards rapid button presses across races, jumps, and throws.",
+    "explanation": "🕹️ is the arcade cabinet; 🔘🔘 show rapid button mashing; 🏃‍♂️ is a race; 🥏 evokes a measured throwing event."
   },
   {
     "id": "pokemon-mew",
@@ -224,9 +224,9 @@ const repairedCards = [
     "categoryId": "minecraft",
     "answer": "Diamond Sword",
     "difficulty": "medium",
-    "emojis": "🟦🤺💥🛡️",
-    "hint": "A blue-edged melee weapon is crafted from the rarest common gem tier.",
-    "explanation": "🟦 marks the blue high-tier material; 🤺 shows a close-range fighter; 💥 is a hit; 🛡️ is the protected opponent."
+    "emojis": "🟦👊💥🧱",
+    "hint": "A high-tier Minecraft melee item deals damage at close range.",
+    "explanation": "🟦 marks the blue high-tier material; 👊 shows close combat; 💥 is the hit; 🧱 is the block target."
   },
   {
     "id": "minecraft-crafting-table",
@@ -242,9 +242,9 @@ const repairedCards = [
     "categoryId": "minecraft",
     "answer": "Pickaxe",
     "difficulty": "medium",
-    "emojis": "🕳️🪨🪵⚒️",
-    "hint": "A two-ended mining tool breaks stone and ore.",
-    "explanation": "🕳️ and 🪨 place the tool in a mine; 🪵 is the shaft; ⚒️ shows the two-ended working head."
+    "emojis": "🕳️🪨🪵💥",
+    "hint": "A handheld tool breaks stone and ore with a pointed striking head.",
+    "explanation": "🕳️ opens the mine; 🪨 is the broken material; 🪵 is the handle; 💥 shows the striking work."
   },
   {
     "id": "minecraft-bee-nest",
@@ -268,10 +268,10 @@ const repairedCards = [
     "id": "science-electricity",
     "categoryId": "science",
     "answer": "Electricity",
-    "difficulty": "easy",
-    "emojis": "💡🏠📡🔋",
-    "hint": "The flow of charge powers lights, signals, and everyday devices.",
-    "explanation": "💡 shows light; 🏠 and 📡 show powered homes and signals; 🔋 is stored charge."
+    "difficulty": "medium",
+    "emojis": "🔋🔌💡📡",
+    "hint": "Charge moving through a system powers light, communication, and devices.",
+    "explanation": "🔋 supplies charge; 🔌 gives the connection; 💡 shows light; 📡 shows powered communication."
   },
   {
     "id": "science-ecosystem",
@@ -412,19 +412,19 @@ const repairedCards = [
     "id": "weather-blizzard",
     "categoryId": "weather",
     "answer": "Blizzard",
-    "difficulty": "easy",
-    "emojis": "🌬️🌨️🛣️⚠️",
-    "hint": "A severe snowstorm combines strong wind, blowing snow, and near-zero visibility.",
-    "explanation": "🌬️ is strong wind; 🌨️ is blowing snow; 🛣️ shows dangerous travel; ⚠️ warns of the storm."
+    "difficulty": "medium",
+    "emojis": "🌬️🌨️🚧🌫️",
+    "hint": "A winter storm brings sustained wind, blowing snow, and dangerously low visibility.",
+    "explanation": "🌬️ is sustained wind; 🌨️ is blowing snow; 🚧 shows travel being blocked; 🌫️ shows the lost visibility."
   },
   {
     "id": "math-circle",
     "categoryId": "math",
     "answer": "Circle",
     "difficulty": "easy",
-    "emojis": "🎯📏🧭🔄",
-    "hint": "A round boundary keeps every point the same distance from its center.",
-    "explanation": "🎯 marks a center; 📏 measures the radius; 🧭 traces equal directions; 🔄 captures the closed round boundary."
+    "emojis": "🎯📏🧭🧵",
+    "hint": "A drawing tool can trace it from one fixed center at one distance.",
+    "explanation": "🎯 marks the center; 📏 measures the radius; 🧭 traces the fixed distance; 🧵 follows the closed boundary."
   },
   {
     "id": "math-graph",
@@ -467,18 +467,18 @@ const repairedCards = [
     "categoryId": "math",
     "answer": "Rectangle",
     "difficulty": "easy",
-    "emojis": "↔️↕️🟰🪞",
-    "hint": "A four-sided figure has four right angles and equal opposite sides, not necessarily all equal.",
-    "explanation": "↔️ and ↕️ show horizontal and vertical sides; 🟰 pairs opposite lengths; 🪞 suggests right-angled symmetry."
+    "emojis": "🪟📏📐↔️",
+    "hint": "A four-sided shape keeps opposite lengths alike while its long and short spans can differ.",
+    "explanation": "🪟 gives a rectangular frame; 📏 measures its spans; 📐 marks right corners; ↔️ emphasizes the longer horizontal direction."
   },
   {
     "id": "math-square",
     "categoryId": "math",
     "answer": "Square",
     "difficulty": "easy",
-    "emojis": "🟰🪞🔄↔️",
-    "hint": "A four-sided figure has four equal sides and four right angles.",
-    "explanation": "🟰 gives equal sides; 🪞 shows mirror symmetry; 🔄 shows rotational symmetry; ↔️ covers both directions."
+    "emojis": "🏁🧩📐🟰",
+    "hint": "A tile keeps the same side length in every direction and meets at right corners.",
+    "explanation": "🏁 gives a grid of equal square cells; 🧩 gives a tile-like form; 📐 marks right corners; 🟰 shows equal side lengths."
   },
   {
     "id": "math-cube",
@@ -502,19 +502,19 @@ const repairedCards = [
     "id": "books-the-cat-in-the-hat",
     "categoryId": "books",
     "answer": "The Cat in the Hat",
-    "difficulty": "easy",
-    "emojis": "🟥⬜👣🚪🌀",
-    "hint": "A bored child meets a mischievous striped visitor on a rainy day.",
-    "explanation": "🟥 and ⬜ create the famous striped palette; 👣 and 🚪 introduce an unexpected visitor; 🌀 is the rainy-day chaos."
+    "difficulty": "medium",
+    "emojis": "🟥⬜1️⃣2️⃣🚪",
+    "hint": "A playful intruder brings two numbered companions into a quiet home.",
+    "explanation": "🟥⬜ create the visitor's striped palette; 1️⃣2️⃣ are the two numbered companions; 🚪 is the unexpected doorway arrival."
   },
   {
     "id": "books-matilda",
     "categoryId": "books",
     "answer": "Matilda",
     "difficulty": "easy",
-    "emojis": "📚👧🧠🪑⬆️",
-    "hint": "A brilliant young reader uses mind powers against cruel adults at school.",
-    "explanation": "📚 and 👧 show the brilliant reader; 🧠 is her unusual power; 🪑⬆️ depicts furniture lifted by thought."
+    "emojis": "👧🧠🪑⬆️🏫",
+    "hint": "A gifted child turns an unfair school upside down with her mind.",
+    "explanation": "👧 is the gifted child; 🧠 signals unusual mental power; 🪑⬆️ shows furniture lifted by thought; 🏫 is the school."
   },
   {
     "id": "books-the-bfg",
@@ -530,9 +530,9 @@ const repairedCards = [
     "categoryId": "myths",
     "answer": "Loki",
     "difficulty": "medium",
-    "emojis": "🦊🌀🪶⛓️",
-    "hint": "A Norse trickster is known for shapeshifting and causing trouble among the gods.",
-    "explanation": "🦊 is the trickster; 🌀 shows shapeshifting; 🪶 evokes Norse ravens; ⛓️ recalls his binding."
+    "emojis": "🦊🌀⛓️🐍",
+    "hint": "A Norse shapeshifter repeatedly upsets the gods and slips between forms.",
+    "explanation": "🦊 gives the trickster; 🌀 shows changing forms; ⛓️ recalls the binding punishment; 🐍 connects to Loki's serpent-linked mythology."
   },
   {
     "id": "myths-ra",
@@ -565,19 +565,19 @@ const repairedCards = [
     "id": "world-landmarks-great-wall-of-china",
     "categoryId": "world-landmarks",
     "answer": "Great Wall of China",
-    "difficulty": "easy",
-    "emojis": "↪️🏯🛡️👀",
-    "hint": "A miles-long defensive barrier winds across northern China.",
-    "explanation": "↪️ shows a long winding route; 🏯 evokes watchtowers; 🛡️ is defense; 👀 is the lookout."
+    "difficulty": "medium",
+    "emojis": "↪️🏯🛡️👀📏",
+    "hint": "A centuries-old frontier defense winds for miles across northern terrain.",
+    "explanation": "↪️ shows the winding route; 🏯 gives watchtowers; 🛡️ is defense; 👀 is the lookout; 📏 emphasizes the long span."
   },
   {
     "id": "world-landmarks-golden-temple",
     "categoryId": "world-landmarks",
     "answer": "Golden Temple",
     "difficulty": "medium",
-    "emojis": "✨🟡💧🧢🤝",
-    "hint": "A Sikh gurdwara with a gold-covered sanctum stands in a sacred pool at Amritsar.",
-    "explanation": "✨ and 🟡 show the gold-covered shrine; 💧 is the sacred pool; 🧢 evokes Sikh worship; 🤝 is the welcoming gurdwara community."
+    "emojis": "✨🟡💧🤝",
+    "hint": "A welcoming gurdwara centers a gold-covered shrine in a sacred pool.",
+    "explanation": "✨🟡 show the gold-covered shrine; 💧 is the sacred pool; 🤝 represents the welcoming gurdwara community."
   },
   {
     "id": "world-landmarks-victoria-memorial",
@@ -585,35 +585,35 @@ const repairedCards = [
     "answer": "Victoria Memorial",
     "difficulty": "medium",
     "emojis": "🏛️👑🌳📚🌴",
-    "hint": "Kolkata's white-marble memorial combines a royal statue, gardens, and a museum.",
+    "hint": "Kolkata's white-marble museum honors a British queen in formal gardens.",
     "explanation": "🏛️ is a memorial building; 👑 honors the monarch; 🌳 is its garden; 📚 is the museum; 🌴 hints at Kolkata's setting."
   },
   {
     "id": "us-landmarks-white-house",
     "categoryId": "us-landmarks",
     "answer": "White House",
-    "difficulty": "easy",
-    "emojis": "🧑‍⚖️🏛️🌳📣",
-    "hint": "The president's official residence and workplace stands behind a formal lawn in Washington, D.C.",
-    "explanation": "🧑‍⚖️ is the chief executive; 🏛️ is the formal government building; 🌳 is the lawn; 📣 evokes public addresses."
+    "difficulty": "medium",
+    "emojis": "🏛️🧑‍💼🪑🌳📣",
+    "hint": "The U.S. president both lives and works in this famous executive building.",
+    "explanation": "🏛️ is the official building; 🧑‍💼 is the executive workplace; 🪑 suggests the office; 🌳 is the lawn; 📣 evokes public addresses."
   },
   {
     "id": "us-landmarks-gateway-arch",
     "categoryId": "us-landmarks",
     "answer": "Gateway Arch",
     "difficulty": "medium",
-    "emojis": "🌊🏙️⬆️↔️🛣️",
-    "hint": "A stainless-steel monument spans the skyline beside the Mississippi in St. Louis.",
-    "explanation": "🌊 places the landmark by the Mississippi; 🏙️ is St. Louis; ⬆️ and ↔️ give the towering span; 🛣️ is the gateway route."
+    "emojis": "🌊🏙️🚋⬆️↔️",
+    "hint": "A shiny landmark beside a major waterway carries visitors upward in a Midwestern city.",
+    "explanation": "🌊 places the landmark beside the Mississippi; 🏙️ gives the city setting; 🚋 is the tram inside; ⬆️↔️ show the rising span."
   },
   {
     "id": "us-landmarks-washington-monument",
     "categoryId": "us-landmarks",
     "answer": "Washington Monument",
     "difficulty": "easy",
-    "emojis": "🪨⬆️📜🌳",
-    "hint": "A tall pointed stone monument honors George Washington on the National Mall.",
-    "explanation": "🪨 is the stone monument; ⬆️ gives its height; 📜 honors the nation's founder; 🌳 evokes the National Mall."
+    "emojis": "🪨⬆️🔺🌳",
+    "hint": "A pointed stone landmark rises from the National Mall in the capital.",
+    "explanation": "🪨 is the stone; ⬆️ gives the height; 🔺 shows the pointed obelisk profile; 🌳 evokes the National Mall."
   },
   {
     "id": "us-landmarks-independence-hall",
@@ -646,10 +646,10 @@ const repairedCards = [
     "id": "world-geography-africa",
     "categoryId": "world-geography",
     "answer": "Africa",
-    "difficulty": "easy",
-    "emojis": "🌍🧭↔️☀️",
-    "hint": "The second-largest continent stretches from the Mediterranean to southern oceans.",
-    "explanation": "🌍 gives continental scale; 🧭 shows a broad north–south span; ↔️ marks its width; ☀️ evokes varied climates."
+    "difficulty": "medium",
+    "emojis": "🧭↕️🏜️🌴🌋",
+    "hint": "A continent spans Mediterranean shores, equatorial forests, and southern grasslands.",
+    "explanation": "🧭↕️ show the broad north-to-south span; 🏜️ gives desert landscapes; 🌴 gives tropical regions; 🌋 adds varied landforms."
   },
   {
     "id": "world-geography-island",
@@ -684,7 +684,7 @@ const repairedCards = [
     "answer": "Nile River",
     "difficulty": "easy",
     "emojis": "🏜️🌊🌱🏺↘️",
-    "hint": "A long African river flows north through Egypt to a delta.",
+    "hint": "A long African waterway runs north through Egypt before reaching the Mediterranean.",
     "explanation": "🏜️ is the desert; 🌊 is the river; 🌱 is its fertile edge; 🏺 places it in Egypt; ↘️ shows flow to the delta."
   },
   {
@@ -693,17 +693,17 @@ const repairedCards = [
     "answer": "Indian Ocean",
     "difficulty": "medium",
     "emojis": "🌊🧭🌴⬇️",
-    "hint": "An ocean lies between eastern Africa, southern Asia, and Australia.",
+    "hint": "A warm sea lies between eastern Africa, southern Asia, and Australia.",
     "explanation": "🌊 is the ocean; 🧭 gives its position between continents; 🌴 evokes tropical shores; ⬇️ marks the southern route."
   },
   {
     "id": "world-geography-arctic-ocean",
     "categoryId": "world-geography",
     "answer": "Arctic Ocean",
-    "difficulty": "easy",
-    "emojis": "🧭🧊⬆️🌬️",
-    "hint": "The smallest ocean surrounds the North Pole beneath sea ice.",
-    "explanation": "🧭 points north; 🧊 is sea ice; ⬆️ marks the top of a world map; 🌬️ gives the polar climate."
+    "difficulty": "medium",
+    "emojis": "🧊⬆️🚢🌬️",
+    "hint": "The poleward sea is Earth's smallest, mostly ice-covered basin.",
+    "explanation": "🧊 is sea ice; ⬆️ marks the poleward position; 🚢 gives the waterway; 🌬️ supplies the polar wind."
   },
   {
     "id": "world-geography-asia",
@@ -727,19 +727,19 @@ const repairedCards = [
     "id": "world-geography-south-america",
     "categoryId": "world-geography",
     "answer": "South America",
-    "difficulty": "easy",
+    "difficulty": "medium",
     "emojis": "🗺️🏔️🌿🌋⬇️",
-    "hint": "A continent south of North America spans the Andes, Amazon, and southern plains.",
+    "hint": "A continent stretches from the Caribbean edge toward Cape Horn, crossing the Andes and Amazon Basin.",
     "explanation": "🗺️ gives continental scale; 🏔️ is the Andes; 🌿 is the Amazon; 🌋 and ⬇️ span its landforms from north to south."
   },
   {
     "id": "world-geography-himalayas",
     "categoryId": "world-geography",
     "answer": "Himalayas",
-    "difficulty": "easy",
-    "emojis": "📏⬆️❄️🧗‍♀️🗺️",
-    "hint": "A high mountain system across South Asia includes Earth's highest peaks.",
-    "explanation": "📏 and ⬆️ emphasize extreme height; ❄️ and 🧗‍♀️ show snowy climbing; 🗺️ places the range in South Asia."
+    "difficulty": "medium",
+    "emojis": "🇳🇵📏❄️🧗‍♀️",
+    "hint": "A range along the Indian–Eurasian collision includes the planet's highest summit.",
+    "explanation": "🇳🇵 places the range by Nepal; 📏 emphasizes extreme height; ❄️ shows snow; 🧗‍♀️ shows high-altitude climbing."
   },
   {
     "id": "world-geography-danube-river",
@@ -747,7 +747,7 @@ const repairedCards = [
     "answer": "Danube River",
     "difficulty": "medium",
     "emojis": "🏛️🏛️🏛️🚢➡️",
-    "hint": "A European river passes Vienna, Bratislava, Budapest, and Belgrade before reaching the Black Sea.",
+    "hint": "A long waterway links four capital cities before reaching the Black Sea.",
     "explanation": "🏛️🏛️🏛️ represent the capitals along its course; 🚢 shows navigable travel; ➡️ marks the long route east."
   }
 ] as const;
@@ -777,6 +777,71 @@ const difficultyChanges = [
     "id": "weather-cloud",
     "from": "easy",
     "to": "medium"
+  },
+  {
+    "id": "sports-track-and-field",
+    "from": "easy",
+    "to": "medium"
+  },
+  {
+    "id": "sports-skateboarding",
+    "from": "easy",
+    "to": "medium"
+  },
+  {
+    "id": "sports-snowboarding",
+    "from": "easy",
+    "to": "medium"
+  },
+  {
+    "id": "party-games-simon-says",
+    "from": "easy",
+    "to": "medium"
+  },
+  {
+    "id": "science-electricity",
+    "from": "easy",
+    "to": "medium"
+  },
+  {
+    "id": "weather-blizzard",
+    "from": "easy",
+    "to": "medium"
+  },
+  {
+    "id": "books-the-cat-in-the-hat",
+    "from": "easy",
+    "to": "medium"
+  },
+  {
+    "id": "world-landmarks-great-wall-of-china",
+    "from": "easy",
+    "to": "medium"
+  },
+  {
+    "id": "us-landmarks-white-house",
+    "from": "easy",
+    "to": "medium"
+  },
+  {
+    "id": "world-geography-africa",
+    "from": "easy",
+    "to": "medium"
+  },
+  {
+    "id": "world-geography-arctic-ocean",
+    "from": "easy",
+    "to": "medium"
+  },
+  {
+    "id": "world-geography-himalayas",
+    "from": "easy",
+    "to": "medium"
+  },
+  {
+    "id": "world-geography-south-america",
+    "from": "easy",
+    "to": "medium"
   }
 ] as const;
 
@@ -804,6 +869,19 @@ describe("partition B blind-review repairs", () => {
       { id: "science-magnet", from: "easy", to: "medium" },
       { id: "science-matter", from: "easy", to: "medium" },
       { id: "weather-cloud", from: "easy", to: "medium" },
+      { id: "sports-track-and-field", from: "easy", to: "medium" },
+      { id: "sports-skateboarding", from: "easy", to: "medium" },
+      { id: "sports-snowboarding", from: "easy", to: "medium" },
+      { id: "party-games-simon-says", from: "easy", to: "medium" },
+      { id: "science-electricity", from: "easy", to: "medium" },
+      { id: "weather-blizzard", from: "easy", to: "medium" },
+      { id: "books-the-cat-in-the-hat", from: "easy", to: "medium" },
+      { id: "world-landmarks-great-wall-of-china", from: "easy", to: "medium" },
+      { id: "us-landmarks-white-house", from: "easy", to: "medium" },
+      { id: "world-geography-africa", from: "easy", to: "medium" },
+      { id: "world-geography-arctic-ocean", from: "easy", to: "medium" },
+      { id: "world-geography-himalayas", from: "easy", to: "medium" },
+      { id: "world-geography-south-america", from: "easy", to: "medium" },
     ]);
 
     for (const change of difficultyChanges) {
