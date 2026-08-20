@@ -1,5 +1,7 @@
 # UPDATES.md
 
+2026-08-20 06:15: Applied the five Partition A final blind repairs and added exact clue, preservation, leak, pair, and repetition regression coverage.
+
 2026-08-20 03:35: Applied all 31 Partition C blind-recheck clue remediations, durable component bans, and exhaustive final-field regression coverage.
 
 2026-06-04 21:17: Initialized project documentation.

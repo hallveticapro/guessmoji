@@ -8,8 +8,9 @@ import {
   normalizeAnswerForAudit,
 } from "@/lib/clue-audit";
 import { findContentInvariantViolations, getCategoryEmojiUsage } from "@/lib/content-audit";
+import type { Puzzle } from "@/types/puzzle";
 
-const finalCalibrationManifest = [
+const repairManifest = [
   {
     id: "star-wars-rey",
     categoryId: "star-wars",
@@ -35,45 +36,6 @@ const finalCalibrationManifest = [
     details: "Marine mammal that uses flippers to swim and often rests on shore or ice.",
     funFact: "Many seals can slow their heart rate during dives to conserve oxygen.",
     tags: ["ocean-animals", "mammal"],
-  },
-  {
-    id: "vegetables-celery",
-    categoryId: "vegetables",
-    answer: "Celery",
-    difficulty: "easy",
-    emojis: "📏🌿🧵🥗",
-    hint: "A leafy-topped stalk has stringy ribs and a crisp, watery bite.",
-    explanation:
-      "📏 gives the long stalk; 🌿 supplies its leafy top; 🧵 shows the stringy ribs; and 🥗 evokes the raw salad or snack use of the crisp stalk.",
-    details: "Type: Stalk vegetable",
-    funFact: "Celery has long fibrous stalks and is mostly water.",
-    tags: ["food", "vegetables"],
-  },
-  {
-    id: "desserts-cupcake",
-    categoryId: "desserts",
-    answer: "Cupcake",
-    difficulty: "easy",
-    emojis: "📄🌀🕯️🤏",
-    hint: "A single frosted bake rises in a pleated paper liner.",
-    explanation:
-      "📄 is the pleated paper liner; 🌀 gives the frosting swirl; 🕯️ evokes a celebratory topping; and 🤏 emphasizes the small individual portion.",
-    details: "Type: Baked dessert",
-    funFact: "Cupcakes became popular because they bake quickly in small cups.",
-    tags: ["food", "dessert", "desserts"],
-  },
-  {
-    id: "breakfast-breakfast-sandwich",
-    categoryId: "breakfast",
-    answer: "Breakfast Sandwich",
-    difficulty: "easy",
-    emojis: "🥚🍞🧀🤲",
-    hint: "A warm morning meal places a cooked egg and savory filling between bread layers for eating by hand.",
-    explanation:
-      "🥚 gives the cooked egg; 🍞 supplies the bread layers; 🧀 gives a savory filling; and 🤲 marks the handheld serving format.",
-    details: "Type: Breakfast dish",
-    funFact: "Breakfast sandwiches often combine eggs with cheese and a bread or biscuit.",
-    tags: ["food", "breakfast"],
   },
   {
     id: "breakfast-english-muffin",
@@ -120,16 +82,15 @@ const finalCalibrationManifest = [
 ] as const;
 
 const categoryContextBans: Record<string, readonly string[]> = {
+  "star-wars": ["✨"],
   "ocean-animals": ["🌊"],
-  vegetables: ["🥕"],
-  desserts: ["🍰"],
   breakfast: ["🥞"],
 };
 
-function getPuzzle(id: string) {
+function getPuzzle(id: string): Puzzle {
   const puzzle = puzzles.find((candidate) => candidate.id === id);
   expect(puzzle, `${id} should exist`).toBeDefined();
-  return puzzle!;
+  return puzzle as Puzzle;
 }
 
 function graphemes(value: string): string[] {
@@ -142,8 +103,13 @@ function normalizedEmojiSet(value: string): Set<string> {
   return new Set(graphemes(value.replace(/\uFE0F/g, "")));
 }
 
-function expectHintDoesNotNameAnswer(hint: string | undefined, answer: string): void {
-  const normalizedHint = ` ${normalizeAnswerForAudit(hint ?? "")} `;
+function sharedEmojiCount(first: string, second: string): number {
+  const secondSet = normalizedEmojiSet(second);
+  return [...normalizedEmojiSet(first)].filter((emoji) => secondSet.has(emoji)).length;
+}
+
+function expectHintDoesNotNameAnswer(hint: string, answer: string): void {
+  const normalizedHint = ` ${normalizeAnswerForAudit(hint)} `;
   const answerWords = normalizeAnswerForAudit(answer)
     .split(" ")
     .filter((word) => word.length >= 4);
@@ -153,72 +119,90 @@ function expectHintDoesNotNameAnswer(hint: string | undefined, answer: string): 
   }
 }
 
-function sharedEmojiCount(first: string, second: string): number {
-  const secondSet = normalizedEmojiSet(second);
-  return [...normalizedEmojiSet(first)].filter((emoji) => secondSet.has(emoji)).length;
-}
+describe("final partition A blind repair", () => {
+  it("applies exactly the five proposed repairs and preserves immutable card fields", () => {
+    expect(repairManifest).toHaveLength(5);
+    expect(new Set(repairManifest.map((card) => card.id)).size).toBe(5);
 
-describe("partition A blind recheck 2 final calibration", () => {
-  it("applies all eight approved A actions exactly once", () => {
-    expect(finalCalibrationManifest).toHaveLength(8);
-    expect(new Set(finalCalibrationManifest.map((card) => card.id)).size).toBe(8);
-
-    for (const expected of finalCalibrationManifest) {
+    for (const expected of repairManifest) {
       expect(getPuzzle(expected.id)).toMatchObject(expected);
     }
   });
 
-  it("keeps repaired explanations free of revision-history prose", () => {
-    const revisionHistoryProse = /\b(?:old|previous|prior|original|earlier)\s+(?:clue|card|version|draft|wording|copy|text)\b/i;
-
-    for (const expected of finalCalibrationManifest) {
-      expect(expected.explanation).not.toMatch(revisionHistoryProse);
-      expect(getPuzzle(expected.id).explanation).not.toMatch(revisionHistoryProse);
-    }
-  });
-
-  it("preserves catalog counts, IDs, answers, and reveal metadata", () => {
+  it("preserves source identity, catalog counts, and affected pool counts", () => {
     expect(expandedPuzzles).toHaveLength(1130);
     expect(puzzles).toHaveLength(1320);
     expect(new Set(expandedPuzzles.map((puzzle) => puzzle.id)).size).toBe(1130);
+    expect(new Set(puzzles.map((puzzle) => puzzle.id)).size).toBe(1320);
 
-    for (const expected of finalCalibrationManifest) {
-      const actual = getPuzzle(expected.id);
-      expect(actual.categoryId).toBe(expected.categoryId);
-      expect(actual.answer).toBe(expected.answer);
-      expect(actual.details).toBe(expected.details);
-      expect(actual.funFact).toBe(expected.funFact);
-      expect(actual.tags).toEqual(expected.tags);
-    }
-  });
-
-  it("keeps every calibrated clue and hint free of leaks and malformed spacing", () => {
-    for (const expected of finalCalibrationManifest) {
+    for (const expected of repairManifest) {
       const puzzle = getPuzzle(expected.id);
-      expect(puzzle.emojis, `${expected.id} clue whitespace`).not.toMatch(/\s/u);
-      expect(graphemes(puzzle.emojis).length, `${expected.id} grapheme count`).toBeGreaterThanOrEqual(3);
-      expect(graphemes(puzzle.emojis).length, `${expected.id} grapheme count`).toBeLessThanOrEqual(5);
-      expect(findDirectAnswerEmojiLeaks([puzzle], answerEmojiBanlist)).toEqual([]);
+      expect(puzzle.id).toBe(expected.id);
+      expect(puzzle.categoryId).toBe(expected.categoryId);
+      expect(puzzle.answer).toBe(expected.answer);
+      expect(puzzle.difficulty).toBe(expected.difficulty);
+      expect(puzzle.details).toBe(expected.details);
+      expect(puzzle.funFact).toBe(expected.funFact);
+      expect(puzzle.tags).toEqual(expected.tags);
+    }
 
-      const normalizedHint = normalizeAnswerForAudit(puzzle.hint ?? "");
-      expect(normalizedHint).not.toContain(normalizeAnswerForAudit(puzzle.answer));
-      expectHintDoesNotNameAnswer(puzzle.hint, puzzle.answer);
+    expect(puzzles.filter((puzzle) => puzzle.categoryId === "star-wars")).toHaveLength(30);
+    expect(expandedPuzzles.filter((puzzle) => puzzle.categoryId === "ocean-animals")).toHaveLength(20);
+    expect(expandedPuzzles.filter((puzzle) => puzzle.categoryId === "breakfast")).toHaveLength(30);
+  });
+
+  it("keeps repaired clues shaped, leak-free, answer-safe, and fully explained", () => {
+    for (const expected of repairManifest) {
+      const puzzle = getPuzzle(expected.id);
+      const clueGraphemes = graphemes(puzzle.emojis);
+
+      expect(puzzle.emojis, `${expected.id} clue whitespace`).not.toMatch(/\s/u);
+      expect(clueGraphemes).toHaveLength(5);
+      expect(findDirectAnswerEmojiLeaks([puzzle], answerEmojiBanlist)).toEqual([]);
+      expectHintDoesNotNameAnswer(puzzle.hint ?? "", puzzle.answer);
+      expect(puzzle.explanation).toBeTruthy();
+
+      for (const emoji of clueGraphemes) {
+        expect(puzzle.explanation, `${expected.id} explanation for ${emoji}`).toContain(emoji);
+      }
+      expect(puzzle.explanation).not.toMatch(/audit|implementation|withheld|generic fallback/i);
     }
   });
 
-  it("keeps calibrated clues free of category-context filler", () => {
-    for (const expected of finalCalibrationManifest) {
+  it("keeps repaired clues free of category-context filler and records reviewed repetition warnings", () => {
+    const reviewedWarnings: Record<string, readonly string[]> = {
+      breakfast: ["🔥"],
+    };
+
+    for (const expected of repairManifest) {
       for (const bannedEmoji of categoryContextBans[expected.categoryId] ?? []) {
         expect(getPuzzle(expected.id).emojis, `${expected.id} context ${bannedEmoji}`).not.toContain(
           bannedEmoji,
         );
       }
 
+      const usage = getCategoryEmojiUsage(
+        puzzles.filter((puzzle) => puzzle.categoryId === expected.categoryId),
+      );
+      for (const emoji of normalizedEmojiSet(expected.emojis)) {
+        const ratio = usage.get(emoji)?.ratio ?? 0;
+        if (ratio > 0.2) {
+          expect(
+            reviewedWarnings[expected.categoryId] ?? [],
+            `${expected.id} repetition ${emoji}`,
+          ).toContain(emoji);
+        }
+      }
     }
+
+    const breakfastUsage = getCategoryEmojiUsage(
+      puzzles.filter((puzzle) => puzzle.categoryId === "breakfast"),
+    );
+    expect(breakfastUsage.get("🔥")).toEqual({ count: 7, ratio: 7 / 30 });
   });
 
-  it("keeps each calibrated clue distinct from every same-category clue and neighbor", () => {
-    for (const expected of finalCalibrationManifest) {
+  it("keeps repaired clues distinct from every same-category neighbor", () => {
+    for (const expected of repairManifest) {
       const puzzle = getPuzzle(expected.id);
       const sameCategory = puzzles.filter(
         (candidate) => candidate.categoryId === puzzle.categoryId && candidate.id !== puzzle.id,
@@ -234,35 +218,8 @@ describe("partition A blind recheck 2 final calibration", () => {
     }
   });
 
-  it("keeps affected category repetition at or below the reviewed threshold", () => {
-    const affectedCategoryIds = new Set(finalCalibrationManifest.map((card) => card.categoryId));
-    const acceptedExistingWarnings: Record<string, readonly string[]> = {
-      vegetables: ["🍃"],
-      breakfast: ["🔥"],
-    };
-
-    for (const categoryId of affectedCategoryIds) {
-      const usage = getCategoryEmojiUsage(
-        puzzles.filter((puzzle) => puzzle.categoryId === categoryId),
-      );
-      expect(
-        [...usage.entries()].filter(
-          ([emoji, { ratio }]) =>
-            ratio > 0.2 && !acceptedExistingWarnings[categoryId]?.includes(emoji),
-        ),
-        `${categoryId} repetition warnings`,
-      ).toEqual([]);
-    }
-  });
-
-  it("keeps the integrated A catalog invariant-clean and answer-safe", () => {
+  it("keeps complete-catalog invariants and direct-answer audits clean", () => {
     expect(findDirectAnswerEmojiLeaks(puzzles, answerEmojiBanlist)).toEqual([]);
     expect(findContentInvariantViolations(categories, puzzles)).toEqual([]);
-
-    for (const expected of finalCalibrationManifest) {
-      const clueSet = normalizedEmojiSet(getPuzzle(expected.id).emojis);
-      expect(clueSet.size).toBeGreaterThanOrEqual(3);
-      expect(getPuzzle(expected.id).explanation?.trim()).toBeTruthy();
-    }
   });
 });

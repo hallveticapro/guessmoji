@@ -180,9 +180,9 @@ const secondPassARewrites: readonly ExpectedCard[] = [
     categoryId: "star-wars",
     answer: "Rey",
     difficulty: "medium",
-    emojis: "🏜️🪵✨🧑",
+    emojis: "🏜️🪵⚙️🔧🧑",
     hint: "A human scavenger from Jakku follows a Jedi path after discovering her place in the Force.",
-    explanation: "🏜️ places Rey on Jakku; 🪵 gives the carried staff; ✨ represents the Force; and 🧑 identifies her as a human hero.",
+    explanation: "🏜️ places the scavenger on Jakku; 🪵 gives the carried staff; ⚙️ and 🔧 evoke the salvaged machinery and repair work; and 🧑 identifies the human hero.",
   },
   {
     id: "pokemon-i-choose-you",
@@ -216,9 +216,9 @@ const secondPassARewrites: readonly ExpectedCard[] = [
     categoryId: "ocean-animals",
     answer: "Seal",
     difficulty: "medium",
-    emojis: "⚪⚫🧊📣🫧",
+    emojis: "🧊🛌🔘📣🫧",
     hint: "A spotted marine mammal rests on ice and makes a barking call.",
-    explanation: "⚪ and ⚫ suggest the spotted coat; 🧊 gives the ice haul-out; 📣 represents the bark-like call; and 🫧 shows the underwater dives of this buoyant marine mammal.",
+    explanation: "🧊 gives the icy haul-out; 🛌 shows resting on the ice; 🔘 suggests the spotted coat; 📣 evokes the barking call; and 🫧 shows dives beneath the surface.",
   },
   {
     id: "dinosaurs-carnotaurus",
@@ -405,9 +405,9 @@ const secondPassARewrites: readonly ExpectedCard[] = [
     categoryId: "breakfast",
     answer: "English Muffin",
     difficulty: "easy",
-    emojis: "🍞🧩↔️🔘",
+    emojis: "🍞🫧🔪🔥🔘",
     hint: "A round yeast bread splits open to reveal nooks and a coarse surface for toasting.",
-    explanation: "🍞 gives the bread; 🧩 represents its nooks; ↔️ shows the split; and 🔘 supplies the round form.",
+    explanation: "🍞 gives the bread; 🫧 represents the airy nooks; 🔪 shows it split open; 🔥 gives the toasted preparation; and 🔘 supplies the round form.",
   },
   {
     id: "breakfast-quiche",
@@ -432,18 +432,18 @@ const secondPassARewrites: readonly ExpectedCard[] = [
     categoryId: "breakfast",
     answer: "Danish Pastry",
     difficulty: "medium",
-    emojis: "📜✨🍓👐",
+    emojis: "🧈🫧🍯🍓👐",
     hint: "A flaky layered bake holds fruit or cream beneath a glaze.",
-    explanation: "📜 represents flaky laminated layers; ✨ gives the glaze; 🍓 supplies a fruit filling; and 👐 shows the hand-held baked good.",
+    explanation: "🧈 evokes buttery pastry; 🫧 gives the airy, flaky layers; 🍯 marks the glaze; 🍓 supplies a fruit filling; and 👐 shows the hand-held pastry.",
   },
   {
     id: "breakfast-biscuit-and-gravy",
     categoryId: "breakfast",
     answer: "Biscuit and Gravy",
     difficulty: "easy",
-    emojis: "🟤✂️🫗🌶️",
+    emojis: "🫓✂️🫗🌶️🥣",
     hint: "A Southern morning plate pairs split baked rounds with a warm pepper-seasoned sauce.",
-    explanation: "🟤 gives the browned baked rounds; ✂️ shows them split open; 🫗 represents the poured gravy; and 🌶️ supplies the peppered savory seasoning.",
+    explanation: "🫓 gives a round baked-bread association for the biscuit; ✂️ shows it split open; 🫗 and 🥣 show gravy poured over it; and 🌶️ supplies the peppered savory seasoning.",
   },
 ];
 
@@ -700,6 +700,7 @@ describe("partition A blind-review follow-up repairs", () => {
 
     expect(warnings).toEqual([
       { categoryId: "vegetables", emoji: "🍃", count: 7, ratio: 7 / 30 },
+      { categoryId: "breakfast", emoji: "🔥", count: 7, ratio: 7 / 30 },
     ]);
   });
 
@@ -799,6 +800,6 @@ describe("partition A blind-review follow-up repairs", () => {
     expect(countEmoji("vegetables", "🔪")).toBe(3);
     expect(countEmoji("vegetables", "🍃")).toBe(7);
     expect(countEmoji("desserts", "🥄")).toBe(4);
-    expect(countEmoji("breakfast", "🔥")).toBe(6);
+    expect(countEmoji("breakfast", "🔥")).toBe(7);
   });
 });
