@@ -32,6 +32,7 @@ export const answerEmojiBanlist = {
   "black hole": ["🕳️"],
   blender: ["🥤"],
   boat: ["🚤", "🛥️", "⛵"],
+  bowling: ["🎳"],
   broccoli: ["🥦"],
   bulldozer: ["🚜"],
   "bumper cars": ["🚗"],

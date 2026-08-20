@@ -59,18 +59,18 @@ const repairManifest = [
     categoryId: "math",
     answer: "Square",
     difficulty: "easy",
-    emojis: "🏁🧩📐🟰",
-    hint: "A tile keeps the same side length in every direction and meets at right corners.",
-    explanation: "🏁 gives a grid of equal square cells; 🧩 gives a tile-like form; 📐 marks right corners; 🟰 shows equal side lengths.",
+    emojis: "🏁🧩🪞🔄",
+    hint: "A four-sided tile has equal spans, right corners, and quarter-turn symmetry.",
+    explanation: "🏁 gives a checkered equal-cell pattern; 🧩 is the tile-like form; 🪞 shows matching halves; 🔄 gives quarter-turn symmetry.",
   },
   {
     id: "sports-track-and-field",
     categoryId: "sports",
     answer: "Track and Field",
     difficulty: "medium",
-    emojis: "🏃‍♂️↗️🥏📏",
-    hint: "A multi-event program combines races with measured jumps and throws.",
-    explanation: "🏃‍♂️ gives the races; ↗️ marks a jump; 🥏 evokes a discus throw; 📏 records the measured mark.",
+    emojis: "🏃‍♂️🏁↗️🥏📏",
+    hint: "A meet combines lane races with jumping and throwing events, all measured or timed.",
+    explanation: "🏃‍♂️ gives the lane races; 🏁 marks the timed meet; ↗️ shows a jump; 🥏 evokes a discus throw; 📏 records measured marks.",
   },
   {
     id: "sports-skateboarding",
@@ -167,9 +167,9 @@ const repairManifest = [
     categoryId: "us-landmarks",
     answer: "Washington Monument",
     difficulty: "easy",
-    emojis: "🪨⬆️🔺🌳",
-    hint: "A pointed stone landmark rises from the National Mall in the capital.",
-    explanation: "🪨 is the stone; ⬆️ gives the height; 🔺 shows the pointed obelisk profile; 🌳 evokes the National Mall.",
+    emojis: "🪨📏🔺🇺🇸🌳",
+    hint: "A pointed stone landmark rises from the National Mall in the nation's capital.",
+    explanation: "🪨 is the stone; 📏 emphasizes the tall scale; 🔺 gives the pointed obelisk profile; 🇺🇸 supplies the national setting; 🌳 evokes the National Mall grounds.",
   },
   {
     id: "world-geography-africa",
@@ -212,27 +212,27 @@ const repairManifest = [
     categoryId: "world-landmarks",
     answer: "Golden Temple",
     difficulty: "medium",
-    emojis: "✨🟡💧🤝",
-    hint: "A welcoming gurdwara centers a gold-covered shrine in a sacred pool.",
-    explanation: "✨🟡 show the gold-covered shrine; 💧 is the sacred pool; 🤝 represents the welcoming gurdwara community.",
+    emojis: "✨🟡💧🙏",
+    hint: "A Sikh gurdwara welcomes visitors around a gold-covered shrine set in a sacred pool.",
+    explanation: "✨ and 🟡 show the gold-covered shrine; 💧 is the sacred pool; 🙏 represents worship and the welcoming religious community.",
   },
   {
     id: "world-landmarks-victoria-memorial",
     categoryId: "world-landmarks",
     answer: "Victoria Memorial",
     difficulty: "medium",
-    emojis: "🏛️👑🌳📚🌴",
-    hint: "Kolkata's white-marble museum honors a British queen in formal gardens.",
-    explanation: "🏛️ is a memorial building; 👑 honors the monarch; 🌳 is its garden; 📚 is the museum; 🌴 hints at Kolkata's setting.",
+    emojis: "🏛️👑🤍🌳🇮🇳",
+    hint: "In Kolkata, a white-marble museum honors a British queen amid formal gardens.",
+    explanation: "🏛️ is the memorial building; 👑 honors the British queen; 🤍 gives the white marble; 🌳 is the formal garden; 🇮🇳 locates India.",
   },
   {
     id: "world-geography-nile-river",
     categoryId: "world-geography",
     answer: "Nile River",
     difficulty: "easy",
-    emojis: "🏜️🌊🌱🏺↘️",
-    hint: "A long African waterway runs north through Egypt before reaching the Mediterranean.",
-    explanation: "🏜️ is the desert; 🌊 is the river; 🌱 is its fertile edge; 🏺 places it in Egypt; ↘️ shows flow to the delta.",
+    emojis: "🗺️🌊🌱🏺↕️",
+    hint: "A long African waterway flows north through Egypt to the Mediterranean.",
+    explanation: "🗺️ gives the mapped route; 🌊 is the waterway; 🌱 is the fertile edge; 🏺 places it in Egypt; ↕️ makes the northward flow meaningful.",
   },
   {
     id: "world-geography-indian-ocean",
@@ -257,9 +257,9 @@ const repairManifest = [
     categoryId: "world-geography",
     answer: "Danube River",
     difficulty: "medium",
-    emojis: "🏛️🏛️🏛️🚢➡️",
-    hint: "A long waterway links four capital cities before reaching the Black Sea.",
-    explanation: "🏛️🏛️🏛️ represent the capitals along its course; 🚢 shows navigable travel; ➡️ marks the long route east.",
+    emojis: "🛶🇦🇹🇸🇰🇭🇺🇷🇸",
+    hint: "A navigable European waterway passes four capital cities before the Black Sea.",
+    explanation: "🛶 gives a navigable inland waterway; 🇦🇹, 🇸🇰, 🇭🇺, and 🇷🇸 are the four countries whose capitals lie along its route.",
   },
 ] as const;
 
@@ -411,10 +411,6 @@ describe("partition B blind-review follow-up repairs", () => {
         }
       }
     }
-    expect(warnings).toEqual([
-      { categoryId: "math", emoji: "🧩", count: 5, ratio: 0.25 },
-      { categoryId: "math", emoji: "📐", count: 5, ratio: 0.25 },
-      { categoryId: "math", emoji: "📏", count: 5, ratio: 0.25 },
-    ]);
+    expect(warnings).toEqual([{ categoryId: "math", emoji: "🧩", count: 5, ratio: 0.25 }]);
   });
 });

@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
+import { answerEmojiBanlist } from "@/data/answerEmojiBanlist";
+import { categories } from "@/data/categories";
 import { expandedPuzzles } from "@/data/expandedPacks";
 import { puzzles } from "@/data/puzzles";
+import { findDirectAnswerEmojiLeaks, normalizeAnswerForAudit } from "@/lib/clue-audit";
+import { getCategoryEmojiUsage, findContentInvariantViolations } from "@/lib/content-audit";
+import { getRandomMixPuzzlePool } from "@/lib/puzzles";
 
 const repairedCards = [
   {
@@ -17,9 +22,9 @@ const repairedCards = [
     "categoryId": "sports",
     "answer": "Track and Field",
     "difficulty": "medium",
-    "emojis": "🏃‍♂️↗️🥏📏",
-    "hint": "A multi-event program combines races with measured jumps and throws.",
-    "explanation": "🏃‍♂️ gives the races; ↗️ marks a jump; 🥏 evokes a discus throw; 📏 records the measured mark."
+    "emojis": "🏃‍♂️🏁↗️🥏📏",
+    "hint": "A meet combines lane races with jumping and throwing events, all measured or timed.",
+    "explanation": "🏃‍♂️ gives the lane races; 🏁 marks the timed meet; ↗️ shows a jump; 🥏 evokes a discus throw; 📏 records measured marks."
   },
   {
     "id": "sports-wrestling",
@@ -44,9 +49,9 @@ const repairedCards = [
     "categoryId": "sports",
     "answer": "Bowling",
     "difficulty": "easy",
-    "emojis": "🛤️🔟↘️🧮",
-    "hint": "Roll a heavy ball down a lane to knock down a triangular set of pins.",
-    "explanation": "🛤️ is the lane; 🔟 suggests ten pins; ↘️ is the roll; 🧮 captures scorekeeping."
+    "emojis": "🛤️⚪🔺↘️🧮",
+    "hint": "Roll a heavy ball down a lane toward ten standing pins.",
+    "explanation": "🛤️ is the lane; ⚪ is the ball; 🔺 shows the triangular pin rack; ↘️ is the roll; 🧮 captures scorekeeping."
   },
   {
     "id": "sports-snowboarding",
@@ -70,10 +75,10 @@ const repairedCards = [
     "id": "outdoor-games-frisbee",
     "categoryId": "outdoor-games",
     "answer": "Frisbee",
-    "difficulty": "easy",
-    "emojis": "👐💨🐕↔️",
-    "hint": "A flying disc travels between thrower and catcher, often with a dog nearby.",
-    "explanation": "👐 shows throwing and catching; 💨 keeps the object airborne; 🐕 evokes a common fetch partner; ↔️ shows the return flight."
+    "difficulty": "medium",
+    "emojis": "👐🌀💨↔️",
+    "hint": "A flat flying throw-and-catch game sends a spinning object between players.",
+    "explanation": "👐 shows the throw and catch; 🌀 gives the spinning flight; 💨 keeps the object airborne; ↔️ shows the return between players."
   },
   {
     "id": "outdoor-games-three-legged-race",
@@ -98,9 +103,9 @@ const repairedCards = [
     "categoryId": "board-games",
     "answer": "Sequence",
     "difficulty": "easy",
-    "emojis": "🃏📍📍📍📍📍",
-    "hint": "Cards tell players where to place markers until they form a line of five.",
-    "explanation": "🃏 supplies locations; the five 📍 markers form a line that earns the objective."
+    "emojis": "🃏🔗5️⃣📍📍📍",
+    "hint": "A card-and-board game rewards making a connected line of five markers.",
+    "explanation": "🃏 supplies card locations; 🔗 shows a connected run; 5️⃣ is the line-of-five goal; 📍📍📍 are the board markers."
   },
   {
     "id": "party-games-simon-says",
@@ -197,9 +202,9 @@ const repairedCards = [
     "categoryId": "pokemon",
     "answer": "Piplup",
     "difficulty": "medium",
-    "emojis": "🧊🌊😤🧣🎒",
-    "hint": "A small, proud, blue Sinnoh starter waddles through a trainer's first journey.",
-    "explanation": "🧊 and 🌊 evoke cold water; 😤 gives the determined personality; 🧣 suggests its bundled silhouette; 🎒 is the starter journey."
+    "emojis": "🔵🪶😤🌊🎒",
+    "hint": "A proud blue starter from Sinnoh waddles on two feet.",
+    "explanation": "🔵 evokes the blue body; 🪶 gives a small feathered bird association; 😤 shows the determined personality; 🌊 marks Water typing; 🎒 is the trainer journey."
   },
   {
     "id": "pokemon-zubat",
@@ -233,9 +238,9 @@ const repairedCards = [
     "categoryId": "minecraft",
     "answer": "Crafting Table",
     "difficulty": "easy",
-    "emojis": "🪵🧩3️⃣🟫",
-    "hint": "A square work station opens a three-by-three recipe grid.",
-    "explanation": "🪵 is the work material; 🧩 is the recipe; 3️⃣ suggests the three-by-three grid; 🟫 is the square station."
+    "emojis": "🟫🧩3️⃣✖️3️⃣",
+    "hint": "A square workstation opens a three-by-three recipe grid.",
+    "explanation": "🟫 is the square workstation block; 🧩 is recipe assembly; the two 3️⃣ symbols and ✖️ form the three-by-three grid."
   },
   {
     "id": "minecraft-pickaxe",
@@ -251,9 +256,9 @@ const repairedCards = [
     "categoryId": "minecraft",
     "answer": "Bee Nest",
     "difficulty": "easy",
-    "emojis": "🌳🪵🔊🕳️",
-    "hint": "A wooden tree home stores honey for a buzzing colony.",
-    "explanation": "🌳 is the tree; 🪵 is the wooden home; 🔊 is the buzzing colony; 🕳️ is the cavity."
+    "emojis": "🌳🍯🔊🕳️",
+    "hint": "A hollow-tree block stores honey for a buzzing colony.",
+    "explanation": "🌳 sets the tree habitat; 🍯 gives the stored honey; 🔊 suggests the buzzing colony; 🕳️ is the hollow cavity."
   },
   {
     "id": "science-magnet",
@@ -340,10 +345,10 @@ const repairedCards = [
     "id": "space-moon",
     "categoryId": "space",
     "answer": "Moon",
-    "difficulty": "easy",
-    "emojis": "🌊🌍🔄🌃",
-    "hint": "Earth's natural satellite brightens the night and drives ocean tides.",
-    "explanation": "🌊 shows tides; 🌍 is Earth; 🔄 is the orbit; 🌃 is the night sky."
+    "difficulty": "medium",
+    "emojis": "🌍🛰️🌊🔄",
+    "hint": "Earth's natural companion circles the planet and helps raise ocean tides.",
+    "explanation": "🌍 is the planet being orbited; 🛰️ supplies an orbiting-satellite association; 🌊 gives the tide effect; 🔄 shows the repeated orbit."
   },
   {
     "id": "space-milky-way",
@@ -430,10 +435,10 @@ const repairedCards = [
     "id": "math-graph",
     "categoryId": "math",
     "answer": "Graph",
-    "difficulty": "easy",
-    "emojis": "↕️↔️📍📍🔗",
-    "hint": "A visual display uses axes and marks to compare or connect data.",
-    "explanation": "↕️ and ↔️ form axes; 📍📍 are plotted data; 🔗 connects the relationship."
+    "difficulty": "medium",
+    "emojis": "📋↕️↔️🔵🔗",
+    "hint": "A data display plots values on axes so trends can be read at a glance.",
+    "explanation": "📋 is a data sheet; ↕️ and ↔️ form the axes; 🔵 are plotted values; 🔗 connects the visible trend."
   },
   {
     "id": "math-pi",
@@ -449,18 +454,18 @@ const repairedCards = [
     "categoryId": "math",
     "answer": "Decimal",
     "difficulty": "easy",
-    "emojis": "🔢🔸🔟🪜",
-    "hint": "A number uses a point to separate whole units from fractional places.",
-    "explanation": "🔢 are numbers; 🔸 is the decimal point; 🔟 gives base ten; 🪜 shows place-value steps."
+    "emojis": "1️⃣🔸5️⃣↔️",
+    "hint": "A number writes whole units on one side of a point and smaller parts on the other.",
+    "explanation": "1️⃣ gives a whole-number digit; 🔸 is the separating point; 5️⃣ gives a fractional digit; ↔️ separates the whole and fractional sides."
   },
   {
     "id": "math-angle",
     "categoryId": "math",
     "answer": "Angle",
     "difficulty": "easy",
-    "emojis": "📍↗️↘️📏",
-    "hint": "Two rays meet at one vertex and form a measurable opening.",
-    "explanation": "📍 is the shared endpoint; ↗️ and ↘️ are the two rays; 📏 measures the opening."
+    "emojis": "📍↗️↘️👐",
+    "hint": "Two rays share one endpoint and open by a measurable amount.",
+    "explanation": "📍 is the shared endpoint; ↗️ and ↘️ are the two rays; 👐 shows the opening between them."
   },
   {
     "id": "math-rectangle",
@@ -476,9 +481,9 @@ const repairedCards = [
     "categoryId": "math",
     "answer": "Square",
     "difficulty": "easy",
-    "emojis": "🏁🧩📐🟰",
-    "hint": "A tile keeps the same side length in every direction and meets at right corners.",
-    "explanation": "🏁 gives a grid of equal square cells; 🧩 gives a tile-like form; 📐 marks right corners; 🟰 shows equal side lengths."
+    "emojis": "🏁🧩🪞🔄",
+    "hint": "A four-sided tile has equal spans, right corners, and quarter-turn symmetry.",
+    "explanation": "🏁 gives a checkered equal-cell pattern; 🧩 is the tile-like form; 🪞 shows matching halves; 🔄 gives quarter-turn symmetry."
   },
   {
     "id": "math-cube",
@@ -521,9 +526,9 @@ const repairedCards = [
     "categoryId": "books",
     "answer": "The BFG",
     "difficulty": "easy",
-    "emojis": "👧🧍‍♂️↕️💭📣",
-    "hint": "A gentle oversized visitor collects dreams and befriends a child.",
-    "explanation": "👧 and 🧍‍♂️ compare a child with an oversized friend; ↕️ emphasizes size; 💭 gives dreams; 📣 gives the giant's booming voice."
+    "emojis": "👧↕️🧍‍♂️💭🫙",
+    "hint": "A gentle giant visits a child's dreams and bottles them for a nighttime mission.",
+    "explanation": "👧 is the child; ↕️ emphasizes the size difference; 🧍‍♂️ is the oversized visitor; 💭 gives the dreams; 🫙 evokes the dream jars."
   },
   {
     "id": "myths-loki",
@@ -575,18 +580,18 @@ const repairedCards = [
     "categoryId": "world-landmarks",
     "answer": "Golden Temple",
     "difficulty": "medium",
-    "emojis": "✨🟡💧🤝",
-    "hint": "A welcoming gurdwara centers a gold-covered shrine in a sacred pool.",
-    "explanation": "✨🟡 show the gold-covered shrine; 💧 is the sacred pool; 🤝 represents the welcoming gurdwara community."
+    "emojis": "✨🟡💧🙏",
+    "hint": "A Sikh gurdwara welcomes visitors around a gold-covered shrine set in a sacred pool.",
+    "explanation": "✨ and 🟡 show the gold-covered shrine; 💧 is the sacred pool; 🙏 represents worship and the welcoming religious community."
   },
   {
     "id": "world-landmarks-victoria-memorial",
     "categoryId": "world-landmarks",
     "answer": "Victoria Memorial",
     "difficulty": "medium",
-    "emojis": "🏛️👑🌳📚🌴",
-    "hint": "Kolkata's white-marble museum honors a British queen in formal gardens.",
-    "explanation": "🏛️ is a memorial building; 👑 honors the monarch; 🌳 is its garden; 📚 is the museum; 🌴 hints at Kolkata's setting."
+    "emojis": "🏛️👑🤍🌳🇮🇳",
+    "hint": "In Kolkata, a white-marble museum honors a British queen amid formal gardens.",
+    "explanation": "🏛️ is the memorial building; 👑 honors the British queen; 🤍 gives the white marble; 🌳 is the formal garden; 🇮🇳 locates India."
   },
   {
     "id": "us-landmarks-white-house",
@@ -611,27 +616,27 @@ const repairedCards = [
     "categoryId": "us-landmarks",
     "answer": "Washington Monument",
     "difficulty": "easy",
-    "emojis": "🪨⬆️🔺🌳",
-    "hint": "A pointed stone landmark rises from the National Mall in the capital.",
-    "explanation": "🪨 is the stone; ⬆️ gives the height; 🔺 shows the pointed obelisk profile; 🌳 evokes the National Mall."
+    "emojis": "🪨📏🔺🇺🇸🌳",
+    "hint": "A pointed stone landmark rises from the National Mall in the nation's capital.",
+    "explanation": "🪨 is the stone; 📏 emphasizes the tall scale; 🔺 gives the pointed obelisk profile; 🇺🇸 supplies the national setting; 🌳 evokes the National Mall grounds."
   },
   {
     "id": "us-landmarks-independence-hall",
     "categoryId": "us-landmarks",
     "answer": "Independence Hall",
     "difficulty": "easy",
-    "emojis": "🏛️🕰️🧱🤝📍",
-    "hint": "A Philadelphia building hosted debates that shaped the Declaration and Constitution.",
-    "explanation": "🏛️ is the historic building; 🕰️ gives its tower; 🧱 identifies the brick structure; 🤝 is the founding debate; 📍 places the meeting."
+    "emojis": "🏛️📜🗣️🧱🤝",
+    "hint": "In Philadelphia, a brick civic building hosted debates on the Declaration and Constitution.",
+    "explanation": "🏛️ is the historic civic building; 📜 represents the founding documents; 🗣️ gives the debates; 🧱 identifies the brick structure; 🤝 shows the agreement reached there."
   },
   {
     "id": "us-landmarks-mount-vernon",
     "categoryId": "us-landmarks",
     "answer": "Mount Vernon",
     "difficulty": "medium",
-    "emojis": "🌊🧑‍⚖️🌳🏛️",
-    "hint": "George Washington's Virginia estate overlooks the Potomac River.",
-    "explanation": "🌊 is the Potomac; 🧑‍⚖️ is Washington; 🌳 gives the grounds; 🏛️ is the estate mansion."
+    "emojis": "🌊🌳🏛️🎩🪶",
+    "hint": "A first president's Virginia estate overlooks a broad river.",
+    "explanation": "🌊 is the Potomac setting; 🌳 gives the grounds; 🏛️ is the estate mansion; 🎩 evokes the first-president era; 🪶 suggests its founding-era historical context."
   },
   {
     "id": "us-landmarks-mammoth-cave",
@@ -683,9 +688,9 @@ const repairedCards = [
     "categoryId": "world-geography",
     "answer": "Nile River",
     "difficulty": "easy",
-    "emojis": "🏜️🌊🌱🏺↘️",
-    "hint": "A long African waterway runs north through Egypt before reaching the Mediterranean.",
-    "explanation": "🏜️ is the desert; 🌊 is the river; 🌱 is its fertile edge; 🏺 places it in Egypt; ↘️ shows flow to the delta."
+    "emojis": "🗺️🌊🌱🏺↕️",
+    "hint": "A long African waterway flows north through Egypt to the Mediterranean.",
+    "explanation": "🗺️ gives the mapped route; 🌊 is the waterway; 🌱 is the fertile edge; 🏺 places it in Egypt; ↕️ makes the northward flow meaningful."
   },
   {
     "id": "world-geography-indian-ocean",
@@ -719,9 +724,9 @@ const repairedCards = [
     "categoryId": "world-geography",
     "answer": "Europe",
     "difficulty": "easy",
-    "emojis": "🏛️🚆🧭🧱",
-    "hint": "A continent west of Asia contains many neighboring countries linked by old cities and railways.",
-    "explanation": "🏛️ represents old cities; 🚆 links neighboring countries; 🧭 gives the region; 🧱 suggests many borders and historic towns."
+    "emojis": "🏛️🇫🇷🇩🇪🧱↔️",
+    "hint": "A continent west of Asia is a patchwork of neighboring countries with shared historic cities.",
+    "explanation": "🏛️ represents historic cities; 🇫🇷 and 🇩🇪 give neighboring European examples; 🧱 suggests borders and old towns; ↔️ shows cross-border connection."
   },
   {
     "id": "world-geography-south-america",
@@ -746,10 +751,182 @@ const repairedCards = [
     "categoryId": "world-geography",
     "answer": "Danube River",
     "difficulty": "medium",
-    "emojis": "🏛️🏛️🏛️🚢➡️",
-    "hint": "A long waterway links four capital cities before reaching the Black Sea.",
-    "explanation": "🏛️🏛️🏛️ represent the capitals along its course; 🚢 shows navigable travel; ➡️ marks the long route east."
+    "emojis": "🛶🇦🇹🇸🇰🇭🇺🇷🇸",
+    "hint": "A navigable European waterway passes four capital cities before the Black Sea.",
+    "explanation": "🛶 gives a navigable inland waterway; 🇦🇹, 🇸🇰, 🇭🇺, and 🇷🇸 are the four countries whose capitals lie along its route."
   }
+] as const;
+
+const secondPassRecheckIds = [
+  "sports-track-and-field",
+  "sports-bowling",
+  "outdoor-games-frisbee",
+  "board-games-sequence",
+  "pokemon-piplup",
+  "minecraft-crafting-table",
+  "minecraft-bee-nest",
+  "space-moon",
+  "math-graph",
+  "math-decimal",
+  "math-angle",
+  "math-square",
+  "books-the-bfg",
+  "world-landmarks-golden-temple",
+  "world-landmarks-victoria-memorial",
+  "us-landmarks-washington-monument",
+  "us-landmarks-independence-hall",
+  "us-landmarks-mount-vernon",
+  "world-geography-nile-river",
+  "world-geography-europe",
+  "world-geography-danube-river",
+] as const;
+
+const secondPassDifficultyChanges = [
+  { id: "outdoor-games-frisbee", from: "easy", to: "medium" },
+  { id: "space-moon", from: "easy", to: "medium" },
+  { id: "math-graph", from: "easy", to: "medium" },
+] as const;
+
+const secondPassPairChecks = [
+  ["sports-track-and-field", "sports-bowling"],
+  ["outdoor-games-frisbee", "outdoor-games-kite-flying"],
+  ["math-graph", "math-angle"],
+  ["math-square", "math-rectangle"],
+  ["math-square", "math-symmetry"],
+  ["world-landmarks-victoria-memorial", "world-landmarks-taj-mahal"],
+  ["us-landmarks-washington-monument", "us-landmarks-mount-rushmore"],
+  ["us-landmarks-independence-hall", "us-landmarks-liberty-bell"],
+  ["world-geography-europe", "world-geography-danube-river"],
+  ["world-geography-nile-river", "world-geography-mediterranean-sea"],
+] as const;
+
+const secondPassPreservedRevealFields = [
+  {
+    id: "sports-track-and-field",
+    details: "Athletics category covering track races plus field events such as jumps and throws.",
+    funFact: "Track and field has been part of every modern Summer Olympic Games.",
+    tags: ["sports", "athletics"],
+  },
+  {
+    id: "sports-bowling",
+    details: "Indoor target sport in which players roll a ball to knock down pins.",
+    funFact: "Ten-pin bowling uses a triangular rack of ten pins.",
+    tags: ["sports", "indoor"],
+  },
+  {
+    id: "outdoor-games-frisbee",
+    details: "Type: Disc game",
+    funFact: "Modern flying discs became popular in the 1900s.",
+    tags: ["games", "outdoors", "outdoor-games"],
+  },
+  {
+    id: "board-games-sequence",
+    details: "Combination card-and-board game whose objective is to make lines of five markers.",
+    funFact: "A corner space is usually wild and counts for every player's line.",
+    tags: ["board-games", "cards", "lines", "family"],
+  },
+  {
+    id: "pokemon-piplup",
+    details: "Water-type Sinnoh starter with a penguin-inspired design and determined personality.",
+    funFact: "Piplup is one of the three starter Pokémon offered to trainers at the beginning of Pokémon Diamond, Pearl, and Platinum.",
+    tags: ["pokemon", "starter", "water", "sinnoh"],
+  },
+  {
+    id: "minecraft-crafting-table",
+    details: "Type: Utility block",
+    funFact: "Crafting tables unlock a larger crafting grid.",
+    tags: ["minecraft", "video-games"],
+  },
+  {
+    id: "minecraft-bee-nest",
+    details: "Type: Natural block",
+    funFact: "Minecraft bees help pollinate crops as they fly.",
+    tags: ["minecraft", "video-games"],
+  },
+  {
+    id: "space-moon",
+    details: "Type: Natural satellite",
+    funFact: "People first walked on the Moon in 1969.",
+    tags: ["space", "science"],
+  },
+  {
+    id: "math-graph",
+    details: "Type: Data display",
+    funFact: "Graphs make numbers easier to compare quickly.",
+    tags: ["math"],
+  },
+  {
+    id: "math-decimal",
+    details: "Number representation based on powers of ten, often written with a decimal point.",
+    funFact: "The word decimal comes from a Latin root meaning ten.",
+    tags: ["math", "numbers", "place-value", "arithmetic"],
+  },
+  {
+    id: "math-angle",
+    details: "Figure formed by two rays or line segments sharing an endpoint.",
+    funFact: "Angles can be measured in degrees, with a full turn measuring 360 degrees.",
+    tags: ["math", "geometry", "measurement", "shapes"],
+  },
+  {
+    id: "math-square",
+    details: "Quadrilateral with four equal sides and four right angles.",
+    funFact: "A square has several lines of symmetry and rotational symmetry as well.",
+    tags: ["math", "geometry", "quadrilateral", "shapes"],
+  },
+  {
+    id: "books-the-bfg",
+    details: "Roald Dahl fantasy novel about Sophie and the Big Friendly Giant.",
+    funFact: "The BFG's invented vocabulary is called Gobblefunk.",
+    tags: ["books", "fantasy", "roald-dahl", "giants"],
+  },
+  {
+    id: "world-landmarks-golden-temple",
+    details: "Harmandir Sahib, also called the Golden Temple, is a major Sikh gurdwara in Amritsar, India.",
+    funFact: "The complex's central shrine is surrounded by the Amrit Sarovar, the sacred pool that gives Amritsar its name.",
+    tags: ["world-landmarks", "india", "sikh", "gurdwara"],
+  },
+  {
+    id: "world-landmarks-victoria-memorial",
+    details: "Large marble memorial in Kolkata, India, built in memory of Queen Victoria.",
+    funFact: "Victoria Memorial opened to the public in 1921 and now houses a museum.",
+    tags: ["world-landmarks", "india", "kolkata", "memorial"],
+  },
+  {
+    id: "us-landmarks-washington-monument",
+    details: "Obelisk memorial in Washington, D.C., honoring George Washington.",
+    funFact: "Its two-tone stone reflects a pause in construction when the quarry source changed.",
+    tags: ["us-landmarks", "washington-dc", "monument", "history"],
+  },
+  {
+    id: "us-landmarks-independence-hall",
+    details: "Historic Philadelphia building where the Declaration of Independence and U.S. Constitution were debated and adopted.",
+    funFact: "The Declaration of Independence was adopted in the building on July 4, 1776.",
+    tags: ["us-landmarks", "philadelphia", "history", "civic"],
+  },
+  {
+    id: "us-landmarks-mount-vernon",
+    details: "Historic plantation estate and home of George Washington in Mount Vernon, Virginia.",
+    funFact: "Washington lived at Mount Vernon for much of his adult life, and the estate overlooks the Potomac.",
+    tags: ["us-landmarks", "virginia", "history", "estate"],
+  },
+  {
+    id: "world-geography-nile-river",
+    details: "Type: River",
+    funFact: "The Nile flows northward into the Mediterranean Sea.",
+    tags: ["geography", "world-geography"],
+  },
+  {
+    id: "world-geography-europe",
+    details: "Continent west of Asia with many countries, climates, languages, and historic urban regions.",
+    funFact: "Europe is conventionally treated as a continent even though it shares a continuous landmass with Asia.",
+    tags: ["world-geography", "continent", "europe", "regions"],
+  },
+  {
+    id: "world-geography-danube-river",
+    details: "Second-longest river in Europe, flowing through or along many countries from Germany toward the Black Sea.",
+    funFact: "The Danube passes through four capital cities: Vienna, Bratislava, Budapest, and Belgrade.",
+    tags: ["world-geography", "river", "europe", "cities"],
+  },
 ] as const;
 
 const difficultyChanges = [
@@ -845,6 +1022,11 @@ const difficultyChanges = [
   }
 ] as const;
 
+function graphemes(value: string): string[] {
+  const segmenter = new Intl.Segmenter(undefined, { granularity: "grapheme" });
+  return [...segmenter.segment(value)].map(({ segment }) => segment.replace(/[\uFE0E\uFE0F]/g, ""));
+}
+
 describe("partition B blind-review repairs", () => {
   it("uses the approved clue, hint, explanation, and difficulty for every repaired card", () => {
     const sourcePuzzles = [...puzzles, ...expandedPuzzles];
@@ -857,6 +1039,149 @@ describe("partition B blind-review repairs", () => {
       expect(actual, expected.id + " should exist").toBeDefined();
       expect(actual).toMatchObject(expected);
     }
+  });
+
+  it("covers every second-pass B recheck row exactly once", () => {
+    const repairedIds = new Set(repairedCards.map((card) => card.id));
+
+    expect(secondPassRecheckIds).toHaveLength(21);
+    expect(new Set(secondPassRecheckIds).size).toBe(21);
+    for (const id of secondPassRecheckIds) {
+      expect(repairedIds.has(id), `${id} should be in the final repair manifest`).toBe(true);
+    }
+  });
+
+  it("applies exactly the three second-pass difficulty calibrations", () => {
+    const sourcePuzzles = [...puzzles, ...expandedPuzzles];
+    const byId = new Map(sourcePuzzles.map((puzzle) => [puzzle.id, puzzle]));
+
+    expect(secondPassDifficultyChanges).toEqual([
+      { id: "outdoor-games-frisbee", from: "easy", to: "medium" },
+      { id: "space-moon", from: "easy", to: "medium" },
+      { id: "math-graph", from: "easy", to: "medium" },
+    ]);
+    for (const change of secondPassDifficultyChanges) {
+      expect(byId.get(change.id)?.difficulty, `${change.id} difficulty`).toBe(change.to);
+    }
+  });
+
+  it("preserves every recheck card's identity and reveal metadata", () => {
+    const sourcePuzzles = [...puzzles, ...expandedPuzzles];
+    const byId = new Map(sourcePuzzles.map((puzzle) => [puzzle.id, puzzle]));
+    const expectedById = new Map(repairedCards.map((card) => [card.id, card]));
+    const preservedById = new Map(secondPassPreservedRevealFields.map((card) => [card.id, card]));
+
+    expect(expandedPuzzles).toHaveLength(1130);
+    expect(new Set(expandedPuzzles.map((puzzle) => puzzle.id)).size).toBe(1130);
+    expect(preservedById.size).toBe(21);
+
+    for (const id of secondPassRecheckIds) {
+      const actual = byId.get(id);
+      const expected = expectedById.get(id);
+      const preserved = preservedById.get(id);
+      expect(actual, `${id} should exist`).toBeDefined();
+      expect(actual?.categoryId).toBe(expected?.categoryId);
+      expect(actual?.answer).toBe(expected?.answer);
+      expect(preserved, `${id} preserved field snapshot`).toBeDefined();
+      expect({
+        id: actual?.id,
+        details: actual?.details,
+        funFact: actual?.funFact,
+        tags: actual?.tags,
+      }).toEqual(preserved);
+    }
+  });
+
+  it("keeps Bowling's direct glyph banned and the full catalog leak-free", () => {
+    expect(answerEmojiBanlist.bowling).toEqual(["🎳"]);
+    expect(findDirectAnswerEmojiLeaks(puzzles, answerEmojiBanlist)).toEqual([]);
+  });
+
+  it("keeps every second-pass hint free of its full answer", () => {
+    const byId = new Map(puzzles.map((puzzle) => [puzzle.id, puzzle]));
+
+    for (const id of secondPassRecheckIds) {
+      const puzzle = byId.get(id);
+      expect(puzzle, `${id} should exist`).toBeDefined();
+      expect(normalizeAnswerForAudit(puzzle?.hint ?? "")).not.toContain(
+        normalizeAnswerForAudit(puzzle?.answer ?? ""),
+      );
+    }
+  });
+
+  it("keeps the recheck categories free of context filler and deterministic violations", () => {
+    const categoryById = new Map(categories.map((category) => [category.id, category]));
+    const contextBans: Record<string, string> = {
+      books: "📚",
+      "world-geography": "🌍",
+      "world-landmarks": "🗺️",
+    };
+
+    for (const [categoryId, bannedEmoji] of Object.entries(contextBans)) {
+      const usage = getCategoryEmojiUsage(
+        expandedPuzzles.filter((puzzle) => puzzle.categoryId === categoryId),
+      );
+      expect(usage.get(bannedEmoji)?.count ?? 0, `${categoryId} context`).toBe(0);
+    }
+
+    const sourceById = new Map(puzzles.map((puzzle) => [puzzle.id, puzzle]));
+    for (const id of secondPassRecheckIds) {
+      const puzzle = sourceById.get(id);
+      const category = categoryById.get(puzzle?.categoryId ?? "");
+      expect(category, `${id} category`).toBeDefined();
+      expect(puzzle?.emojis).not.toContain(category?.icon ?? "");
+    }
+
+    const findings = findContentInvariantViolations(categories, puzzles).filter((finding) =>
+      secondPassRecheckIds.some((id) => finding.puzzleIds.includes(id)),
+    );
+    expect(findings).toEqual([]);
+
+    const randomMixPool = getRandomMixPuzzlePool();
+    expect(new Set(randomMixPool.map((puzzle) => normalizeAnswerForAudit(puzzle.answer))).size).toBe(
+      randomMixPool.length,
+    );
+  });
+
+  it("keeps every explicit high-risk pair distinct", () => {
+    const byId = new Map(expandedPuzzles.map((puzzle) => [puzzle.id, puzzle]));
+
+    for (const [leftId, rightId] of secondPassPairChecks) {
+      const left = byId.get(leftId);
+      const right = byId.get(rightId);
+      expect(left, `${leftId} should exist`).toBeDefined();
+      expect(right, `${rightId} should exist`).toBeDefined();
+      expect(left?.emojis).not.toBe(right?.emojis);
+
+      const rightEmojiSet = new Set(graphemes(right?.emojis ?? ""));
+      const shared = graphemes(left?.emojis ?? "").filter((emoji) => rightEmojiSet.has(emoji));
+      expect(shared.length, `${leftId} vs ${rightId}`).toBeLessThanOrEqual(2);
+    }
+  });
+
+  it("keeps repetition warnings at the reviewed baseline", () => {
+    const recheckCategoryIds = new Set(
+      secondPassRecheckIds.map((id) => expandedPuzzles.find((puzzle) => puzzle.id === id)?.categoryId),
+    );
+    const warnings: Array<{ categoryId: string; emoji: string; count: number; ratio: number }> = [];
+
+    for (const categoryId of recheckCategoryIds) {
+      if (!categoryId) continue;
+      const usage = getCategoryEmojiUsage(
+        expandedPuzzles.filter((puzzle) => puzzle.categoryId === categoryId),
+      );
+      for (const [emoji, summary] of usage) {
+        if (summary.ratio > 0.2) {
+          warnings.push({ categoryId, emoji, count: summary.count, ratio: summary.ratio });
+        }
+      }
+    }
+
+    expect(warnings).toEqual([{ categoryId: "math", emoji: "🧩", count: 5, ratio: 0.25 }]);
+    const geographyUsage = getCategoryEmojiUsage(
+      expandedPuzzles.filter((puzzle) => puzzle.categoryId === "world-geography"),
+    );
+    expect(geographyUsage.get("🌊")).toEqual({ count: 6, ratio: 0.2 });
   });
 
   it("applies exactly the five approved difficulty changes", () => {
