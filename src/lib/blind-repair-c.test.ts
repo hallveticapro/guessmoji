@@ -71,54 +71,54 @@ const repairedCards = [
     "categoryId": "construction",
     "answer": "Bulldozer",
     "difficulty": "easy",
-    "emojis": "🛠️🪨➡️🟫",
+    "emojis": "🛞🛠️🟫➡️",
     "hint": "A tracked machine with a broad blade that pushes soil into piles.",
-    "explanation": "🛠️ establishes heavy work, 🪨 and 🟫 give earth and soil, and ➡️ shows the broad forward push."
+    "explanation": "🛞 represents continuous treads, 🛠️ gives heavy equipment, 🟫 gives the soil being moved, and ➡️ shows the broad forward push."
   },
   {
     "id": "construction-dump-truck",
     "categoryId": "construction",
     "answer": "Dump Truck",
     "difficulty": "easy",
-    "emojis": "🪨📦↗️⬇️",
+    "emojis": "🛞🪨↗️↘️",
     "hint": "A hauling vehicle whose raised bed releases rubble.",
-    "explanation": "🪨 gives the rubble, 📦 gives a hauled load, ↗️ shows the bed lifting, and ⬇️ shows the load being tipped out."
+    "explanation": "🛞 signals the road hauler, 🪨 gives the rubble load, ↗️ shows the bed rising, and ↘️ shows the load tipping out."
   },
   {
     "id": "construction-wheelbarrow",
     "categoryId": "construction",
     "answer": "Wheelbarrow",
     "difficulty": "easy",
-    "emojis": "🪣🤲↪️⚖️",
+    "emojis": "🪣🤲🪵⚖️",
     "hint": "A single-wheel carrier pushed by one person.",
-    "explanation": "🪣 gives a typical load, 🤲 gives the handles and one-person effort, ↪️ shows maneuvering, and ⚖️ gives the balancing task."
+    "explanation": "🪣 gives the carried load, 🤲 gives the handles and pushing effort, 🪵 gives the wooden frame, and ⚖️ gives the balance required by one wheel."
   },
   {
     "id": "construction-scaffolding",
     "categoryId": "construction",
     "answer": "Scaffolding",
     "difficulty": "medium",
-    "emojis": "🔗↔️⬆️🛡️",
+    "emojis": "🧱🧍⬆️↔️",
     "hint": "A temporary work platform assembled around a building.",
-    "explanation": "🔗 gives the modular frame, ↔️ gives a working platform, ⬆️ gives access at height, and 🛡️ gives the safety purpose."
+    "explanation": "🧱 places the structure against a building, 🧍 is the worker, ⬆️ gives working height, and ↔️ is the temporary platform."
   },
   {
     "id": "construction-nail-gun",
     "categoryId": "construction",
     "answer": "Nail Gun",
     "difficulty": "medium",
-    "emojis": "📌🪵💨↘️",
+    "emojis": "🪵🧰💥↘️",
     "hint": "A powered fastener tool used for rapid framing.",
-    "explanation": "📌 gives a driven fastener, 🪵 gives the framing material, 💨 signals powered rapid action, and ↘️ shows driving it into the surface."
+    "explanation": "🪵 gives the framing material, 🧰 gives the handheld tool, 💥 gives rapid powered impact, and ↘️ shows fasteners driven into the surface."
   },
   {
     "id": "construction-work-gloves",
     "categoryId": "construction",
     "answer": "Work Gloves",
     "difficulty": "easy",
-    "emojis": "🤲🛡️🪨⚠️",
+    "emojis": "🤲🪵🛡️🛠️",
     "hint": "Protective handwear for handling rough materials.",
-    "explanation": "🤲 gives hands at work, 🛡️ gives protection, 🪨 gives rough material, and ⚠️ gives the hazard the gear helps prevent."
+    "explanation": "🤲 shows hands handling material, 🪵 gives lumber, 🛡️ gives hand protection, and 🛠️ gives the job-site task."
   },
   {
     "id": "jobs-artist",
@@ -134,9 +134,9 @@ const repairedCards = [
     "categoryId": "jobs",
     "answer": "Designer",
     "difficulty": "medium",
-    "emojis": "📐🧩👀🖼️🧪",
-    "hint": "A creative planner who tests how a product looks and works for people.",
-    "explanation": "📐 gives layout, 🧩 gives design constraints, 👀 gives observing users, 🖼️ gives the visual result, and 🧪 gives prototype testing."
+    "emojis": "💡🖊️🧩👀🧪",
+    "hint": "A creative professional shapes useful ideas into visuals, objects, or experiences and tests them with people.",
+    "explanation": "💡 gives the idea, 🖊️ gives the sketch, 🧩 gives design constraints, 👀 gives user observation, and 🧪 gives prototype testing."
   },
   {
     "id": "music-instruments-tambourine",
@@ -152,9 +152,9 @@ const repairedCards = [
     "categoryId": "music-instruments",
     "answer": "Cello",
     "difficulty": "medium",
-    "emojis": "🪑🫳⬇️🎼",
+    "emojis": "🪑🧵🫳⬇️",
     "hint": "A bowed string instrument bigger than a violin, played between the knees.",
-    "explanation": "🪑 gives the seated posture, 🫳 gives the bowing hand, ⬇️ gives the low register, and 🎼 gives the orchestral role."
+    "explanation": "🪑 gives the seated posture, 🧵 gives the strings, 🫳 gives bowing, and ⬇️ gives the low register."
   },
   {
     "id": "music-instruments-clarinet",
@@ -170,9 +170,9 @@ const repairedCards = [
     "categoryId": "music-instruments",
     "answer": "Banjo",
     "difficulty": "medium",
-    "emojis": "🧑‍🤝‍🧑🌾🫳🔘",
+    "emojis": "〰️🫳🔘🌾",
     "hint": "A plucked string instrument with a round resonator common in bluegrass.",
-    "explanation": "🧑‍🤝‍🧑 gives communal playing, 🌾 gives the bluegrass setting, 🫳 gives the plucking motion, and 🔘 gives the round resonator."
+    "explanation": "〰️ gives the strings, 🫳 gives plucking, 🔘 gives the round resonator, and 🌾 gives the bluegrass setting."
   },
   {
     "id": "music-genres-funk",
@@ -188,9 +188,9 @@ const repairedCards = [
     "categoryId": "music-genres",
     "answer": "R&B",
     "difficulty": "medium",
-    "emojis": "🎙️🫀🪘🌃",
-    "hint": "A groove-driven style with expressive vocals, keyboard lines, and a late-night feel.",
-    "explanation": "🎙️ gives expressive vocals, 🫀 gives emotional feeling, 🪘 gives the rhythmic groove, and 🌃 gives the late-night performance mood."
+    "emojis": "🎙️🎹🔊🏙️",
+    "hint": "A vocal groove style built around keyboard lines, steady rhythm, and an urban sound.",
+    "explanation": "🎙️ gives expressive vocals, 🎹 gives keyboard lines, 🔊 gives the produced groove, and 🏙️ gives the urban setting."
   },
   {
     "id": "art-supplies-crayons",
@@ -205,10 +205,10 @@ const repairedCards = [
     "id": "art-supplies-markers",
     "categoryId": "art-supplies",
     "answer": "Markers",
-    "difficulty": "easy",
-    "emojis": "🧽🟣📄🖐️",
-    "hint": "Color tools that leave bold ink through a porous tip.",
-    "explanation": "🧽 gives the porous felt tip, 🟣 gives bold ink color, 📄 gives the page, and 🖐️ gives the hand-held drawing action."
+    "difficulty": "medium",
+    "emojis": "🖋️🟣📄🖐️",
+    "hint": "Bold-color drawing tools with ink delivered through a felt tip.",
+    "explanation": "🖋️ gives an ink writing tool, 🟣 gives bold color, 📄 gives the drawing surface, and 🖐️ gives hand-held use."
   },
   {
     "id": "art-supplies-colored-pencils",
@@ -233,9 +233,9 @@ const repairedCards = [
     "categoryId": "art-supplies",
     "answer": "Palette",
     "difficulty": "easy",
-    "emojis": "🟠🟣⚪🔄",
+    "emojis": "🫙🔴🔵🫳",
     "hint": "A hand-held surface with small wells for mixing colors.",
-    "explanation": "🟠🟣⚪ give separate paint dabs, and 🔄 gives arranging and mixing them on one working surface."
+    "explanation": "🫙 gives the small paint wells, 🔴 and 🔵 give separate color dabs, and 🫳 gives hand mixing on one surface."
   },
   {
     "id": "art-supplies-watercolor-paint",
@@ -269,9 +269,9 @@ const repairedCards = [
     "categoryId": "art-supplies",
     "answer": "Beads",
     "difficulty": "easy",
-    "emojis": "🟣🕳️🪢👐",
+    "emojis": "🟣🔴🟡🕳️",
     "hint": "Small colorful pieces with holes that can be threaded into crafts.",
-    "explanation": "🟣 gives colorful pieces, 🕳️ gives their holes, 🪢 gives threading and knotting, and 👐 gives the craft work."
+    "explanation": "🟣, 🔴, and 🟡 show separate colorful pieces, while 🕳️ gives the holes used for threading."
   },
   {
     "id": "school-supplies-notebook",
@@ -323,9 +323,9 @@ const repairedCards = [
     "categoryId": "camping",
     "answer": "Camp Pillow",
     "difficulty": "easy",
-    "emojis": "🧠😴🫧🧳",
+    "emojis": "🧠🤏🪶🧳",
     "hint": "A small cushion that supports your head, not your whole sleeping body.",
-    "explanation": "🧠 gives head support, 😴 gives sleep, 🫧 gives a compressible cushion, and 🧳 gives packable travel gear."
+    "explanation": "🧠 gives head support, 🤏 gives the small size, 🪶 gives soft lightweight filling, and 🧳 gives packable camping gear."
   },
   {
     "id": "national-parks-grand-canyon",
@@ -350,9 +350,9 @@ const repairedCards = [
     "categoryId": "national-parks",
     "answer": "Great Sand Dunes National Park and Preserve",
     "difficulty": "medium",
-    "emojis": "🟤🦶↗️🏔️",
-    "hint": "A Colorado park protecting North America's tallest dunes beside high mountains.",
-    "explanation": "🟤 gives sand, 🦶 gives walking the dune face, ↗️ gives rising slopes, and 🏔️ gives the mountain backdrop."
+    "emojis": "🟤〰️🦶📏",
+    "hint": "A Colorado protected landscape of towering wind-shaped ridges beside high mountains.",
+    "explanation": "🟤 gives loose sand, 〰️ gives dune ridges, 🦶 gives climbing the slope, and 📏 gives the dunes' exceptional height."
   },
   {
     "id": "halloween-jack-o-lantern",
@@ -376,10 +376,10 @@ const repairedCards = [
     "id": "winter-holidays-hanukkiah",
     "categoryId": "winter-holidays",
     "answer": "Hanukkiah",
-    "difficulty": "medium",
-    "emojis": "9️⃣🧱🔆8️⃣",
-    "hint": "A nine-branched candleholder used during Hanukkah.",
-    "explanation": "9️⃣ gives the nine branches, 🧱 gives the standing holder, 🔆 gives the lights, and 8️⃣ recalls the eight nights of lighting.",
+    "difficulty": "hard",
+    "emojis": "9️⃣🕯️➕8️⃣",
+    "hint": "A Hebrew-derived name for the nine-branched Hanukkah candelabrum with eight lights plus a separate helper.",
+    "explanation": "9️⃣ gives the nine branches, 🕯️ gives the individual candles, ➕ gives the separate helper light, and 8️⃣ recalls the eight holiday nights.",
     "details": "Type: Holiday object; the nine-branched Hanukkah candelabrum is called a hanukkiah.",
     "funFact": "A Hanukkah hanukkiah has eight lights plus a separate helper light.",
     "tags": [
@@ -393,9 +393,9 @@ const repairedCards = [
     "categoryId": "winter-holidays",
     "answer": "Gift Wrap",
     "difficulty": "easy",
-    "emojis": "📄🎀🧻📦",
+    "emojis": "📄🎀🧻🫳",
     "hint": "Decorative paper and ribbon that cover a present.",
-    "explanation": "📄 gives the paper, 🎀 gives ribbon, 🧻 gives the covering layer, and 📦 gives the wrapped package."
+    "explanation": "📄 gives the paper, 🎀 gives ribbon, 🧻 gives the tissue covering, and 🫳 gives the act of wrapping by hand."
   },
   {
     "id": "winter-holidays-kwanzaa-kinara",
@@ -447,18 +447,18 @@ const repairedCards = [
     "categoryId": "summer-fun",
     "answer": "Camping Trip",
     "difficulty": "easy",
-    "emojis": "🛌🧳🌌🧭",
+    "emojis": "🚗🛌🌌🧭",
     "hint": "A getaway that involves traveling to sleep outdoors.",
-    "explanation": "🛌 gives sleeping outside, 🧳 gives a getaway, 🌌 gives an overnight setting, and 🧭 gives travel and exploration."
+    "explanation": "🚗 gives the travel, 🛌 gives the overnight sleep, 🌌 gives the outdoor night, and 🧭 gives exploration away from home."
   },
   {
     "id": "beach-day-surfboard",
     "categoryId": "beach-day",
     "answer": "Surfboard",
     "difficulty": "easy",
-    "emojis": "📏〰️🦶↔️",
+    "emojis": "🧍〰️🪵⚖️",
     "hint": "A long board designed to carry a rider across breaking waves.",
-    "explanation": "📏 gives the board's length, 〰️ gives the breaking wave, 🦶 gives the rider's stance, and ↔️ gives balance across the moving water."
+    "explanation": "🧍 gives the standing rider, 〰️ gives the breaking wave, 🪵 gives the board surface, and ⚖️ gives balance while riding."
   },
   {
     "id": "beach-day-beach-ball",
@@ -474,9 +474,9 @@ const repairedCards = [
     "categoryId": "beach-day",
     "answer": "Flip-Flops",
     "difficulty": "easy",
-    "emojis": "🪶👣🔊🧷",
+    "emojis": "👣🪢🔊↔️",
     "hint": "Open slip-on footwear with a toe strap that makes a slapping sound.",
-    "explanation": "🪶 gives lightweight footwear, 👣 gives walking, 🔊 gives the familiar slap, and 🧷 gives the small toe-strap fastener."
+    "explanation": "👣 gives the feet, 🪢 gives the toe strap, 🔊 gives the familiar slap, and ↔️ gives the paired alternating steps."
   },
   {
     "id": "beach-day-beach-towel",
@@ -510,9 +510,9 @@ const repairedCards = [
     "categoryId": "amusement-park",
     "answer": "Mascot",
     "difficulty": "easy",
-    "emojis": "🎭🪪📣📸",
+    "emojis": "🎭🏳️📣📸",
     "hint": "A costumed character that represents a park or team and welcomes guests.",
-    "explanation": "🎭 gives the costume, 🪪 gives a recognizable identity, 📣 gives welcoming energy, and 📸 gives visitor photos."
+    "explanation": "🎭 gives the costume, 🏳️ gives the represented park or team, 📣 gives cheering and welcome, and 📸 gives visitor photos."
   },
   {
     "id": "around-the-house-sofa",
@@ -528,9 +528,9 @@ const repairedCards = [
     "categoryId": "around-the-house",
     "answer": "Bed",
     "difficulty": "easy",
-    "emojis": "🧺😴🌙🧵",
+    "emojis": "🪵🧺😴📏",
     "hint": "A piece of furniture with a mattress where someone sleeps.",
-    "explanation": "🧺 gives bed linens, 😴 gives sleep, 🌙 gives nighttime, and 🧵 gives the soft bedding around the mattress."
+    "explanation": "🪵 gives the frame, 🧺 gives bed linens, 😴 gives sleeping, and 📏 gives the full-sized furniture and mattress."
   },
   {
     "id": "around-the-house-mirror",
@@ -555,9 +555,9 @@ const repairedCards = [
     "categoryId": "around-the-house",
     "answer": "Shower",
     "difficulty": "easy",
-    "emojis": "🫧🧴🧼⬆️",
+    "emojis": "💧⬆️🛁🫧",
     "hint": "A wall fixture that sprays water from above for washing.",
-    "explanation": "🫧 gives spray, 🧴 gives bath products, 🧼 gives washing, and ⬆️ gives the overhead fixture."
+    "explanation": "💧 gives the water stream, ⬆️ gives the overhead direction, 🛁 gives the bathing setting, and 🫧 gives the spray."
   },
   {
     "id": "around-the-house-toilet",
@@ -582,27 +582,27 @@ const repairedCards = [
     "categoryId": "kitchen-tools",
     "answer": "Ladle",
     "difficulty": "easy",
-    "emojis": "🍲🫳📏🫗",
+    "emojis": "🍲🪵🫳🥣",
     "hint": "A long-handled scoop used to serve soup from a deep pot.",
-    "explanation": "🍲 gives soup, 🫳 gives the serving grip, 📏 gives the long handle, and 🫗 gives transferring liquid from pot to bowl."
+    "explanation": "🍲 gives soup from a deep pot, 🪵 gives the long handle, 🫳 gives the serving grip, and 🥣 gives the receiving bowl."
   },
   {
     "id": "kitchen-tools-citrus-juicer",
     "categoryId": "kitchen-tools",
     "answer": "Citrus Juicer",
     "difficulty": "medium",
-    "emojis": "🫳🔺🍹🫗",
-    "hint": "A kitchen tool that presses cut citrus to release juice.",
-    "explanation": "🫳 gives pressing, 🔺 gives the reamer cone, 🍹 gives the extracted juice, and 🫗 gives pouring the result."
+    "emojis": "🤲💧🫙⬇️",
+    "hint": "A hand tool that presses a tart, segmented fruit to release juice.",
+    "explanation": "🤲 gives the hand press, 💧 gives released juice, 🫙 gives the collecting container, and ⬇️ gives pressing down on the cut fruit."
   },
   {
     "id": "kitchen-tools-potato-masher",
     "categoryId": "kitchen-tools",
     "answer": "Potato Masher",
     "difficulty": "easy",
-    "emojis": "🫳⬇️🕳️🧈",
+    "emojis": "🤲⬇️🍽️🧈",
     "hint": "A hand tool with a perforated plate that crushes cooked tubers.",
-    "explanation": "🫳 gives the grip, ⬇️ gives pressing, 🕳️ gives the perforated plate, and 🧈 gives the soft mashed result."
+    "explanation": "🤲 gives the hand tool, ⬇️ gives pressing down, 🍽️ gives the prepared food, and 🧈 gives the soft mashed texture."
   },
   {
     "id": "kitchen-tools-pastry-brush",
@@ -627,27 +627,27 @@ const repairedCards = [
     "categoryId": "idioms",
     "answer": "Through Thick and Thin",
     "difficulty": "medium",
-    "emojis": "🤝🧊🔥⏳",
-    "hint": "An idiom about staying loyal through good times and hard times.",
-    "explanation": "🤝 gives loyalty, 🧊 and 🔥 give opposite difficult conditions, and ⏳ gives staying together over time."
+    "emojis": "🤝🧱🧵⏳",
+    "hint": "An idiom about staying loyal in both easy and difficult circumstances.",
+    "explanation": "🤝 gives loyalty, 🧱 gives something thick, 🧵 gives something thin, and ⏳ gives staying together through time."
   },
   {
     "id": "emotions-love",
     "categoryId": "emotions",
     "answer": "Love",
     "difficulty": "easy",
-    "emojis": "👥🤝🧸⏳",
-    "hint": "A deep feeling of care that grows through trust, time, and close connection.",
-    "explanation": "👥 gives close relationships, 🤝 gives trust and connection, 🧸 gives caring comfort, and ⏳ gives lasting attachment."
+    "emojis": "💌🫶🧸⏳",
+    "hint": "A deep feeling of affection and care expressed through closeness, comfort, and lasting support.",
+    "explanation": "💌 gives an affection message, 🫶 gives caring love, 🧸 gives comfort, and ⏳ gives lasting attachment."
   },
   {
     "id": "emotions-nervous",
     "categoryId": "emotions",
     "answer": "Nervous",
     "difficulty": "easy",
-    "emojis": "👐💓📋⚡",
-    "hint": "A jittery feeling before an important event.",
-    "explanation": "👐 gives fidgeting, 💓 gives a racing heartbeat, 📋 gives preparation, and ⚡ gives the sudden jolt of nervous energy."
+    "emojis": "🫨💓📅👀",
+    "hint": "A jittery feeling while waiting for an important event to begin.",
+    "explanation": "🫨 gives trembling, 💓 gives a racing heartbeat, 📅 gives the upcoming event, and 👀 gives anxious anticipation."
   },
   {
     "id": "emotions-frustrated",
@@ -690,9 +690,9 @@ const repairedCards = [
     "categoryId": "plants",
     "answer": "Pumpkin Vine",
     "difficulty": "medium",
-    "emojis": "🪢🟠🍃🧺",
-    "hint": "A sprawling vine whose large orange fruit develops from yellow blossoms.",
-    "explanation": "🪢 gives the trailing vine, 🟠 gives the developing orange fruit, 🍃 gives leaves, and 🧺 gives the garden harvest."
+    "emojis": "🪢🌼🍃🟠",
+    "hint": "A trailing plant with tendrils whose large orange fruit develops from yellow blossoms.",
+    "explanation": "🪢 gives the trailing tendril, 🌼 gives the blossoms, 🍃 gives the leaves, and 🟠 gives the fruit growing on the plant."
   },
   {
     "id": "plants-aloe-vera",
@@ -744,10 +744,292 @@ const repairedCards = [
     "categoryId": "harry-potter",
     "answer": "The Deathly Hallows",
     "difficulty": "medium",
-    "emojis": "3️⃣🔺👬🎁📜",
-    "hint": "A legend about three powerful objects inherited by one wizarding family.",
-    "explanation": "3️⃣ counts the set, 🔺 gives the Hallows emblem, 👬 gives the Peverell brothers, 🎁 gives inherited objects, and 📜 gives the old legend."
+    "emojis": "3️⃣🔺🫥🔁🧿",
+    "hint": "A wizarding set of three legendary objects whose powers include invisibility and return from death.",
+    "explanation": "3️⃣ counts the set, 🔺 gives the Hallows emblem, 🫥 gives invisibility, 🔁 gives return from death, and 🧿 gives the magical-object set."
   }
+] as const;
+
+const secondPassFinalFields = [
+  {
+    id: "construction-bulldozer",
+    categoryId: "construction",
+    answer: "Bulldozer",
+    difficulty: "easy",
+    details: "Type: Construction equipment",
+    funFact: "Bulldozers use a broad blade at the front.",
+    tags: ["machines", "construction"],
+  },
+  {
+    id: "construction-dump-truck",
+    categoryId: "construction",
+    answer: "Dump Truck",
+    difficulty: "easy",
+    details: "Type: Construction vehicle",
+    funFact: "Dump trucks use hydraulics to lift the bed.",
+    tags: ["machines", "construction"],
+  },
+  {
+    id: "construction-wheelbarrow",
+    categoryId: "construction",
+    answer: "Wheelbarrow",
+    difficulty: "easy",
+    details: "Hand-powered cart with one wheel and handles used for soil, concrete, or debris.",
+    funFact: "One wheel makes a wheelbarrow easy to turn but requires the user to balance the load.",
+    tags: ["construction", "tool", "material-handling", "landscaping"],
+  },
+  {
+    id: "construction-scaffolding",
+    categoryId: "construction",
+    answer: "Scaffolding",
+    difficulty: "medium",
+    details: "Temporary platform and frame system used to support workers and materials at height.",
+    funFact: "Scaffolding is assembled in sections and must be properly braced and supported.",
+    tags: ["construction", "site", "safety", "building"],
+  },
+  {
+    id: "construction-nail-gun",
+    categoryId: "construction",
+    answer: "Nail Gun",
+    difficulty: "medium",
+    details: "Tool that uses compressed air, gas, or electricity to drive nails into material.",
+    funFact: "Different nail-gun types are designed for framing, finishing, roofing, or small trim work.",
+    tags: ["construction", "tool", "woodworking", "safety"],
+  },
+  {
+    id: "construction-work-gloves",
+    categoryId: "construction",
+    answer: "Work Gloves",
+    difficulty: "easy",
+    details: "Hand protection selected for tasks such as handling lumber, masonry, tools, or sharp materials.",
+    funFact: "Different jobs require different glove materials because no single glove protects against every hazard.",
+    tags: ["construction", "safety", "workwear", "ppe"],
+  },
+  {
+    id: "jobs-designer",
+    categoryId: "jobs",
+    answer: "Designer",
+    difficulty: "medium",
+    details: "Professional who develops visual, product, or interaction solutions for a defined purpose and audience.",
+    funFact: "Designers often test rough ideas with sketches or prototypes before producing a final version.",
+    tags: ["jobs", "design", "product", "user-experience"],
+  },
+  {
+    id: "music-instruments-cello",
+    categoryId: "music-instruments",
+    answer: "Cello",
+    difficulty: "medium",
+    details: "Type: String instrument",
+    funFact: "A cello is tuned in fifths, one octave below a viola.",
+    tags: ["music", "instruments", "string"],
+  },
+  {
+    id: "music-instruments-banjo",
+    categoryId: "music-instruments",
+    answer: "Banjo",
+    difficulty: "medium",
+    details: "Type: Plucked string instrument",
+    funFact: "Many banjos use a circular, drum-like body under their strings.",
+    tags: ["music", "instruments", "string", "folk"],
+  },
+  {
+    id: "music-genres-randb",
+    categoryId: "music-genres",
+    answer: "R&B",
+    difficulty: "medium",
+    details: "Type: Music genre",
+    funFact: "Rhythm and blues helped shape later soul, funk, and pop music.",
+    tags: ["music", "genres", "r-and-b"],
+  },
+  {
+    id: "art-supplies-markers",
+    categoryId: "art-supplies",
+    answer: "Markers",
+    difficulty: "medium",
+    details: "Type: Drawing tool",
+    funFact: "Markers can be washable, permanent, or paint-based.",
+    tags: ["art", "art-supplies"],
+  },
+  {
+    id: "art-supplies-palette",
+    categoryId: "art-supplies",
+    answer: "Palette",
+    difficulty: "easy",
+    details: "Type: Art tool",
+    funFact: "Painters use palettes to organize and blend paint.",
+    tags: ["art", "art-supplies"],
+  },
+  {
+    id: "art-supplies-beads",
+    categoryId: "art-supplies",
+    answer: "Beads",
+    difficulty: "easy",
+    details: "Type: Craft material",
+    funFact: "Beads can be made from glass, wood, clay, plastic, or stone.",
+    tags: ["art", "supplies", "craft"],
+  },
+  {
+    id: "camping-camp-pillow",
+    categoryId: "camping",
+    answer: "Camp Pillow",
+    difficulty: "easy",
+    details: "Type: Camping gear",
+    funFact: "Many camping pillows compress or fold to save packing space.",
+    tags: ["camping", "outdoors", "sleep"],
+  },
+  {
+    id: "national-parks-great-sand-dunes-national-park-and-preserve",
+    categoryId: "national-parks",
+    answer: "Great Sand Dunes National Park and Preserve",
+    difficulty: "medium",
+    details: "Established 2004",
+    funFact: "It protects the tallest dunes in North America.",
+    tags: ["national-parks", "colorado", "dunes"],
+  },
+  {
+    id: "winter-holidays-hanukkiah",
+    categoryId: "winter-holidays",
+    answer: "Hanukkiah",
+    difficulty: "hard",
+    details: "Type: Holiday object; the nine-branched Hanukkah candelabrum is called a hanukkiah.",
+    funFact: "A Hanukkah hanukkiah has eight lights plus a separate helper light.",
+    tags: ["holidays", "winter", "winter-holidays"],
+  },
+  {
+    id: "winter-holidays-gift-wrap",
+    categoryId: "winter-holidays",
+    answer: "Gift Wrap",
+    difficulty: "easy",
+    details: "Type: Holiday supply",
+    funFact: "Wrapping a present can turn an ordinary box into part of the surprise.",
+    tags: ["holidays", "winter", "winter-holidays"],
+  },
+  {
+    id: "summer-fun-camping-trip",
+    categoryId: "summer-fun",
+    answer: "Camping Trip",
+    difficulty: "easy",
+    details: "Type: Outdoor trip",
+    funFact: "Camping can happen in tents, cabins, or under the stars.",
+    tags: ["summer", "summer-fun"],
+  },
+  {
+    id: "beach-day-surfboard",
+    categoryId: "beach-day",
+    answer: "Surfboard",
+    difficulty: "easy",
+    details: "Type: Beach gear",
+    funFact: "Surfboards come in different shapes for different waves.",
+    tags: ["beach", "summer", "beach-day"],
+  },
+  {
+    id: "beach-day-flip-flops",
+    categoryId: "beach-day",
+    answer: "Flip-Flops",
+    difficulty: "easy",
+    details: "Type: Footwear",
+    funFact: "Flip-flops are named for the sound they make while walking.",
+    tags: ["beach", "summer", "beach-day"],
+  },
+  {
+    id: "amusement-park-mascot",
+    categoryId: "amusement-park",
+    answer: "Mascot",
+    difficulty: "easy",
+    details: "Type: Park role",
+    funFact: "A mascot gives a place or team a recognizable character for visitors to meet.",
+    tags: ["amusement-park", "people", "character"],
+  },
+  {
+    id: "around-the-house-bed",
+    categoryId: "around-the-house",
+    answer: "Bed",
+    difficulty: "easy",
+    details: "Type: Furniture",
+    funFact: "Mattresses are designed to support the body while resting.",
+    tags: ["home", "around-the-house"],
+  },
+  {
+    id: "around-the-house-shower",
+    categoryId: "around-the-house",
+    answer: "Shower",
+    difficulty: "easy",
+    details: "Type: Bathroom fixture",
+    funFact: "Shower temperature and pressure can be adjusted for comfort and cleaning.",
+    tags: ["home", "bathroom", "cleaning"],
+  },
+  {
+    id: "kitchen-tools-ladle",
+    categoryId: "kitchen-tools",
+    answer: "Ladle",
+    difficulty: "easy",
+    details: "Type: Serving tool",
+    funFact: "A ladle’s deep bowl holds more liquid than a typical spoon.",
+    tags: ["kitchen", "tools", "serving"],
+  },
+  {
+    id: "kitchen-tools-citrus-juicer",
+    categoryId: "kitchen-tools",
+    answer: "Citrus Juicer",
+    difficulty: "medium",
+    details: "Type: Prep tool",
+    funFact: "A reamer or cone extracts juice when cut citrus is pressed against it.",
+    tags: ["kitchen", "tools", "prep"],
+  },
+  {
+    id: "kitchen-tools-potato-masher",
+    categoryId: "kitchen-tools",
+    answer: "Potato Masher",
+    difficulty: "easy",
+    details: "Type: Prep tool",
+    funFact: "A masher’s perforated plate pushes cooked food into a soft texture.",
+    tags: ["kitchen", "tools", "prep"],
+  },
+  {
+    id: "idioms-through-thick-and-thin",
+    categoryId: "idioms",
+    answer: "Through Thick and Thin",
+    difficulty: "medium",
+    details: "Type: Idiom",
+    funFact: "The phrase describes staying with someone through changing conditions.",
+    tags: ["phrases", "idioms"],
+  },
+  {
+    id: "emotions-love",
+    categoryId: "emotions",
+    answer: "Love",
+    difficulty: "easy",
+    details: "Type: Positive feeling",
+    funFact: "Love can be expressed through care, trust, time, and support.",
+    tags: ["emotions", "feelings", "positive"],
+  },
+  {
+    id: "emotions-nervous",
+    categoryId: "emotions",
+    answer: "Nervous",
+    difficulty: "easy",
+    details: "Type: Feeling",
+    funFact: "Nervousness often appears when an outcome matters and is not yet known.",
+    tags: ["emotions", "feelings", "school"],
+  },
+  {
+    id: "plants-pumpkin-vine",
+    categoryId: "plants",
+    answer: "Pumpkin Vine",
+    difficulty: "medium",
+    details: "Type: Vine",
+    funFact: "Pumpkins grow from flowers on long vines.",
+    tags: ["plants", "nature"],
+  },
+  {
+    id: "harry-potter-the-deathly-hallows",
+    categoryId: "harry-potter",
+    answer: "The Deathly Hallows",
+    difficulty: "medium",
+    details: "Legend about three powerful objects: the Elder Wand, Invisibility Cloak, and Resurrection Stone.",
+    funFact: "The Peverell brothers were the original owners of the three Hallows.",
+    tags: ["harry-potter", "concepts", "legend", "objects", "deathly-hallows"],
+  },
 ] as const;
 
 describe("partition C blind-review repairs", () => {
@@ -764,5 +1046,18 @@ describe("partition C blind-review repairs", () => {
 
     expect(byId.has("winter-holidays-menorah")).toBe(false);
     expect(answerEmojiBanlist.hanukkiah).toContain("🕎");
+  });
+
+  it("preserves every final field and recalibrated difficulty for all 31 second-pass cards", () => {
+    const byId = new Map(expandedPuzzles.map((puzzle) => [puzzle.id, puzzle]));
+
+    expect(secondPassFinalFields).toHaveLength(31);
+
+    for (const expected of secondPassFinalFields) {
+      const actual = byId.get(expected.id);
+      expect(actual, expected.id + " should exist").toBeDefined();
+      expect(actual).toMatchObject(expected);
+      expect(actual?.tags).toEqual(expected.tags);
+    }
   });
 });

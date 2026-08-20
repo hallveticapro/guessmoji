@@ -1,5 +1,7 @@
 # UPDATES.md
 
+2026-08-20 03:35: Applied all 31 Partition C blind-recheck clue remediations, durable component bans, and exhaustive final-field regression coverage.
+
 2026-06-04 21:17: Initialized project documentation.
 2026-06-04 21:20: Scaffolded the Next.js app.
 2026-06-04 21:22: Added puzzle types.
