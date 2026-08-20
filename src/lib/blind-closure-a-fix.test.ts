@@ -28,7 +28,7 @@ const closureRepairManifest = [
     id: "breakfast-english-muffin",
     categoryId: "breakfast",
     answer: "English Muffin",
-    difficulty: "easy",
+    difficulty: "hard",
     emojis: "🍞🫧🔪🔥🟤",
     hint: "A round yeast bread splits open to reveal nooks and a coarse surface for toasting.",
     explanation:
@@ -42,7 +42,7 @@ const closureRepairManifest = [
     id: "breakfast-danish-pastry",
     categoryId: "breakfast",
     answer: "Danish Pastry",
-    difficulty: "medium",
+    difficulty: "hard",
     emojis: "🧈🔁🍯🍓👐",
     hint: "A flaky layered bake holds fruit or cream beneath a glaze.",
     explanation:
@@ -56,7 +56,7 @@ const closureRepairManifest = [
     id: "breakfast-biscuit-and-gravy",
     categoryId: "breakfast",
     answer: "Biscuit and Gravy",
-    difficulty: "easy",
+    difficulty: "hard",
     emojis: "🟤✂️🫗🌶️🥣",
     hint: "A Southern morning plate pairs split baked rounds with a warm pepper-seasoned sauce.",
     explanation:

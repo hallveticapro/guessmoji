@@ -1,5 +1,7 @@
 # UPDATES.md
 
+2026-08-20 07:01: Recalibrated the three Closure 2 breakfast cards to Hard and added focused hard-card criterion coverage.
+
 2026-08-20 06:47: Applied the four Closure A blind clue repairs and added exact preservation, leak, pair, repetition, and catalog regression coverage.
 
 2026-08-20 06:15: Applied the five Partition A final blind repairs and added exact clue, preservation, leak, pair, and repetition regression coverage.
