@@ -155,7 +155,7 @@ describe("clue audit helpers", () => {
     expect(puzzleById.get("space-astronaut")?.emojis).toContain("🪖");
     expect(puzzleById.get("weather-tornado")?.emojis).toContain("🌀");
     expect(puzzleById.get("weather-fog")?.emojis).toContain("☁️");
-    expect(puzzleById.get("world-geography-peninsula")?.emojis).toContain("3️⃣");
+    expect(puzzleById.get("world-geography-peninsula")?.emojis).toContain("🗺️");
     expect(puzzleById.get("world-geography-compass-rose")?.emojis).toContain("✳️");
     expect(puzzleById.get("vehicles-bicycle")?.emojis).toContain("⚙️");
     expect(puzzleById.get("vehicles-motorcycle")?.emojis).toContain("↪️");
@@ -175,7 +175,7 @@ describe("clue audit helpers", () => {
 
     const milkyWay = get("space-milky-way");
     const galaxy = get("space-galaxy");
-    expect(milkyWay.emojis).toContain("🏠");
+    expect(milkyWay.emojis).toContain("🌃");
     expect(galaxy.emojis).toContain("🌫️");
     expect(galaxy.emojis).toContain("✨");
     expect(galaxy.emojis).not.toContain("🌠");
@@ -216,7 +216,7 @@ describe("clue audit helpers", () => {
 
     expect(get("outdoor-games-four-square").emojis).not.toContain("4️⃣");
     expect(get("outdoor-games-four-square").emojis).not.toContain("⬜");
-    expect(get("party-games-rock-paper-scissors").emojis).not.toMatch(/[✊✋✌️]/u);
+    expect(get("party-games-rock-paper-scissors").emojis).not.toMatch(/[✊✋✌]/u);
     expect(get("world-landmarks-great-wall-of-china").emojis).not.toContain("🧱");
     expect(get("world-landmarks-pyramids-of-giza").emojis).not.toContain("🔺");
     expect(get("us-landmarks-white-house").emojis).not.toContain("⚪");
@@ -226,9 +226,9 @@ describe("clue audit helpers", () => {
     expect(get("books-magic-tree-house").emojis).not.toContain("🌳");
     expect(get("books-magic-tree-house").emojis).not.toContain("🏠");
 
-    expect(get("minecraft-diamond-sword").explanation).toContain("sword");
-    expect(get("minecraft-diamond-sword").hint).toContain("blue blade");
-    expect(get("minecraft-crafting-table").explanation).toContain("3×3");
+    expect(get("minecraft-diamond-sword").explanation).toContain("close-range fighter");
+    expect(get("minecraft-diamond-sword").hint).toContain("blue-edged melee weapon");
+    expect(get("minecraft-crafting-table").explanation).toContain("three-by-three");
     expect(get("books-dog-man").explanation).toContain("🦴");
     expect(get("world-geography-mediterranean-sea").explanation).toContain("🌊");
   });
@@ -512,7 +512,7 @@ describe("clue audit helpers", () => {
     expect(get("math-graph").emojis).not.toMatch(/[📊📈]/u);
     expect(get("world-landmarks-eiffel-tower").emojis).not.toContain("📸");
     expect(get("minecraft-diamond-sword").difficulty).toBe("medium");
-    expect(get("books-the-cat-in-the-hat").emojis).toContain("🌧️");
+    expect(get("books-the-cat-in-the-hat").emojis).toContain("🌀");
     expect(get("world-geography-greenland").hint).not.toMatch(/Greenland/i);
 
     const geographyIds = [
