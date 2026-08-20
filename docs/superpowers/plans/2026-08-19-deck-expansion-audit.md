@@ -4,6 +4,8 @@
 
 **Goal:** Audit all 60 source decks and expand each to the strongest honest multiple-of-10 ceiling: 30 where the category supports it, 20 where 30 would require weak or obscure cards, and 10 where even 20 would dilute playability.
 
+> **Status:** Tasks 1–5 are complete; Task 6 release work remains pending.
+
 **Architecture:** Keep the existing static seed-data model and category IDs. Add only complete 10-card blocks, preserve globally unique puzzle IDs, extend the direct-answer emoji banlist when needed, and rely on the existing catalog normalizer, random-round behavior, and audit tests. Treat `CONTENT_GENERATION_RULES.md` as the content specification and require fresh staged blind review for every added block.
 
 **Tech Stack:** Next.js, React, TypeScript, Vitest, static TypeScript seed data, Docker, GitHub Actions, GHCR, Arcane.
@@ -19,11 +21,11 @@
 - Read: `src/data/expandedPacks.ts`
 - Read: `src/data/answerEmojiBanlist.ts`
 
-- [ ] Record the current count and existing answers for every non-random category.
-- [ ] Partition all under-target categories across clean-context reviewers.
-- [ ] For each deck, select a defensible ceiling of 30, 20, or 10 and provide complete proposed 10-card answer blocks.
-- [ ] Reject candidates that are obscure, duplicate another answer in the deck, leak the answer through direct/component emoji, waste category-context emoji, or force repetitive clues.
-- [ ] Reconcile cross-partition duplicates and freeze the approved expansion manifest.
+- [x] Record the current count and existing answers for every non-random category.
+- [x] Partition all under-target categories across clean-context reviewers.
+- [x] For each deck, select a defensible ceiling of 30, 20, or 10 and provide complete proposed 10-card answer blocks.
+- [x] Reject candidates that are obscure, duplicate another answer in the deck, leak the answer through direct/component emoji, waste category-context emoji, or force repetitive clues.
+- [x] Reconcile cross-partition duplicates and freeze the approved expansion manifest.
 
 ### Task 2: Author approved expansion blocks
 
@@ -32,11 +34,11 @@
 - Modify: `src/data/expandedPacks.ts`
 - Modify: `src/data/answerEmojiBanlist.ts`
 
-- [ ] Assign non-overlapping category ownership to implementation subagents.
-- [ ] Add only approved complete 10-card blocks, with explicit answer, emojis, hint, details, fun fact, difficulty, explanation, and tags.
-- [ ] Keep IDs globally unique and facts accurate; preserve existing source ordering and project patterns.
-- [ ] Add or update direct-answer emoji bans for every newly introduced answer that has a direct emoji representation.
-- [ ] Run focused typecheck and clue-audit checks after each integration batch.
+- [x] Assign non-overlapping category ownership to implementation subagents.
+- [x] Add only approved complete 10-card blocks, with explicit answer, emojis, hint, details, fun fact, difficulty, explanation, and tags.
+- [x] Keep IDs globally unique and facts accurate; preserve existing source ordering and project patterns.
+- [x] Add or update direct-answer emoji bans for every newly introduced answer that has a direct emoji representation.
+- [x] Run focused typecheck and clue-audit checks after each integration batch.
 
 ### Task 3: Perform staged blind and rules review
 
@@ -45,10 +47,10 @@
 - Review: `src/data/expandedPacks.ts`
 - Review: `src/data/answerEmojiBanlist.ts`
 
-- [ ] Give each new block to a fresh clean-context reviewer stage-by-stage as required by `CONTENT_GENERATION_RULES.md`.
-- [ ] Record clue-only/category-stage guesses before exposing hints, then review hints, reveal metadata, difficulty, safety, and fun-fact accuracy.
-- [ ] Repair or omit every failed card; never preserve a block merely to hit a numeric target.
-- [ ] Run a separate whole-catalog review for duplicates, semantic leaks, category-context filler, emoji repetition, and tier integrity.
+- [x] Give each new block to a fresh clean-context reviewer stage-by-stage as required by `CONTENT_GENERATION_RULES.md`.
+- [x] Record clue-only/category-stage guesses before exposing hints, then review hints, reveal metadata, difficulty, safety, and fun-fact accuracy.
+- [x] Repair or omit every failed card; never preserve a block merely to hit a numeric target.
+- [x] Run a separate whole-catalog review for duplicates, semantic leaks, category-context filler, emoji repetition, and tier integrity.
 
 ### Task 4: Lock catalog invariants and documentation
 
@@ -59,21 +61,21 @@
 - Modify: `TASKS.md`
 - Modify: `UPDATES.md`
 
-- [ ] Add focused automated assertions for final per-deck counts, multiple-of-10 integrity, ID uniqueness, and any newly discovered regression class.
-- [ ] Confirm Random Mix continues to normalize safely and draw without duplicates.
-- [ ] Update the authoritative task status and add a concise timestamped update.
+- [x] Add focused automated assertions for final per-deck counts, multiple-of-10 integrity, ID uniqueness, and any newly discovered regression class.
+- [x] Confirm Random Mix continues to normalize safely and draw without duplicates.
+- [x] Update the authoritative task status and add a concise timestamped update.
 
 ### Task 5: Validate the complete application
 
 **Files:**
 - Verify: all changed files
 
-- [ ] Run `npm run lint`.
-- [ ] Run `npm run typecheck`.
-- [ ] Run `npm test -- --run`.
-- [ ] Run `npm run build`.
-- [ ] Run the relevant Docker build and smoke checks.
-- [ ] Request a final clean-context branch review and resolve all material findings.
+- [x] Run `npm run lint`.
+- [x] Run `npm run typecheck`.
+- [x] Run `npm test -- --run`.
+- [x] Run `npm run build`.
+- [x] Run the relevant Docker build and smoke checks.
+- [x] Request a final clean-context branch review and resolve all material findings.
 
 ### Task 6: Release through protected main and Arcane
 

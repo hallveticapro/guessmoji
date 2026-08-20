@@ -35,9 +35,9 @@ const repairedCards = [
     "categoryId": "vehicles",
     "answer": "Golf Cart",
     "difficulty": "easy",
-    "emojis": "🏌️🧳🔋🛞",
-    "hint": "A small low-speed vehicle carrying clubs around a golf course.",
-    "explanation": "🏌️ identifies the course activity, 🧳 gives carried equipment, 🔋 signals common electric power, and 🛞 gives the compact vehicle."
+    "emojis": "🧳🔋🛞",
+    "hint": "A small low-speed vehicle carrying equipment around a wide course.",
+    "explanation": "🧳 gives carried equipment, 🔋 signals common electric power, and 🛞 gives the compact vehicle."
   },
   {
     "id": "vehicles-skateboard",

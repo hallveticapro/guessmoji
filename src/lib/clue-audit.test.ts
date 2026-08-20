@@ -103,6 +103,61 @@ describe("clue audit helpers", () => {
     ]);
   });
 
+  it("covers reviewed direct and component representations in strict-category cards", () => {
+    const puzzleById = new Map(expandedPuzzles.map((puzzle) => [puzzle.id, puzzle]));
+    const reviewedVariants = [
+      {
+        answer: "Golf Cart",
+        puzzleId: "vehicles-golf-cart",
+        categoryId: "vehicles",
+        forbiddenEmoji: "🏌️",
+        requiredBans: ["⛳", "🏌️"],
+      },
+      {
+        answer: "Ruler",
+        puzzleId: "school-supplies-ruler",
+        categoryId: "school-supplies",
+        forbiddenEmoji: "📐",
+        requiredBans: ["📏", "📐"],
+      },
+      {
+        answer: "Snow",
+        puzzleId: "weather-snow",
+        categoryId: "weather",
+        forbiddenEmoji: "🌨️",
+        requiredBans: ["❄️", "🌨️"],
+      },
+    ] as const;
+
+    for (const { answer, puzzleId, categoryId, forbiddenEmoji, requiredBans } of reviewedVariants) {
+      const normalizedAnswer = normalizeAnswerForAudit(answer);
+      expect(answerEmojiBanlist[normalizedAnswer as keyof typeof answerEmojiBanlist]).toEqual(
+        expect.arrayContaining([...requiredBans]),
+      );
+      expect(puzzleById.get(puzzleId)?.emojis).not.toContain(forbiddenEmoji);
+
+      expect(
+        findDirectAnswerEmojiLeaks(
+          [
+            {
+              id: `synthetic-${puzzleId}-variant`,
+              answer,
+              emojis: `${forbiddenEmoji}🧩`,
+              categoryId,
+              difficulty: "easy",
+            },
+          ],
+          answerEmojiBanlist,
+        ),
+      ).toContainEqual(
+        expect.objectContaining({
+          puzzleId: `synthetic-${puzzleId}-variant`,
+          forbiddenEmoji,
+        }),
+      );
+    }
+  });
+
   it("reports structured direct-answer emoji leaks", () => {
     const leakingPuzzle: Puzzle = {
       id: "synthetic-fox",

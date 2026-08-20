@@ -932,92 +932,74 @@ const secondPassPreservedRevealFields = [
 const difficultyChanges = [
   {
     "id": "sports-tennis",
-    "from": "easy",
     "to": "medium"
   },
   {
     "id": "minecraft-pickaxe",
-    "from": "easy",
     "to": "medium"
   },
   {
     "id": "science-magnet",
-    "from": "easy",
     "to": "medium"
   },
   {
     "id": "science-matter",
-    "from": "easy",
     "to": "medium"
   },
   {
     "id": "weather-cloud",
-    "from": "easy",
     "to": "medium"
   },
   {
     "id": "sports-track-and-field",
-    "from": "easy",
     "to": "medium"
   },
   {
     "id": "sports-skateboarding",
-    "from": "easy",
     "to": "medium"
   },
   {
     "id": "sports-snowboarding",
-    "from": "easy",
     "to": "medium"
   },
   {
     "id": "party-games-simon-says",
-    "from": "easy",
     "to": "medium"
   },
   {
     "id": "science-electricity",
-    "from": "easy",
     "to": "medium"
   },
   {
     "id": "weather-blizzard",
-    "from": "easy",
     "to": "medium"
   },
   {
     "id": "books-the-cat-in-the-hat",
-    "from": "easy",
     "to": "medium"
   },
   {
     "id": "world-landmarks-great-wall-of-china",
-    "from": "easy",
     "to": "medium"
   },
   {
     "id": "us-landmarks-white-house",
-    "from": "easy",
     "to": "medium"
   },
   {
     "id": "world-geography-africa",
-    "from": "easy",
     "to": "medium"
   },
   {
     "id": "world-geography-arctic-ocean",
-    "from": "easy",
     "to": "medium"
   },
   {
     "id": "world-geography-himalayas",
-    "from": "easy",
     "to": "medium"
   },
   {
     "id": "world-geography-south-america",
-    "from": "easy",
     "to": "medium"
   }
 ] as const;
@@ -1188,29 +1170,29 @@ describe("partition B blind-review repairs", () => {
     expect(geographyUsage.get("🌊")).toEqual({ count: 6, ratio: 0.2 });
   });
 
-  it("applies exactly the five approved difficulty changes", () => {
+  it("applies exactly the 18 approved difficulty changes", () => {
     const sourcePuzzles = [...puzzles, ...expandedPuzzles];
     const byId = new Map(sourcePuzzles.map((puzzle) => [puzzle.id, puzzle]));
 
     expect(difficultyChanges).toEqual([
-      { id: "sports-tennis", from: "easy", to: "medium" },
-      { id: "minecraft-pickaxe", from: "easy", to: "medium" },
-      { id: "science-magnet", from: "easy", to: "medium" },
-      { id: "science-matter", from: "easy", to: "medium" },
-      { id: "weather-cloud", from: "easy", to: "medium" },
-      { id: "sports-track-and-field", from: "easy", to: "medium" },
-      { id: "sports-skateboarding", from: "easy", to: "medium" },
-      { id: "sports-snowboarding", from: "easy", to: "medium" },
-      { id: "party-games-simon-says", from: "easy", to: "medium" },
-      { id: "science-electricity", from: "easy", to: "medium" },
-      { id: "weather-blizzard", from: "easy", to: "medium" },
-      { id: "books-the-cat-in-the-hat", from: "easy", to: "medium" },
-      { id: "world-landmarks-great-wall-of-china", from: "easy", to: "medium" },
-      { id: "us-landmarks-white-house", from: "easy", to: "medium" },
-      { id: "world-geography-africa", from: "easy", to: "medium" },
-      { id: "world-geography-arctic-ocean", from: "easy", to: "medium" },
-      { id: "world-geography-himalayas", from: "easy", to: "medium" },
-      { id: "world-geography-south-america", from: "easy", to: "medium" },
+      { id: "sports-tennis", to: "medium" },
+      { id: "minecraft-pickaxe", to: "medium" },
+      { id: "science-magnet", to: "medium" },
+      { id: "science-matter", to: "medium" },
+      { id: "weather-cloud", to: "medium" },
+      { id: "sports-track-and-field", to: "medium" },
+      { id: "sports-skateboarding", to: "medium" },
+      { id: "sports-snowboarding", to: "medium" },
+      { id: "party-games-simon-says", to: "medium" },
+      { id: "science-electricity", to: "medium" },
+      { id: "weather-blizzard", to: "medium" },
+      { id: "books-the-cat-in-the-hat", to: "medium" },
+      { id: "world-landmarks-great-wall-of-china", to: "medium" },
+      { id: "us-landmarks-white-house", to: "medium" },
+      { id: "world-geography-africa", to: "medium" },
+      { id: "world-geography-arctic-ocean", to: "medium" },
+      { id: "world-geography-himalayas", to: "medium" },
+      { id: "world-geography-south-america", to: "medium" },
     ]);
 
     for (const change of difficultyChanges) {
