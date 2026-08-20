@@ -461,6 +461,16 @@ describe("content audit helpers", () => {
       "Patronus",
       "Triwizard Tournament",
       "The Deathly Hallows",
+      "Severus Snape",
+      "Draco Malfoy",
+      "Sirius Black",
+      "Luna Lovegood",
+      "Neville Longbottom",
+      "Lord Voldemort",
+      "Minerva McGonagall",
+      "Fawkes",
+      "Marauder’s Map",
+      "Elder Wand",
     ];
 
     expect(category).toMatchObject({
@@ -473,8 +483,8 @@ describe("content audit helpers", () => {
       recommendedGradeBand: "3-8",
     });
     expect(harryPotterCards.map((puzzle) => puzzle.answer)).toEqual(expectedAnswers);
-    expect(new Set(harryPotterCards.map((puzzle) => puzzle.id)).size).toBe(20);
-    expect(new Set(harryPotterCards.map((puzzle) => puzzle.answer))).toHaveLength(20);
+    expect(new Set(harryPotterCards.map((puzzle) => puzzle.id)).size).toBe(30);
+    expect(new Set(harryPotterCards.map((puzzle) => puzzle.answer))).toHaveLength(30);
     expect(harryPotterCards.every((puzzle) =>
       puzzle.answer.trim() &&
       puzzle.emojis.trim() &&
@@ -484,23 +494,24 @@ describe("content audit helpers", () => {
       puzzle.funFact?.trim() &&
       puzzle.tags?.length,
     )).toBe(true);
-    expect(harryPotterCards.filter((puzzle) => puzzle.difficulty === "easy")).toHaveLength(13);
-    expect(harryPotterCards.filter((puzzle) => puzzle.difficulty === "medium")).toHaveLength(7);
+    expect(harryPotterCards.filter((puzzle) => puzzle.difficulty === "easy")).toHaveLength(17);
+    expect(harryPotterCards.filter((puzzle) => puzzle.difficulty === "medium")).toHaveLength(13);
     expect(harryPotterCards.filter((puzzle) => puzzle.difficulty === "hard")).toHaveLength(0);
 
     const subthemeCounts = new Map<string, number>();
     for (const puzzle of harryPotterCards) {
       const subtheme = puzzle.tags?.find((tag) =>
-        ["characters", "locations", "objects", "concepts"].includes(tag),
+        ["characters", "locations", "objects", "concepts", "creatures"].includes(tag),
       );
       expect(subtheme, `${puzzle.id} should carry one Harry Potter subtheme`).toBeDefined();
       subthemeCounts.set(subtheme as string, (subthemeCounts.get(subtheme as string) ?? 0) + 1);
     }
     expect(Object.fromEntries(subthemeCounts)).toEqual({
-      characters: 5,
+      characters: 12,
       locations: 5,
-      objects: 5,
+      objects: 7,
       concepts: 5,
+      creatures: 1,
     });
 
     const forbiddenScopeText = [
@@ -546,9 +557,9 @@ describe("content audit helpers", () => {
     const harryPotterCards = expandedPuzzles.filter((puzzle) => puzzle.categoryId === "harry-potter");
     const usage = getCategoryEmojiUsage(harryPotterCards);
 
-    expect(new Set(harryPotterCards.map((puzzle) => puzzle.emojis)).size).toBe(20);
-    expect([...usage.values()].every(({ count }) => count <= 4)).toBe(true);
-    expect(usage.get("🛡") ?? usage.get("🛡️")).toEqual({ count: 4, ratio: 0.2 });
+    expect(new Set(harryPotterCards.map((puzzle) => puzzle.emojis)).size).toBe(30);
+    expect([...usage.values()].every(({ count }) => count <= 6)).toBe(true);
+    expect(usage.get("🛡") ?? usage.get("🛡️")).toEqual({ count: 6, ratio: 0.2 });
     expect(harryPotterCards.every((puzzle) => !puzzle.emojis.includes("\n"))).toBe(true);
   });
 

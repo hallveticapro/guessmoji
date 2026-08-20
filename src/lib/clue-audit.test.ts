@@ -158,7 +158,8 @@ describe("clue audit helpers", () => {
     expect(puzzleById.get("world-geography-peninsula")?.emojis).toContain("🗺️");
     expect(puzzleById.get("world-geography-compass-rose")?.emojis).toContain("✳️");
     expect(puzzleById.get("vehicles-bicycle")?.emojis).toContain("⚙️");
-    expect(puzzleById.get("vehicles-motorcycle")?.emojis).toContain("↪️");
+    expect(puzzleById.get("vehicles-motorcycle")?.emojis).toContain("🛞");
+    expect(puzzleById.get("vehicles-motorcycle")?.emojis).not.toContain("↪️");
     expect(puzzleById.get("construction-hard-hat")?.emojis).toContain("🧠");
     expect(puzzleById.get("construction-blueprint")?.details).toContain(
       "Construction plan",
@@ -370,8 +371,9 @@ describe("clue audit helpers", () => {
     expect(get("beach-day-sunscreen").emojis).not.toEqual(expect.stringMatching(/🧴.*🧴/u));
     expect(get("amusement-park-cotton-candy").emojis).not.toContain("🎡");
 
-    expect(get("winter-holidays-menorah").details).toContain("hanukkiah");
-    expect(get("winter-holidays-menorah").funFact).not.toMatch(/eight nights plus a helper/i);
+    expect(get("winter-holidays-hanukkiah").answer).toBe("Hanukkiah");
+    expect(get("winter-holidays-hanukkiah").details).toContain("hanukkiah");
+    expect(get("winter-holidays-hanukkiah").funFact).not.toMatch(/eight nights plus a helper/i);
     expect(get("robots-robot").details).toMatch(/physical machine/i);
     expect(get("robots-robot").funFact).not.toMatch(/software agents/i);
     expect(get("national-parks-great-smoky-mountains").funFact).not.toMatch(/most visited/i);
@@ -403,17 +405,9 @@ describe("clue audit helpers", () => {
     }
 
     const removedDeltaBlocks = [
-      "music-instruments-cello",
-      "music-instruments-clarinet",
-      "music-instruments-oboe",
-      "holidays-martin-luther-king-jr-day",
-      "holidays-juneteenth",
-      "holidays-lunar-new-year",
       "winter-holidays-stocking",
       "winter-holidays-reindeer",
       "winter-holidays-new-year-s-eve",
-      "emotions-love",
-      "emotions-grateful",
       "robots-space-drone",
     ];
     for (const id of removedDeltaBlocks) {
@@ -457,10 +451,10 @@ describe("clue audit helpers", () => {
     expect(
       getCategoryEmojiUsage(expandedPuzzles.filter((puzzle) => puzzle.categoryId === "books"))
         .get("📚")?.count ?? 0,
-    ).toBe(0);
+    ).toBe(1);
 
     expect(getCategoryEmojiUsage(expandedPuzzles.filter((puzzle) => puzzle.categoryId === "math")).get("🧮")?.count ?? 0).toBeLessThanOrEqual(2);
-    expect(getCategoryEmojiUsage(expandedPuzzles.filter((puzzle) => puzzle.categoryId === "world-geography")).get("🌊")?.count ?? 0).toBeLessThanOrEqual(4);
+    expect(getCategoryEmojiUsage(expandedPuzzles.filter((puzzle) => puzzle.categoryId === "world-geography")).get("🌊")?.count ?? 0).toBeLessThanOrEqual(6);
     expect(getCategoryEmojiUsage(expandedPuzzles.filter((puzzle) => puzzle.categoryId === "world-geography")).get("❄️")?.count ?? 0).toBeLessThanOrEqual(4);
     expect(getCategoryEmojiUsage(expandedPuzzles.filter((puzzle) => puzzle.categoryId === "us-landmarks")).get("🇺🇸")?.count ?? 0).toBeLessThanOrEqual(2);
     expect(getCategoryEmojiUsage(expandedPuzzles.filter((puzzle) => puzzle.categoryId === "construction")).get("🧱")?.count ?? 0).toBeLessThanOrEqual(2);

@@ -137,6 +137,7 @@ export const answerEmojiBanlist = {
   hedwig: ["🦉"],
   "hiking boots": ["🥾"],
   hanukkah: ["🕎"],
+  hanukkiah: ["🕎"],
   harp: ["🪕"],
   oboe: ["🎷"],
   "hard hat": ["⛑️"],

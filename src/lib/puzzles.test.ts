@@ -133,6 +133,16 @@ describe("puzzle utilities", () => {
       "Grand Canyon",
       "Yellowstone",
       "Harry Potter",
+      // Expanded entertainment, activity, and object packs intentionally share these answers.
+      "Beauty and the Beast",
+      "The Bad Guys",
+      "Snow White and the Seven Dwarfs",
+      "The Lorax",
+      "Donkey Kong",
+      "Pac-Man",
+      "Tetris",
+      "Skeleton",
+      "Canoe",
     ]);
     const answersByName = new Map<string, string[]>();
 
