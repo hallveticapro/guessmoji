@@ -12,6 +12,6 @@ describe("play route catalog aggregation", () => {
   });
 
   it("keeps Harry Potter reachable through the derived category data", () => {
-    expect(getPuzzlesByCategoryId("harry-potter")).toHaveLength(20);
+    expect(getPuzzlesByCategoryId("harry-potter")).toHaveLength(30);
   });
 });

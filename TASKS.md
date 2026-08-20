@@ -51,7 +51,11 @@ As of 2026-08-18:
 
 As of 2026-08-19:
 
-- Tasks 8 and 9 close the content audit. The balanced 20-card `Harry Potter` category comes from the core seven-book/eight-film saga; commit `5d5a28c` closes its staged 20/20 blind evidence and source/rules approval. The integrated catalog now contains 60 source categories, 61 categories including Random Mix, and 730 source puzzles.
+- Tasks 8 and 9 close the staged content audit. The balanced `Harry Potter` category comes from the core seven-book/eight-film saga; commit `5d5a28c` closes its staged blind evidence and source/rules approval. The final catalog totals are recorded below after the 2026-08-20 expansion closeout.
+
+As of 2026-08-20:
+
+- The 2026-08-19/20 deck expansion and blind audit is closed. All 60 source decks are locked by `src/data/auditedDeckCeilings.ts` to 9 ten-card, 30 twenty-card, and 21 thirty-card ceilings: 1,320 source puzzles across 60 source categories, 61 category choices including Random Mix, and a 1,299-card normalized-answer-unique Random Mix pool.
 
 The app should support many themed categories, including:
 
@@ -1872,9 +1876,10 @@ Required:
 **Status:** Complete.
 
 **Current catalog evidence:** The source arrays derive 60 source categories, 61
-category choices including Random Mix, 730 source puzzles, and a 719-card
-normalized-answer-unique Random Mix pool. Every source category is a complete multiple
-of ten; Harry Potter contains 20 cards.
+category choices including Random Mix, 1,320 source puzzles, and a 1,299-card
+normalized-answer-unique Random Mix pool. The explicit audited ceiling manifest
+contains 9 ten-card, 30 twenty-card, and 21 thirty-card decks; Harry Potter contains
+30 cards.
 
 **Implementation note:** Final closeout keeps exactly three deterministic,
 category-aligned answer-hidden/full audit packets; packet balancing minimizes the
@@ -1888,7 +1893,8 @@ first source occurrence.
 **Required closeout evidence:**
 
 - `findContentInvariantViolations(categories, puzzles)` returns no findings.
-- All source category counts are derived and satisfy `count >= 10` and `count % 10 === 0`.
+- Every source category count equals its explicit audited ceiling, is one of 10, 20,
+  or 30, and satisfies `count % 10 === 0`.
 - Every source card appears exactly once in each packet view with blind/full/hint ID parity.
 - Focused and full Vitest suites, lint, typecheck, build, Docker build, and diff-check pass.
 

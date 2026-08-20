@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { auditedDeckCeilings } from "@/data/auditedDeckCeilings";
 import { categories } from "@/data/categories";
 import { puzzles } from "@/data/puzzles";
 import {
@@ -54,14 +55,16 @@ describe("puzzle utilities", () => {
     expect(categories).toHaveLength(sourceCategories.length + 1);
   });
 
-  it("keeps every playable category at ten or more puzzles", () => {
+  it("keeps every playable category at its audited source ceiling", () => {
     const playableCategories = categories.filter(
       (category) => category.id !== "random-mix",
     );
 
     expect(
       playableCategories.every(
-        (category) => getPuzzlesByCategoryId(category.id).length >= 10,
+        (category) =>
+          getPuzzlesByCategoryId(category.id).length ===
+          auditedDeckCeilings[category.id as keyof typeof auditedDeckCeilings],
       ),
     ).toBe(true);
   });
@@ -133,6 +136,16 @@ describe("puzzle utilities", () => {
       "Grand Canyon",
       "Yellowstone",
       "Harry Potter",
+      // Expanded entertainment, activity, and object packs intentionally share these answers.
+      "Beauty and the Beast",
+      "The Bad Guys",
+      "Snow White and the Seven Dwarfs",
+      "The Lorax",
+      "Donkey Kong",
+      "Pac-Man",
+      "Tetris",
+      "Skeleton",
+      "Canoe",
     ]);
     const answersByName = new Map<string, string[]>();
 
@@ -182,6 +195,7 @@ describe("puzzle utilities", () => {
 
     expect(randomMixPool.every((puzzle) => puzzle.categoryId !== "random-mix")).toBe(true);
     expect(new Set(nonEmptyNormalizedAnswers).size).toBe(nonEmptyNormalizedAnswers.length);
+    expect(randomMixPool).toHaveLength(1299);
     expect(randomMixPool.length).toBeGreaterThanOrEqual(RANDOM_MIX_SESSION_COUNT);
   });
 

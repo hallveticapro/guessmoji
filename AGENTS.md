@@ -74,10 +74,12 @@ docker compose ps
 - `Puzzle`: answer, emoji clue, category, difficulty, optional hint, details, explanation, fun fact, tags
 - `Category`: id, name, slug, description, icon, theme, grade band
 
-The shipped seed set has 730 source puzzles across 60 source categories, plus the
+The shipped seed set has 1,320 source puzzles across 60 source categories, plus the
 derived Random Mix option (61 category choices total). Random Mix currently derives
-a 719-card pool by normalized-answer deduplication and preserves the first source
-occurrence.
+a 1,299-card pool by normalized-answer deduplication and preserves the first source
+occurrence. Audited source ceilings are recorded explicitly in
+`src/data/auditedDeckCeilings.ts` and cover 9 ten-card, 30 twenty-card, and 21
+thirty-card decks.
 
 Keep default puzzles broadly friendly, recognizable, and free of mature or horror content unless a future opt-in pack is explicitly added. Do not ship generic fallback reveal copy for default puzzles.
 

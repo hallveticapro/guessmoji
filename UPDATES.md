@@ -1,5 +1,17 @@
 # UPDATES.md
 
+2026-08-20 07:20: Closed the 2026-08-19/20 deck expansion and blind audit with 60 audited source ceilings (1,320 cards), catalog invariant tests, and a 1,299-card normalized Random Mix pool.
+
+2026-08-20 08:03: Repaired strict-category direct/component emoji audit coverage for Golf Cart, Ruler, and Snow, refreshed final-review regressions, and marked the expansion plan complete through validation.
+
+2026-08-20 07:01: Recalibrated the three Closure 2 breakfast cards to Hard and added focused hard-card criterion coverage.
+
+2026-08-20 06:47: Applied the four Closure A blind clue repairs and added exact preservation, leak, pair, repetition, and catalog regression coverage.
+
+2026-08-20 06:15: Applied the five Partition A final blind repairs and added exact clue, preservation, leak, pair, and repetition regression coverage.
+
+2026-08-20 03:35: Applied all 31 Partition C blind-recheck clue remediations, durable component bans, and exhaustive final-field regression coverage.
+
 2026-06-04 21:17: Initialized project documentation.
 2026-06-04 21:20: Scaffolded the Next.js app.
 2026-06-04 21:22: Added puzzle types.
@@ -63,3 +75,9 @@
 2026-08-19 05:45: Applied Harry Potter fix round 1: corrected Dumbledore's alchemy fact and separated Golden Snitch/Quidditch clues; fresh staged delta blind review pending.
 2026-08-19 06:05: Closed the Harry Potter audit and added dynamic catalog invariants, category-aligned audit packet balancing, ten-card round history, and final generic count documentation.
 2026-08-19 06:30: Hardened Docker build metadata, added pull-request validation and GHCR update guidance, and cleaned tracked temporary audit evidence.
+2026-08-20 03:49: Applied the 21-card Partition B blind recheck remediations, added the Bowling direct-glyph ban, and extended exhaustive regression coverage.
+2026-08-20 04:08: Applied all 31 Partition A blind recheck remediations, recalibrated Honeydew, and extended exhaustive clue/repetition metadata coverage.
+2026-08-20 04:42: Applied the nine-card Partition B final calibration, stabilized the Line Graph source ID, and extended blind-review regression coverage.
+2026-08-20 04:58: Applied all 20 Partition C final calibrations, preserved reveal metadata, and extended exhaustive blind-review regression coverage.
+2026-08-20 05:08: Applied all eight Partition A final calibrations, recalibrated Rey and Seal to Medium, and extended exhaustive blind-review regression coverage.
+2026-08-20 05:25: Polished Rey's reveal explanation to remove revision-history wording and added a regression guard for repaired-card copy.

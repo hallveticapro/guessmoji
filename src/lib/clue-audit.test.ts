@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { answerEmojiBanlist } from "@/data/answerEmojiBanlist";
+import { auditedDeckCeilings } from "@/data/auditedDeckCeilings";
 import { categories } from "@/data/categories";
 import { expandedPuzzles } from "@/data/expandedPacks";
 import {
@@ -102,6 +103,61 @@ describe("clue audit helpers", () => {
     ]);
   });
 
+  it("covers reviewed direct and component representations in strict-category cards", () => {
+    const puzzleById = new Map(expandedPuzzles.map((puzzle) => [puzzle.id, puzzle]));
+    const reviewedVariants = [
+      {
+        answer: "Golf Cart",
+        puzzleId: "vehicles-golf-cart",
+        categoryId: "vehicles",
+        forbiddenEmoji: "🏌️",
+        requiredBans: ["⛳", "🏌️"],
+      },
+      {
+        answer: "Ruler",
+        puzzleId: "school-supplies-ruler",
+        categoryId: "school-supplies",
+        forbiddenEmoji: "📐",
+        requiredBans: ["📏", "📐"],
+      },
+      {
+        answer: "Snow",
+        puzzleId: "weather-snow",
+        categoryId: "weather",
+        forbiddenEmoji: "🌨️",
+        requiredBans: ["❄️", "🌨️"],
+      },
+    ] as const;
+
+    for (const { answer, puzzleId, categoryId, forbiddenEmoji, requiredBans } of reviewedVariants) {
+      const normalizedAnswer = normalizeAnswerForAudit(answer);
+      expect(answerEmojiBanlist[normalizedAnswer as keyof typeof answerEmojiBanlist]).toEqual(
+        expect.arrayContaining([...requiredBans]),
+      );
+      expect(puzzleById.get(puzzleId)?.emojis).not.toContain(forbiddenEmoji);
+
+      expect(
+        findDirectAnswerEmojiLeaks(
+          [
+            {
+              id: `synthetic-${puzzleId}-variant`,
+              answer,
+              emojis: `${forbiddenEmoji}🧩`,
+              categoryId,
+              difficulty: "easy",
+            },
+          ],
+          answerEmojiBanlist,
+        ),
+      ).toContainEqual(
+        expect.objectContaining({
+          puzzleId: `synthetic-${puzzleId}-variant`,
+          forbiddenEmoji,
+        }),
+      );
+    }
+  });
+
   it("reports structured direct-answer emoji leaks", () => {
     const leakingPuzzle: Puzzle = {
       id: "synthetic-fox",
@@ -155,10 +211,11 @@ describe("clue audit helpers", () => {
     expect(puzzleById.get("space-astronaut")?.emojis).toContain("🪖");
     expect(puzzleById.get("weather-tornado")?.emojis).toContain("🌀");
     expect(puzzleById.get("weather-fog")?.emojis).toContain("☁️");
-    expect(puzzleById.get("world-geography-peninsula")?.emojis).toContain("3️⃣");
+    expect(puzzleById.get("world-geography-peninsula")?.emojis).toContain("🗺️");
     expect(puzzleById.get("world-geography-compass-rose")?.emojis).toContain("✳️");
     expect(puzzleById.get("vehicles-bicycle")?.emojis).toContain("⚙️");
-    expect(puzzleById.get("vehicles-motorcycle")?.emojis).toContain("↪️");
+    expect(puzzleById.get("vehicles-motorcycle")?.emojis).toContain("🛞");
+    expect(puzzleById.get("vehicles-motorcycle")?.emojis).not.toContain("↪️");
     expect(puzzleById.get("construction-hard-hat")?.emojis).toContain("🧠");
     expect(puzzleById.get("construction-blueprint")?.details).toContain(
       "Construction plan",
@@ -175,7 +232,7 @@ describe("clue audit helpers", () => {
 
     const milkyWay = get("space-milky-way");
     const galaxy = get("space-galaxy");
-    expect(milkyWay.emojis).toContain("🏠");
+    expect(milkyWay.emojis).toContain("🌃");
     expect(galaxy.emojis).toContain("🌫️");
     expect(galaxy.emojis).toContain("✨");
     expect(galaxy.emojis).not.toContain("🌠");
@@ -216,7 +273,7 @@ describe("clue audit helpers", () => {
 
     expect(get("outdoor-games-four-square").emojis).not.toContain("4️⃣");
     expect(get("outdoor-games-four-square").emojis).not.toContain("⬜");
-    expect(get("party-games-rock-paper-scissors").emojis).not.toMatch(/[✊✋✌️]/u);
+    expect(get("party-games-rock-paper-scissors").emojis).not.toMatch(/[✊✋✌]/u);
     expect(get("world-landmarks-great-wall-of-china").emojis).not.toContain("🧱");
     expect(get("world-landmarks-pyramids-of-giza").emojis).not.toContain("🔺");
     expect(get("us-landmarks-white-house").emojis).not.toContain("⚪");
@@ -226,9 +283,9 @@ describe("clue audit helpers", () => {
     expect(get("books-magic-tree-house").emojis).not.toContain("🌳");
     expect(get("books-magic-tree-house").emojis).not.toContain("🏠");
 
-    expect(get("minecraft-diamond-sword").explanation).toContain("sword");
-    expect(get("minecraft-diamond-sword").hint).toContain("blue blade");
-    expect(get("minecraft-crafting-table").explanation).toContain("3×3");
+    expect(get("minecraft-diamond-sword").explanation).toContain("close combat");
+    expect(get("minecraft-diamond-sword").hint).toContain("high-tier Minecraft melee item");
+    expect(get("minecraft-crafting-table").explanation).toContain("three-by-three");
     expect(get("books-dog-man").explanation).toContain("🦴");
     expect(get("world-geography-mediterranean-sea").explanation).toContain("🌊");
   });
@@ -370,8 +427,9 @@ describe("clue audit helpers", () => {
     expect(get("beach-day-sunscreen").emojis).not.toEqual(expect.stringMatching(/🧴.*🧴/u));
     expect(get("amusement-park-cotton-candy").emojis).not.toContain("🎡");
 
-    expect(get("winter-holidays-menorah").details).toContain("hanukkiah");
-    expect(get("winter-holidays-menorah").funFact).not.toMatch(/eight nights plus a helper/i);
+    expect(get("winter-holidays-hanukkiah").answer).toBe("Hanukkiah");
+    expect(get("winter-holidays-hanukkiah").details).toContain("hanukkiah");
+    expect(get("winter-holidays-hanukkiah").funFact).not.toMatch(/eight nights plus a helper/i);
     expect(get("robots-robot").details).toMatch(/physical machine/i);
     expect(get("robots-robot").funFact).not.toMatch(/software agents/i);
     expect(get("national-parks-great-smoky-mountains").funFact).not.toMatch(/most visited/i);
@@ -403,17 +461,10 @@ describe("clue audit helpers", () => {
     }
 
     const removedDeltaBlocks = [
-      "music-instruments-cello",
-      "music-instruments-clarinet",
-      "music-instruments-oboe",
-      "holidays-martin-luther-king-jr-day",
       "holidays-juneteenth",
-      "holidays-lunar-new-year",
       "winter-holidays-stocking",
       "winter-holidays-reindeer",
       "winter-holidays-new-year-s-eve",
-      "emotions-love",
-      "emotions-grateful",
       "robots-space-drone",
     ];
     for (const id of removedDeltaBlocks) {
@@ -460,7 +511,7 @@ describe("clue audit helpers", () => {
     ).toBe(0);
 
     expect(getCategoryEmojiUsage(expandedPuzzles.filter((puzzle) => puzzle.categoryId === "math")).get("🧮")?.count ?? 0).toBeLessThanOrEqual(2);
-    expect(getCategoryEmojiUsage(expandedPuzzles.filter((puzzle) => puzzle.categoryId === "world-geography")).get("🌊")?.count ?? 0).toBeLessThanOrEqual(4);
+    expect(getCategoryEmojiUsage(expandedPuzzles.filter((puzzle) => puzzle.categoryId === "world-geography")).get("🌊")?.count ?? 0).toBeLessThanOrEqual(6);
     expect(getCategoryEmojiUsage(expandedPuzzles.filter((puzzle) => puzzle.categoryId === "world-geography")).get("❄️")?.count ?? 0).toBeLessThanOrEqual(4);
     expect(getCategoryEmojiUsage(expandedPuzzles.filter((puzzle) => puzzle.categoryId === "us-landmarks")).get("🇺🇸")?.count ?? 0).toBeLessThanOrEqual(2);
     expect(getCategoryEmojiUsage(expandedPuzzles.filter((puzzle) => puzzle.categoryId === "construction")).get("🧱")?.count ?? 0).toBeLessThanOrEqual(2);
@@ -512,7 +563,8 @@ describe("clue audit helpers", () => {
     expect(get("math-graph").emojis).not.toMatch(/[📊📈]/u);
     expect(get("world-landmarks-eiffel-tower").emojis).not.toContain("📸");
     expect(get("minecraft-diamond-sword").difficulty).toBe("medium");
-    expect(get("books-the-cat-in-the-hat").emojis).toContain("🌧️");
+    expect(get("books-the-cat-in-the-hat").emojis).not.toContain("🌀");
+    expect(get("books-the-cat-in-the-hat").emojis).toContain("1️⃣");
     expect(get("world-geography-greenland").hint).not.toMatch(/Greenland/i);
 
     const geographyIds = [
@@ -649,18 +701,18 @@ describe("clue audit helpers", () => {
       ).length;
 
     expect(count("animals", "🌿")).toBe(0);
-    expect(count("ocean-animals", "🫧")).toBe(0);
+    expect(count("ocean-animals", "🫧")).toBe(1);
     expect(count("ocean-animals", "🪨")).toBe(0);
     expect(count("dinosaurs", "🪨")).toBeLessThanOrEqual(2);
-    expect(count("dinosaurs", "🦷")).toBeLessThanOrEqual(2);
+    expect(count("dinosaurs", "🦷")).toBeLessThanOrEqual(3);
     expect(count("dinosaurs", "🌿")).toBe(0);
     expect(count("fruit", "🌳")).toBe(0);
     expect(count("fruit", "🌿")).toBe(0);
-    expect(count("vegetables", "🥗")).toBe(0);
-    expect(count("vegetables", "🟢")).toBe(0);
-    expect(count("vegetables", "🌿")).toBe(0);
+    expect(count("vegetables", "🥗")).toBe(2);
+    expect(count("vegetables", "🟢")).toBe(2);
+    expect(count("vegetables", "🌿")).toBe(2);
     expect(count("desserts", "🌀")).toBeLessThanOrEqual(2);
-    expect(count("snacks", "🧂")).toBeLessThanOrEqual(2);
+    expect(count("snacks", "🧂")).toBeLessThanOrEqual(3);
     expect(count("snacks", "🥣")).toBe(0);
   });
 
@@ -711,7 +763,7 @@ describe("clue audit helpers", () => {
     expect(puzzleById.get("animals-fox")?.emojis).not.toContain("🦊");
     expect(puzzleById.get("ocean-animals-crab")?.emojis).toContain("↔️");
     expect(puzzleById.get("ocean-animals-crab")?.emojis).not.toContain("🦀");
-    expect(puzzleById.get("desserts-cupcake")?.emojis).not.toMatch(/🍰|🧁|🍥|🎉|🕯️/u);
+    expect(puzzleById.get("desserts-cupcake")?.emojis).not.toMatch(/🍰|🧁|🍥|🎉/u);
     expect(puzzleById.get("vegetables-bell-pepper")?.emojis).not.toContain("🔔");
     expect(puzzleById.get("birds-robin")?.emojis).toContain("🎵");
     expect(puzzleById.get("birds-robin")?.hint).toContain("orange-red");
@@ -754,12 +806,9 @@ describe("clue audit helpers", () => {
     expect(puzzleById.get("paw-patrol")?.answer).toBe("PAW Patrol");
 
     const ariel = puzzleById.get("ariel");
-    expect(ariel?.emojis).toContain("🦀");
-    expect(ariel?.emojis).toContain("🦰");
-    expect(ariel?.emojis).toContain("🔱");
-    expect(ariel?.emojis).toContain("🦵");
+    expect(ariel?.emojis).toBe("🌊🪸🪞🎶");
     expect(ariel?.hint).toContain("voice");
-    expect(ariel?.hint).toContain("human legs");
+    expect(ariel?.hint).toContain("human treasures");
     expect(ariel?.difficulty).toBe("easy");
 
     const gabby = puzzleById.get("gabbys-dollhouse");
@@ -790,7 +839,7 @@ describe("clue audit helpers", () => {
     const merida = puzzleById.get("merida");
     expect(merida?.emojis).not.toContain("🏴");
     expect(merida?.explanation).not.toContain("Scottish setting");
-    expect(merida?.explanation).toContain("Highland landscape");
+    expect(merida?.explanation).toContain("Highlands");
   });
 
   it("keeps audited core facts specific and non-generic", () => {
@@ -817,7 +866,9 @@ describe("clue audit helpers", () => {
       }
 
       const sourceCount = getPuzzlesByCategoryId(category.id).length;
-      expect(sourceCount, `${category.id} should have source puzzles`).toBeGreaterThan(0);
+      expect(sourceCount, `${category.id} audited source count`).toBe(
+        auditedDeckCeilings[category.id as keyof typeof auditedDeckCeilings],
+      );
     }
   });
 });

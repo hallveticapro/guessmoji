@@ -45,11 +45,11 @@ rounds, projector use, smartboards, Chromebooks, tablets, and phones.
 
 ## Features
 
-- 60 source categories with 730 source puzzles, plus the derived Random Mix option
+- 60 source categories with 1,320 source puzzles, plus the derived Random Mix option
   (61 category choices total).
 - Classroom-friendly packs for movies, characters, shows, games, school topics,
   animals, science, landmarks, holidays, idioms, emotions, and more.
-- Random Mix mode built from a 719-card pool deduplicated by normalized answer.
+- Random Mix mode built from a 1,299-card pool deduplicated by normalized answer.
 - Large emoji clue card for shared-screen play.
 - Hint, reveal, hide answer, next, previous, shuffle, restart, fullscreen, and timer
   controls.
@@ -144,7 +144,7 @@ Summer Fun, Beach Day, Amusement Park, Around the House, Kitchen Tools, Literal
 Phrases, Idioms, Emotions, Robots, Plants, and Harry Potter. Random Mix is the
 61st derived category choice.
 
-Every source category has at least one complete ten-card block; Harry Potter has 20
+Every source category has an audited 10-, 20-, or 30-card ceiling; Harry Potter has 30
 cards. Random Mix pulls from the safe source pool, keeps the first occurrence of each
 normalized answer, and starts a ten-card session without revealing a card's source
 category until the answer is revealed.
@@ -165,7 +165,7 @@ Each puzzle can include:
 - Fun fact
 - Tags
 
-The MVP seed set is static and checked into the repository: 730 source cards across
+The seed set is static and checked into the repository: 1,320 source cards across
 60 source categories. This keeps setup simple, portable, and database-free.
 
 ## Run the Checks
