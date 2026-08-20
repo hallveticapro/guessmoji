@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { answerEmojiBanlist } from "@/data/answerEmojiBanlist";
+import { categories } from "@/data/categories";
 import { puzzles } from "@/data/puzzles";
 import { findDirectAnswerEmojiLeaks, normalizeAnswerForAudit } from "@/lib/clue-audit";
+import { getCategoryEmojiUsage } from "@/lib/content-audit";
 import type { Puzzle, PuzzleDifficulty } from "@/types/puzzle";
 
 const sourcePuzzles = puzzles;
@@ -112,9 +114,9 @@ const immediateRewrites: readonly ExpectedCard[] = [
     categoryId: "dinosaurs",
     answer: "Carnotaurus",
     difficulty: "medium",
-    emojis: "🦬🌎🤏🧠",
-    hint: "A horned South American predator had comically tiny arms and an unusually deep skull.",
-    explanation: "🦬 evokes the paired brow horns without depicting the dinosaur, 🌎 identifies South America, 🤏 shows the tiny arms, and 🧠 points to the deep skull.",
+    emojis: "🦬🇦🇷🤏🧠",
+    hint: "A horned South American predator had unusually tiny arms and a deep skull.",
+    explanation: "🦬 evokes the paired brow horns, 🇦🇷 points to South America, 🤏 shows the tiny arms, and 🧠 the deep skull.",
   },
   {
     id: "vegetables-broccoli",
@@ -157,11 +159,329 @@ const immediateRewrites: readonly ExpectedCard[] = [
     categoryId: "desserts",
     answer: "Macaron",
     difficulty: "medium",
-    emojis: "🌈⭕🫧🪞",
-    hint: "A French sandwich cookie has two smooth meringue shells and a creamy center.",
-    explanation: "🌈 evokes the colorful shells, ⭕ shows their round form, 🫧 points to the airy meringue texture, and 🪞 evokes the smooth shell surface.",
+    emojis: "⭕🟡🫧🪞",
+    hint: "A French meringue sweet pairs smooth shells with a creamy center.",
+    explanation: "⭕ shows the paired round shells, 🟡 the filling, 🫧 the airy meringue, and 🪞 the smooth shell surface.",
   },
 ];
+
+const secondPassARewrites: readonly ExpectedCard[] = [
+  {
+    id: "marvel-shuri",
+    categoryId: "marvel",
+    answer: "Shuri",
+    difficulty: "medium",
+    emojis: "👩‍🔬🛠️🏙️🧠",
+    hint: "A brilliant Wakandan princess and scientist builds advanced tools for her kingdom.",
+    explanation: "👩‍🔬 identifies a scientist, 🛠️ her inventions, 🏙️ the Wakandan city, and 🧠 her inventive mind.",
+  },
+  {
+    id: "star-wars-rey",
+    categoryId: "star-wars",
+    answer: "Rey",
+    difficulty: "easy",
+    emojis: "🏜️🧺🪵🛠️",
+    hint: "A resourceful scavenger on a desert world carries a staff and discovers a Jedi legacy.",
+    explanation: "🏜️ places the character on a desert world, 🧺 evokes scavenged scrap, 🪵 suggests the staff, and 🛠️ captures her resourceful repairs.",
+  },
+  {
+    id: "pokemon-i-choose-you",
+    categoryId: "video-game-movies",
+    answer: "Pokémon the Movie: I Choose You!",
+    difficulty: "medium",
+    emojis: "1️⃣🧢🐭🤝🛤️",
+    hint: "A trainer relives the opening journey with a familiar electric partner.",
+    explanation: "1️⃣ marks the first journey, 🧢 the trainer, 🐭 the familiar electric partner, 🤝 their chosen partnership, and 🛤️ the road retelling.",
+  },
+  {
+    id: "kid-tv-shows-kim-possible",
+    categoryId: "kid-tv-shows",
+    answer: "Kim Possible",
+    difficulty: "easy",
+    emojis: "🧑‍🎓📱🦰🛡️",
+    hint: "A red-haired high-school spy balances homework with missions against villains.",
+    explanation: "🧑‍🎓 establishes high school, 📱 is the mission communicator, 🦰 identifies the red-haired heroine, and 🛡️ signals her protective hero work.",
+  },
+  {
+    id: "animated-classics-the-land-before-time",
+    categoryId: "animated-classics",
+    answer: "The Land Before Time",
+    difficulty: "easy",
+    emojis: "🦕👥🏞️🧭",
+    hint: "A herd of young dinosaurs travels toward a legendary safe valley.",
+    explanation: "🦕 identifies the prehistoric children, 👥 the young herd, 🏞️ the valley landscape, and 🧭 their long journey.",
+  },
+  {
+    id: "ocean-animals-seal",
+    categoryId: "ocean-animals",
+    answer: "Seal",
+    difficulty: "easy",
+    emojis: "⚪⚫🪽📣🛟",
+    hint: "A spotted flippered swimmer rests on ice and barks to its group.",
+    explanation: "⚪ and ⚫ suggest a spotted coat, 🪽 represents flippers, 📣 the bark-like call, and 🛟 a buoyant swimmer.",
+  },
+  {
+    id: "dinosaurs-carnotaurus",
+    categoryId: "dinosaurs",
+    answer: "Carnotaurus",
+    difficulty: "medium",
+    emojis: "🦬🇦🇷🤏🧠",
+    hint: "A horned South American predator had unusually tiny arms and a deep skull.",
+    explanation: "🦬 evokes the paired brow horns, 🇦🇷 points to South America, 🤏 shows the tiny arms, and 🧠 the deep skull.",
+  },
+  {
+    id: "dinosaurs-allosaurus",
+    categoryId: "dinosaurs",
+    answer: "Allosaurus",
+    difficulty: "medium",
+    emojis: "3️⃣🖐️👀🦷",
+    hint: "A large Jurassic predator had three-fingered hands and ridges above its eyes.",
+    explanation: "3️⃣ and 🖐️ identify the three-fingered hands, 👀 the paired brow ridges, and 🦷 the large predator.",
+  },
+  {
+    id: "fruit-honeydew",
+    categoryId: "fruit",
+    answer: "Honeydew",
+    difficulty: "medium",
+    emojis: "🟢⚪🧊🌱",
+    hint: "A smooth-rind melon has pale-green flesh and mild sweetness.",
+    explanation: "🟢 and ⚪ distinguish the smooth green rind and pale interior, 🧊 evokes chilled serving, and 🌱 the melon growing on a vine.",
+  },
+  {
+    id: "vegetables-celery",
+    categoryId: "vegetables",
+    answer: "Celery",
+    difficulty: "easy",
+    emojis: "🧵📏💧🥣",
+    hint: "A long fibrous stalk adds watery crunch to soups and snack sticks.",
+    explanation: "🧵 shows the stringy fibers, 📏 the long stalk, 💧 the water-rich crunch, and 🥣 its familiar soup use.",
+  },
+  {
+    id: "vegetables-cabbage",
+    categoryId: "vegetables",
+    answer: "Cabbage",
+    difficulty: "easy",
+    emojis: "🍃🫙🥗🍲",
+    hint: "A leafy head is shredded for slaw, soups, and fermented dishes.",
+    explanation: "🍃 represents the layered leaves, 🫙 fermented preparations, 🥗 slaw, and 🍲 soup use.",
+  },
+  {
+    id: "vegetables-brussels-sprouts",
+    categoryId: "vegetables",
+    answer: "Brussels Sprouts",
+    difficulty: "easy",
+    emojis: "🟢🔘🪵🔥",
+    hint: "Small green heads grow along a stalk and become tender when roasted.",
+    explanation: "🟢 and 🔘 show the small green heads, 🪵 the stalk, and 🔥 the common roasting preparation.",
+  },
+  {
+    id: "vegetables-artichoke",
+    categoryId: "vegetables",
+    answer: "Artichoke",
+    difficulty: "medium",
+    emojis: "🔺👐🥣🌿",
+    hint: "A layered flower bud is pulled apart and dipped before eating.",
+    explanation: "🔺 suggests the pointed bracts, 👐 the pull-apart leaves, 🥣 a dipping bowl, and 🌿 the thistle-like plant.",
+  },
+  {
+    id: "vegetables-okra",
+    categoryId: "vegetables",
+    answer: "Okra",
+    difficulty: "medium",
+    emojis: "📐⭐🍲🟢",
+    hint: "A ridged green pod makes a star-shaped cross-section and thickens stews.",
+    explanation: "📐 shows the ridges, ⭐ the star-shaped slice, 🍲 the stew use, and 🟢 the green pod.",
+  },
+  {
+    id: "vegetables-swiss-chard",
+    categoryId: "vegetables",
+    answer: "Swiss Chard",
+    difficulty: "medium",
+    emojis: "🌈🍃🧵👐",
+    hint: "A leafy green has brightly colored stalks and can be cooked like spinach.",
+    explanation: "🌈 identifies the colorful stalks, 🍃 the broad leaf, 🧵 the fibrous stems, and 👐 the separate handling of leaves and stalks.",
+  },
+  {
+    id: "desserts-cupcake",
+    categoryId: "desserts",
+    answer: "Cupcake",
+    difficulty: "easy",
+    emojis: "📄🌀🍽️🧺",
+    hint: "A small frosted bake sits in a pleated paper cup.",
+    explanation: "📄 is the pleated liner, 🌀 the frosting swirl, 🍽️ the single serving, and 🧺 a batch of small bakes.",
+  },
+  {
+    id: "desserts-s-mores",
+    categoryId: "desserts",
+    answer: "S'mores",
+    difficulty: "easy",
+    emojis: "⛺🪵⚪⬜",
+    hint: "A camp treat stacks a toasted soft center between two crisp squares.",
+    explanation: "⛺ establishes the camp setting, 🪵 the firewood setting, ⚪ the soft toasted center, and ⬜ the crisp square layers.",
+  },
+  {
+    id: "desserts-macaron",
+    categoryId: "desserts",
+    answer: "Macaron",
+    difficulty: "medium",
+    emojis: "⭕🟡🫧🪞",
+    hint: "A French meringue sweet pairs smooth shells with a creamy center.",
+    explanation: "⭕ shows the paired round shells, 🟡 the filling, 🫧 the airy meringue, and 🪞 the smooth shell surface.",
+  },
+  {
+    id: "desserts-clair",
+    categoryId: "desserts",
+    answer: "Éclair",
+    difficulty: "medium",
+    emojis: "📏🧴🟫👐",
+    hint: "An oblong hand-held pastry carries cream beneath a glossy top.",
+    explanation: "📏 shows the elongated shape, 🧴 the piped cream, 🟫 the glossy top, and 👐 its hand-held form.",
+  },
+  {
+    id: "desserts-fruit-tart",
+    categoryId: "desserts",
+    answer: "Fruit Tart",
+    difficulty: "medium",
+    emojis: "📐🌈🧺🪞",
+    hint: "A crisp pastry shell holds cream under a neat fruit mosaic.",
+    explanation: "📐 shows the crisp shell edge, 🌈 the colorful fruit arrangement, 🧺 the fresh topping, and 🪞 its glossy finish.",
+  },
+  {
+    id: "snacks-chips",
+    categoryId: "snacks",
+    answer: "Chips",
+    difficulty: "easy",
+    emojis: "🛍️🟨🧂⚡",
+    hint: "Thin salted slices come in a crinkly bag and snap when bitten.",
+    explanation: "🛍️ evokes a crinkly snack bag, 🟨 the thin golden slices, 🧂 the salt, and ⚡ the crisp snap.",
+  },
+  {
+    id: "snacks-rice-cakes",
+    categoryId: "snacks",
+    answer: "Rice Cakes",
+    difficulty: "medium",
+    emojis: "⭕🫧📦⬜",
+    hint: "Flat puffed-grain discs stack into a light, porous snack.",
+    explanation: "⭕ shows the discs, 🫧 the porous puffed texture, 📦 the packaged snack, and ⬜ the pale grain color.",
+  },
+  {
+    id: "snacks-biscotti",
+    categoryId: "snacks",
+    answer: "Biscotti",
+    difficulty: "medium",
+    emojis: "☕🫗📏🔁",
+    hint: "A dry oblong treat is baked twice and made for dunking.",
+    explanation: "☕ and 🫗 show the dunking drink, 📏 the oblong biscuit, and 🔁 the defining second bake.",
+  },
+  {
+    id: "breakfast-breakfast-burrito",
+    categoryId: "breakfast",
+    answer: "Breakfast Burrito",
+    difficulty: "medium",
+    emojis: "📜🥚🧀🌶️",
+    hint: "A soft flatbread folds around eggs, cheese, and savory morning fillings.",
+    explanation: "📜 represents the folded tortilla, 🥚 and 🧀 the core fillings, and 🌶️ the savory breakfast profile.",
+  },
+  {
+    id: "breakfast-eggs-benedict",
+    categoryId: "breakfast",
+    answer: "Eggs Benedict",
+    difficulty: "medium",
+    emojis: "🫗🟡🥓🍞",
+    hint: "A poached center and rich sauce crown a toasted breakfast base.",
+    explanation: "🫗 is the rich hollandaise, 🟡 the poached egg center, 🥓 the traditional savory topping, and 🍞 the toasted base.",
+  },
+  {
+    id: "breakfast-breakfast-sandwich",
+    categoryId: "breakfast",
+    answer: "Breakfast Sandwich",
+    difficulty: "easy",
+    emojis: "🥚🍞☀️🧺",
+    hint: "A handheld morning meal puts a cooked egg inside bread or a biscuit.",
+    explanation: "🥚 identifies the cooked egg, 🍞 the bread or biscuit, ☀️ the morning meal, and 🧺 the portable packed format.",
+  },
+  {
+    id: "breakfast-english-muffin",
+    categoryId: "breakfast",
+    answer: "English Muffin",
+    difficulty: "easy",
+    emojis: "🍞🧩↔️🔥",
+    hint: "A split round bread has a coarse, holey surface for toasting.",
+    explanation: "🍞 identifies the bread, 🧩 its nooks, ↔️ the split, and 🔥 the toasting preparation.",
+  },
+  {
+    id: "breakfast-quiche",
+    categoryId: "breakfast",
+    answer: "Quiche",
+    difficulty: "medium",
+    emojis: "🫕🟡🌿📐",
+    hint: "A savory custard bakes inside a crisp shell with cheese or vegetables.",
+    explanation: "🫕 shows the baked dish, 🟡 the egg custard, 🌿 a vegetable filling, and 📐 the crisp tart shell.",
+  },
+  {
+    id: "breakfast-chia-pudding",
+    categoryId: "breakfast",
+    answer: "Chia Pudding",
+    difficulty: "medium",
+    emojis: "⚫🫙🫧🥄",
+    hint: "Tiny seeds swell into a chilled, spoonable gel.",
+    explanation: "⚫ shows the seeds, 🫙 the soaked jar, 🫧 the gelled texture, and 🥄 the spoonable preparation.",
+  },
+  {
+    id: "breakfast-danish-pastry",
+    categoryId: "breakfast",
+    answer: "Danish Pastry",
+    difficulty: "medium",
+    emojis: "📜✨🫙👐",
+    hint: "A flaky laminated pastry may hold fruit or cream beneath a glaze.",
+    explanation: "📜 represents flaky layers, ✨ the glaze, 🫙 the fruit or cream filling, and 👐 the hand-held pastry.",
+  },
+  {
+    id: "breakfast-biscuit-and-gravy",
+    categoryId: "breakfast",
+    answer: "Biscuit and Gravy",
+    difficulty: "easy",
+    emojis: "🟤↔️🫗🧂",
+    hint: "Split baked rounds are covered in warm peppered sauce.",
+    explanation: "🟤 shows browned biscuit rounds, ↔️ that they are split, 🫗 the poured gravy, and 🧂 the peppered seasoning.",
+  },
+];
+
+const secondPassAPreservedRevealFields = [
+  { id: "marvel-shuri", details: "Marvel's Wakandan princess and scientist who develops advanced tools and later takes on a heroic mantle.", funFact: "Shuri first appeared in Marvel Comics in 2005.", tags: ["marvel", "hero", "wakanda"] },
+  { id: "star-wars-rey", details: "Star Wars hero introduced in the sequel trilogy who becomes a Jedi.", funFact: "Rey first appears in The Force Awakens, played by Daisy Ridley.", tags: ["star-wars", "jedi", "film"] },
+  { id: "pokemon-i-choose-you", details: "Released: 2017 | Type: anime movie", funFact: "Pokémon the Movie: I Choose You! commemorated the anime's 20th anniversary.", tags: ["video-games", "pokemon"] },
+  { id: "kid-tv-shows-kim-possible", details: "Disney animated series about a teenage crime fighter aided by Ron Stoppable and Rufus.", funFact: "The opening theme asks, “What's the sitch?” as a shorthand for situation.", tags: ["kid-tv", "hero", "disney"] },
+  { id: "animated-classics-the-land-before-time", details: "Animated adventure about orphaned dinosaur children traveling to the Great Valley.", funFact: "The film was produced by Steven Spielberg and George Lucas and released in 1988.", tags: ["animated-classics", "dinosaurs", "film"] },
+  { id: "ocean-animals-seal", details: "Marine mammal that uses flippers to swim and often rests on shore or ice.", funFact: "Many seals can slow their heart rate during dives to conserve oxygen.", tags: ["ocean-animals", "mammal"] },
+  { id: "dinosaurs-carnotaurus", details: "Late Cretaceous theropod dinosaur known for two horns above its eyes.", funFact: "Carnotaurus is one of the few known carnivorous dinosaurs with preserved skin impressions.", tags: ["dinosaurs", "carnivore", "paleontology"] },
+  { id: "dinosaurs-allosaurus", details: "Large theropod dinosaur from the Late Jurassic, known for a deep skull and paired brow ridges.", funFact: "Allosaurus means “different lizard,” referring to the unusual shape of its vertebrae.", tags: ["dinosaurs", "carnivore", "paleontology"] },
+  { id: "fruit-honeydew", details: "Melon with smooth rind and light green flesh, often served chilled.", funFact: "Honeydew is also called White Antibes melon in some parts of the world.", tags: ["fruit", "melon"] },
+  { id: "vegetables-celery", details: "Type: Stalk vegetable", funFact: "Celery has long fibrous stalks and is mostly water.", tags: ["food", "vegetables"] },
+  { id: "vegetables-cabbage", details: "Leafy vegetable that forms a compact head and is eaten raw or cooked.", funFact: "Kimchi and sauerkraut are both fermented cabbage preparations.", tags: ["vegetables", "leafy-green"] },
+  { id: "vegetables-brussels-sprouts", details: "Compact buds of a cabbage-family plant, commonly roasted or steamed.", funFact: "The vegetable is named after Brussels, Belgium, where it was cultivated widely.", tags: ["vegetables", "cruciferous"] },
+  { id: "vegetables-artichoke", details: "Edible immature flower head of a thistle plant, usually steamed or grilled.", funFact: "The heart is the tender center left after the tougher outer leaves are removed.", tags: ["vegetables", "flower-bud"] },
+  { id: "vegetables-okra", details: "Warm-season flowering plant whose edible pods are used in soups, stews, and fried dishes.", funFact: "The mucilage released by okra pods is what thickens gumbo.", tags: ["vegetables", "pod"] },
+  { id: "vegetables-swiss-chard", details: "Leafy vegetable with broad green leaves and stalks that may be red, yellow, orange, or white.", funFact: "The stalks and leaves can be cooked separately because they soften at different rates.", tags: ["vegetables", "leafy-green"] },
+  { id: "desserts-cupcake", details: "Type: Baked dessert", funFact: "Cupcakes became popular because they bake quickly in small cups.", tags: ["food", "dessert", "desserts"] },
+  { id: "desserts-s-mores", details: "Type: Campfire dessert", funFact: "The name is short for some more.", tags: ["food", "dessert", "desserts"] },
+  { id: "desserts-macaron", details: "French-style almond meringue cookie made from two shells joined by a filling.", funFact: "Macarons and coconut macaroons are different confections despite their similar names.", tags: ["desserts", "cookie"] },
+  { id: "desserts-clair", details: "Oblong French pastry made from choux dough, filled with cream, and finished with icing.", funFact: "Éclair dough is made from pâte à choux, the same dough used for cream puffs.", tags: ["desserts", "pastry"] },
+  { id: "desserts-fruit-tart", details: "Open pastry dessert topped with pastry cream or another filling and arranged fruit.", funFact: "Many fruit tarts combine a baked pastry shell with a layer of custard and fresh fruit.", tags: ["desserts", "pastry", "fruit"] },
+  { id: "snacks-chips", details: "Type: Snack", funFact: "Potato chips were popularized in the 1800s.", tags: ["food", "snacks"] },
+  { id: "snacks-rice-cakes", details: "Type: Puffed grain snack", funFact: "Puffed rice expands when heat and pressure are released.", tags: ["food", "snacks"] },
+  { id: "snacks-biscotti", details: "Dry, oblong Italian biscuits baked twice for a firm, crisp texture, often with almonds.", funFact: "The name biscotti comes from Latin roots that mean “baked twice.”", tags: ["snacks", "baked", "cookie"] },
+  { id: "breakfast-breakfast-burrito", details: "Type: Breakfast dish", funFact: "A breakfast burrito commonly wraps eggs and other morning fillings in a flour tortilla.", tags: ["food", "breakfast"] },
+  { id: "breakfast-eggs-benedict", details: "Type: Brunch dish", funFact: "Eggs Benedict commonly combines poached eggs, Canadian bacon, an English muffin, and hollandaise sauce.", tags: ["food", "breakfast"] },
+  { id: "breakfast-breakfast-sandwich", details: "Type: Breakfast dish", funFact: "Breakfast sandwiches often combine eggs with cheese and a bread or biscuit.", tags: ["food", "breakfast"] },
+  { id: "breakfast-english-muffin", details: "Type: Bread", funFact: "English muffins are yeast-raised round breads with a coarse-textured surface, commonly split and toasted.", tags: ["food", "breakfast"] },
+  { id: "breakfast-quiche", details: "Pastry crust filled with an egg-and-dairy custard and savory additions.", funFact: "Quiche Lorraine traditionally includes bacon and comes from the Lorraine region of France.", tags: ["breakfast", "savory"] },
+  { id: "breakfast-chia-pudding", details: "No-cook breakfast made by soaking chia seeds in milk or another liquid until gelled.", funFact: "Chia seeds can absorb many times their weight in liquid because of their soluble fiber.", tags: ["breakfast", "plant-based"] },
+  { id: "breakfast-danish-pastry", details: "Sweet laminated yeast pastry associated with Danish baking and often filled or glazed.", funFact: "Danish pastry developed from Austrian baking techniques brought to Denmark in the nineteenth century.", tags: ["breakfast", "baked"] },
+  { id: "breakfast-biscuit-and-gravy", details: "Southern U.S. breakfast of biscuits served with a thick sausage or peppered gravy.", funFact: "The dish became especially common in the American South because the ingredients were inexpensive and filling.", tags: ["breakfast", "savory"] },
+] as const;
+
+const secondPassADifficultyChanges = [{ id: "fruit-honeydew", from: "easy", to: "medium" }] as const;
 
 type FocusedReview = {
   id: string;
@@ -263,6 +583,119 @@ function expectNoAnswerOrAliasText(text: string | undefined, answer: string, ali
 }
 
 describe("partition A blind-review follow-up repairs", () => {
+  it("covers every second-pass A row exactly once with its approved rewrite", () => {
+    const expectedIds = secondPassARewrites.map(({ id }) => id);
+
+    expect(secondPassARewrites).toHaveLength(31);
+    expect(new Set(expectedIds).size).toBe(31);
+
+    for (const expected of secondPassARewrites) {
+      const puzzle = findPuzzle(expected.id);
+
+      expect(puzzle.categoryId, `${expected.id} category`).toBe(expected.categoryId);
+      expect(puzzle.answer, `${expected.id} answer`).toBe(expected.answer);
+      expect(puzzle.difficulty, `${expected.id} difficulty`).toBe(expected.difficulty);
+      expect(puzzle.emojis, `${expected.id} emojis`).toBe(expected.emojis);
+      expect(puzzle.hint, `${expected.id} hint`).toBe(expected.hint);
+      expect(puzzle.explanation, `${expected.id} explanation`).toBe(expected.explanation);
+      expectClueShape(puzzle.emojis);
+      expectNoAnswerOrAliasText(puzzle.hint, puzzle.answer);
+      expect(findDirectAnswerEmojiLeaks([puzzle], answerEmojiBanlist)).toEqual([]);
+    }
+  });
+
+  it("applies exactly the one second-pass A difficulty recalibration", () => {
+    expect(secondPassADifficultyChanges).toEqual([
+      { id: "fruit-honeydew", from: "easy", to: "medium" },
+    ]);
+
+    for (const change of secondPassADifficultyChanges) {
+      expect(findPuzzle(change.id).difficulty, `${change.id} difficulty`).toBe(change.to);
+    }
+    expect(secondPassARewrites.filter(({ id }) => id === "fruit-honeydew")).toHaveLength(1);
+  });
+
+  it("preserves every second-pass A card's identity and reveal metadata", () => {
+    expect(puzzles).toHaveLength(1320);
+    expect(new Set(puzzles.map((puzzle) => puzzle.id)).size).toBe(1320);
+    expect(secondPassAPreservedRevealFields).toHaveLength(31);
+
+    const preservedById = new Map<string, (typeof secondPassAPreservedRevealFields)[number]>(
+      secondPassAPreservedRevealFields.map((card) => [card.id, card]),
+    );
+    for (const expected of secondPassARewrites) {
+      const actual = findPuzzle(expected.id);
+      const preserved = preservedById.get(expected.id);
+
+      expect(preserved, `${expected.id} preserved field snapshot`).toBeDefined();
+      expect({
+        id: actual.id,
+        categoryId: actual.categoryId,
+        answer: actual.answer,
+        details: actual.details,
+        funFact: actual.funFact,
+        tags: actual.tags,
+      }).toEqual({
+        id: actual.id,
+        categoryId: actual.categoryId,
+        answer: actual.answer,
+        details: preserved?.details,
+        funFact: preserved?.funFact,
+        tags: preserved?.tags,
+      });
+    }
+  });
+
+  it("keeps every second-pass A clue free of answer leaks and category-context filler", () => {
+    const categoryById = new Map(categories.map((category) => [category.id, category]));
+
+    for (const expected of secondPassARewrites) {
+      const puzzle = findPuzzle(expected.id);
+      const category = categoryById.get(puzzle.categoryId);
+
+      expect(category, `${expected.id} category`).toBeDefined();
+      expect(puzzle.emojis).not.toContain(category?.icon ?? "");
+      expectNoAnswerOrAliasText(puzzle.hint, puzzle.answer);
+      expect(findDirectAnswerEmojiLeaks([puzzle], answerEmojiBanlist)).toEqual([]);
+    }
+  });
+
+  it("keeps repaired cards distinct from every same-category clue and preserves reviewed repetition warnings", () => {
+    const repairedIds = new Set(secondPassARewrites.map(({ id }) => id));
+    const categoryIds = new Set(secondPassARewrites.map(({ categoryId }) => categoryId));
+
+    for (const categoryId of categoryIds) {
+      const categoryCards = sourcePuzzles.filter((puzzle) => puzzle.categoryId === categoryId);
+      for (const puzzle of categoryCards.filter(({ id }) => repairedIds.has(id))) {
+        for (const other of categoryCards) {
+          if (other.id === puzzle.id) continue;
+          expect(puzzle.emojis, `${puzzle.id}/${other.id} exact clue`).not.toBe(other.emojis);
+          expect(
+            sharedEmojis(puzzle.emojis, other.emojis).length,
+            `${puzzle.id}/${other.id} shared clue glyphs`,
+          ).toBeLessThanOrEqual(2);
+        }
+      }
+    }
+
+    const warnings: Array<{ categoryId: string; emoji: string; count: number; ratio: number }> = [];
+    for (const categoryId of categoryIds) {
+      const usage = getCategoryEmojiUsage(
+        sourcePuzzles.filter((puzzle) => puzzle.categoryId === categoryId),
+      );
+      for (const [emoji, summary] of usage) {
+        if (summary.ratio > 0.2) {
+          warnings.push({ categoryId, emoji, count: summary.count, ratio: summary.ratio });
+        }
+      }
+    }
+
+    expect(warnings).toEqual([
+      { categoryId: "vegetables", emoji: "🍃", count: 7, ratio: 7 / 30 },
+      { categoryId: "breakfast", emoji: "🔥", count: 7, ratio: 7 / 30 },
+    ]);
+  });
+
   it("applies every immediate rewrite field to its exact source card", () => {
     for (const expected of immediateRewrites) {
       const puzzle = findPuzzle(expected.id);
@@ -332,7 +765,7 @@ describe("partition A blind-review follow-up repairs", () => {
 
   it("separates every named vegetable and breakfast collision at the grapheme level", () => {
     const pairChecks = [
-      ["vegetables-broccoli", "vegetables-brussels-sprouts", ["🧩"]],
+      ["vegetables-broccoli", "vegetables-brussels-sprouts", []],
       ["vegetables-broccoli", "vegetables-cauliflower", ["🧩"]],
       ["vegetables-zucchini", "vegetables-green-beans", ["🟩"]],
       ["breakfast-scrambled-eggs", "breakfast-breakfast-casserole", []],
@@ -356,9 +789,9 @@ describe("partition A blind-review follow-up repairs", () => {
       ).length;
 
     expect(countEmoji("animals", "🌾")).toBe(5);
-    expect(countEmoji("vegetables", "🔪")).toBe(6);
+    expect(countEmoji("vegetables", "🔪")).toBe(3);
     expect(countEmoji("vegetables", "🍃")).toBe(7);
-    expect(countEmoji("desserts", "🥄")).toBe(5);
+    expect(countEmoji("desserts", "🥄")).toBe(4);
     expect(countEmoji("breakfast", "🔥")).toBe(7);
   });
 });

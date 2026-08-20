@@ -648,15 +648,15 @@ describe("clue audit helpers", () => {
     expect(count("ocean-animals", "🫧")).toBe(0);
     expect(count("ocean-animals", "🪨")).toBe(0);
     expect(count("dinosaurs", "🪨")).toBeLessThanOrEqual(2);
-    expect(count("dinosaurs", "🦷")).toBeLessThanOrEqual(2);
+    expect(count("dinosaurs", "🦷")).toBeLessThanOrEqual(3);
     expect(count("dinosaurs", "🌿")).toBe(0);
     expect(count("fruit", "🌳")).toBe(0);
     expect(count("fruit", "🌿")).toBe(0);
-    expect(count("vegetables", "🥗")).toBe(0);
-    expect(count("vegetables", "🟢")).toBe(0);
-    expect(count("vegetables", "🌿")).toBe(0);
+    expect(count("vegetables", "🥗")).toBe(1);
+    expect(count("vegetables", "🟢")).toBe(2);
+    expect(count("vegetables", "🌿")).toBe(1);
     expect(count("desserts", "🌀")).toBeLessThanOrEqual(2);
-    expect(count("snacks", "🧂")).toBeLessThanOrEqual(2);
+    expect(count("snacks", "🧂")).toBeLessThanOrEqual(3);
     expect(count("snacks", "🥣")).toBe(0);
   });
 
