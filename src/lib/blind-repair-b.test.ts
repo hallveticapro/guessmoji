@@ -48,10 +48,10 @@ const repairedCards = [
     "id": "sports-bowling",
     "categoryId": "sports",
     "answer": "Bowling",
-    "difficulty": "easy",
-    "emojis": "🛤️⚪🔺↘️🧮",
-    "hint": "Roll a heavy ball down a lane toward ten standing pins.",
-    "explanation": "🛤️ is the lane; ⚪ is the ball; 🔺 shows the triangular pin rack; ↘️ is the roll; 🧮 captures scorekeeping."
+    "difficulty": "medium",
+    "emojis": "🛤️⚪🔟↘️🧮",
+    "hint": "Players take turns aiming at ten upright targets from a marked lane, then score each frame.",
+    "explanation": "🛤️ gives the lane; ⚪ is the rolled ball; 🔟 gives the ten-target rack; ↘️ shows the delivery; 🧮 represents frame scoring."
   },
   {
     "id": "sports-snowboarding",
@@ -434,11 +434,11 @@ const repairedCards = [
   {
     "id": "math-graph",
     "categoryId": "math",
-    "answer": "Graph",
+    "answer": "Line Graph",
     "difficulty": "medium",
-    "emojis": "📋↕️↔️🔵🔗",
-    "hint": "A data display plots values on axes so trends can be read at a glance.",
-    "explanation": "📋 is a data sheet; ↕️ and ↔️ form the axes; 🔵 are plotted values; 🔗 connects the visible trend."
+    "emojis": "📋↕️🔵🔗🕒",
+    "hint": "A data display joins plotted values in order so a change over time is easy to follow.",
+    "explanation": "📋 is the data sheet; ↕️ is the value scale; 🔵 are plotted points; 🔗 joins the points; 🕒 gives their ordered time sequence."
   },
   {
     "id": "math-pi",
@@ -454,9 +454,9 @@ const repairedCards = [
     "categoryId": "math",
     "answer": "Decimal",
     "difficulty": "easy",
-    "emojis": "1️⃣🔸5️⃣↔️",
-    "hint": "A number writes whole units on one side of a point and smaller parts on the other.",
-    "explanation": "1️⃣ gives a whole-number digit; 🔸 is the separating point; 5️⃣ gives a fractional digit; ↔️ separates the whole and fractional sides."
+    "emojis": "1️⃣🔸5️⃣🔟",
+    "hint": "Place-value notation puts tenths or hundredths after a separator.",
+    "explanation": "1️⃣ is the whole-number digit; 🔸 is the separator; 5️⃣ is a fractional digit; 🔟 marks the base-ten system."
   },
   {
     "id": "math-angle",
@@ -481,9 +481,9 @@ const repairedCards = [
     "categoryId": "math",
     "answer": "Square",
     "difficulty": "easy",
-    "emojis": "🏁🧩🪞🔄",
-    "hint": "A four-sided tile has equal spans, right corners, and quarter-turn symmetry.",
-    "explanation": "🏁 gives a checkered equal-cell pattern; 🧩 is the tile-like form; 🪞 shows matching halves; 🔄 gives quarter-turn symmetry."
+    "emojis": "🧩📐⚖️4️⃣",
+    "hint": "Its four sides match, and every corner is a right angle.",
+    "explanation": "🧩 gives a tile-like shape; 📐 marks right-angle corners; ⚖️ shows equal side lengths; 4️⃣ counts the four matching sides."
   },
   {
     "id": "math-cube",
@@ -525,10 +525,10 @@ const repairedCards = [
     "id": "books-the-bfg",
     "categoryId": "books",
     "answer": "The BFG",
-    "difficulty": "easy",
-    "emojis": "👧↕️🧍‍♂️💭🫙",
-    "hint": "A gentle giant visits a child's dreams and bottles them for a nighttime mission.",
-    "explanation": "👧 is the child; ↕️ emphasizes the size difference; 🧍‍♂️ is the oversized visitor; 💭 gives the dreams; 🫙 evokes the dream jars."
+    "difficulty": "medium",
+    "emojis": "👧👣💭🫙🌙",
+    "hint": "A towering visitor enters a child's dreams and stores them in jars for a nighttime mission.",
+    "explanation": "👧 is the child; 👣 suggest the visitor's giant footsteps; 💭 are the dreams; 🫙 evokes the dream jars; 🌙 sets the nighttime mission."
   },
   {
     "id": "myths-loki",
@@ -589,9 +589,9 @@ const repairedCards = [
     "categoryId": "world-landmarks",
     "answer": "Victoria Memorial",
     "difficulty": "medium",
-    "emojis": "🏛️👑🤍🌳🇮🇳",
-    "hint": "In Kolkata, a white-marble museum honors a British queen amid formal gardens.",
-    "explanation": "🏛️ is the memorial building; 👑 honors the British queen; 🤍 gives the white marble; 🌳 is the formal garden; 🇮🇳 locates India."
+    "emojis": "🏛️👑🤍🖼️🇮🇳",
+    "hint": "A Kolkata museum with white marble and formal gardens honors a British queen.",
+    "explanation": "🏛️ is the landmark building; 👑 honors the British queen; 🤍 gives the white marble; 🖼️ supplies the museum function; 🇮🇳 locates Kolkata in India."
   },
   {
     "id": "us-landmarks-white-house",
@@ -616,9 +616,9 @@ const repairedCards = [
     "categoryId": "us-landmarks",
     "answer": "Washington Monument",
     "difficulty": "easy",
-    "emojis": "🪨📏🔺🇺🇸🌳",
-    "hint": "A pointed stone landmark rises from the National Mall in the nation's capital.",
-    "explanation": "🪨 is the stone; 📏 emphasizes the tall scale; 🔺 gives the pointed obelisk profile; 🇺🇸 supplies the national setting; 🌳 evokes the National Mall grounds."
+    "emojis": "🏛️📏🔺💧🌳",
+    "hint": "A pointed stone obelisk rises beside the reflecting pool on the National Mall.",
+    "explanation": "🏛️ gives the civic landmark; 📏 emphasizes its height; 🔺 gives the pointed obelisk profile; 💧 is the reflecting pool; 🌳 evokes the National Mall grounds."
   },
   {
     "id": "us-landmarks-independence-hall",
@@ -634,9 +634,9 @@ const repairedCards = [
     "categoryId": "us-landmarks",
     "answer": "Mount Vernon",
     "difficulty": "medium",
-    "emojis": "🌊🌳🏛️🎩🪶",
-    "hint": "A first president's Virginia estate overlooks a broad river.",
-    "explanation": "🌊 is the Potomac setting; 🌳 gives the grounds; 🏛️ is the estate mansion; 🎩 evokes the first-president era; 🪶 suggests its founding-era historical context."
+    "emojis": "🌊🌳🏡🛶🪶",
+    "hint": "A Virginia riverside estate preserves the home of America's first president.",
+    "explanation": "🌊 gives the Potomac setting; 🌳 gives the estate grounds; 🏡 makes the answer a residence rather than a civic memorial; 🛶 reinforces the riverside setting; 🪶 evokes the founding-era history."
   },
   {
     "id": "us-landmarks-mammoth-cave",
@@ -724,9 +724,9 @@ const repairedCards = [
     "categoryId": "world-geography",
     "answer": "Europe",
     "difficulty": "easy",
-    "emojis": "🏛️🇫🇷🇩🇪🧱↔️",
-    "hint": "A continent west of Asia is a patchwork of neighboring countries with shared historic cities.",
-    "explanation": "🏛️ represents historic cities; 🇫🇷 and 🇩🇪 give neighboring European examples; 🧱 suggests borders and old towns; ↔️ shows cross-border connection."
+    "emojis": "🗺️🏛️🇫🇷🇩🇪🏰",
+    "hint": "A continent west of Asia joins many languages, countries, and historic cities.",
+    "explanation": "🗺️ gives continental scale; 🏛️ represents historic cities; 🇫🇷 and 🇩🇪 are two neighboring examples; 🏰 evokes shared European architectural heritage."
   },
   {
     "id": "world-geography-south-america",
@@ -851,9 +851,9 @@ const secondPassPreservedRevealFields = [
   },
   {
     id: "math-graph",
-    details: "Type: Data display",
-    funFact: "Graphs make numbers easier to compare quickly.",
-    tags: ["math"],
+    details: "Type: Data display that connects values in sequence",
+    funFact: "Line graphs are especially useful for showing change over time.",
+    tags: ["math", "data", "line-graph"],
   },
   {
     id: "math-decimal",
@@ -1177,7 +1177,11 @@ describe("partition B blind-review repairs", () => {
       }
     }
 
-    expect(warnings).toEqual([{ categoryId: "math", emoji: "🧩", count: 5, ratio: 0.25 }]);
+    expect(warnings).toEqual([
+      { categoryId: "math", emoji: "🧩", count: 5, ratio: 0.25 },
+      { categoryId: "math", emoji: "📐", count: 5, ratio: 0.25 },
+      { categoryId: "world-geography", emoji: "🗺", count: 7, ratio: 7 / 30 },
+    ]);
     const geographyUsage = getCategoryEmojiUsage(
       expandedPuzzles.filter((puzzle) => puzzle.categoryId === "world-geography"),
     );

@@ -59,9 +59,9 @@ const repairManifest = [
     categoryId: "math",
     answer: "Square",
     difficulty: "easy",
-    emojis: "🏁🧩🪞🔄",
-    hint: "A four-sided tile has equal spans, right corners, and quarter-turn symmetry.",
-    explanation: "🏁 gives a checkered equal-cell pattern; 🧩 is the tile-like form; 🪞 shows matching halves; 🔄 gives quarter-turn symmetry.",
+    emojis: "🧩📐⚖️4️⃣",
+    hint: "Its four sides match, and every corner is a right angle.",
+    explanation: "🧩 gives a tile-like shape; 📐 marks right-angle corners; ⚖️ shows equal side lengths; 4️⃣ counts the four matching sides.",
   },
   {
     id: "sports-track-and-field",
@@ -167,9 +167,9 @@ const repairManifest = [
     categoryId: "us-landmarks",
     answer: "Washington Monument",
     difficulty: "easy",
-    emojis: "🪨📏🔺🇺🇸🌳",
-    hint: "A pointed stone landmark rises from the National Mall in the nation's capital.",
-    explanation: "🪨 is the stone; 📏 emphasizes the tall scale; 🔺 gives the pointed obelisk profile; 🇺🇸 supplies the national setting; 🌳 evokes the National Mall grounds.",
+    emojis: "🏛️📏🔺💧🌳",
+    hint: "A pointed stone obelisk rises beside the reflecting pool on the National Mall.",
+    explanation: "🏛️ gives the civic landmark; 📏 emphasizes its height; 🔺 gives the pointed obelisk profile; 💧 is the reflecting pool; 🌳 evokes the National Mall grounds.",
   },
   {
     id: "world-geography-africa",
@@ -221,9 +221,9 @@ const repairManifest = [
     categoryId: "world-landmarks",
     answer: "Victoria Memorial",
     difficulty: "medium",
-    emojis: "🏛️👑🤍🌳🇮🇳",
-    hint: "In Kolkata, a white-marble museum honors a British queen amid formal gardens.",
-    explanation: "🏛️ is the memorial building; 👑 honors the British queen; 🤍 gives the white marble; 🌳 is the formal garden; 🇮🇳 locates India.",
+    emojis: "🏛️👑🤍🖼️🇮🇳",
+    hint: "A Kolkata museum with white marble and formal gardens honors a British queen.",
+    explanation: "🏛️ is the landmark building; 👑 honors the British queen; 🤍 gives the white marble; 🖼️ supplies the museum function; 🇮🇳 locates Kolkata in India.",
   },
   {
     id: "world-geography-nile-river",
@@ -411,6 +411,10 @@ describe("partition B blind-review follow-up repairs", () => {
         }
       }
     }
-    expect(warnings).toEqual([{ categoryId: "math", emoji: "🧩", count: 5, ratio: 0.25 }]);
+    expect(warnings).toEqual([
+      { categoryId: "math", emoji: "🧩", count: 5, ratio: 0.25 },
+      { categoryId: "math", emoji: "📐", count: 5, ratio: 0.25 },
+      { categoryId: "world-geography", emoji: "🗺", count: 7, ratio: 7 / 30 },
+    ]);
   });
 });

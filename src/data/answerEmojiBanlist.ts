@@ -127,6 +127,7 @@ export const answerEmojiBanlist = {
   golf: ["⛳"],
   grapes: ["🍇"],
   graph: ["📊", "📈"],
+  "line graph": ["📈", "📊"],
   "great barrier reef": ["🪸"],
   "great wall of china": ["🧱", "🇨🇳"],
   grasshopper: ["🦗"],
