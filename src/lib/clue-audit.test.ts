@@ -405,6 +405,7 @@ describe("clue audit helpers", () => {
     }
 
     const removedDeltaBlocks = [
+      "holidays-juneteenth",
       "winter-holidays-stocking",
       "winter-holidays-reindeer",
       "winter-holidays-new-year-s-eve",
