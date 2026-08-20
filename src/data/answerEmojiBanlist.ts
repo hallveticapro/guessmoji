@@ -468,6 +468,8 @@ export const answerEmojiBanlist = {
   ferry: ["⛴️"],
   monorail: ["🚝"],
   "cable car": ["🚠", "🚡"],
+  van: ["🚐"],
+  mechanic: ["🧑‍🔧", "👨‍🔧", "👩‍🔧"],
   screwdriver: ["🪛"],
   saw: ["🪚"],
   zombie: ["🧟"],
