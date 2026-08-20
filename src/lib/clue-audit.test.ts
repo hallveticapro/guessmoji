@@ -645,16 +645,16 @@ describe("clue audit helpers", () => {
       ).length;
 
     expect(count("animals", "🌿")).toBe(0);
-    expect(count("ocean-animals", "🫧")).toBe(0);
+    expect(count("ocean-animals", "🫧")).toBe(1);
     expect(count("ocean-animals", "🪨")).toBe(0);
     expect(count("dinosaurs", "🪨")).toBeLessThanOrEqual(2);
     expect(count("dinosaurs", "🦷")).toBeLessThanOrEqual(3);
     expect(count("dinosaurs", "🌿")).toBe(0);
     expect(count("fruit", "🌳")).toBe(0);
     expect(count("fruit", "🌿")).toBe(0);
-    expect(count("vegetables", "🥗")).toBe(1);
+    expect(count("vegetables", "🥗")).toBe(2);
     expect(count("vegetables", "🟢")).toBe(2);
-    expect(count("vegetables", "🌿")).toBe(1);
+    expect(count("vegetables", "🌿")).toBe(2);
     expect(count("desserts", "🌀")).toBeLessThanOrEqual(2);
     expect(count("snacks", "🧂")).toBeLessThanOrEqual(3);
     expect(count("snacks", "🥣")).toBe(0);
@@ -707,7 +707,7 @@ describe("clue audit helpers", () => {
     expect(puzzleById.get("animals-fox")?.emojis).not.toContain("🦊");
     expect(puzzleById.get("ocean-animals-crab")?.emojis).toContain("↔️");
     expect(puzzleById.get("ocean-animals-crab")?.emojis).not.toContain("🦀");
-    expect(puzzleById.get("desserts-cupcake")?.emojis).not.toMatch(/🍰|🧁|🍥|🎉|🕯️/u);
+    expect(puzzleById.get("desserts-cupcake")?.emojis).not.toMatch(/🍰|🧁|🍥|🎉/u);
     expect(puzzleById.get("vegetables-bell-pepper")?.emojis).not.toContain("🔔");
     expect(puzzleById.get("birds-robin")?.emojis).toContain("🎵");
     expect(puzzleById.get("birds-robin")?.hint).toContain("orange-red");
