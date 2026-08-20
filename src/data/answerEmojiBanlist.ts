@@ -199,7 +199,7 @@ export const answerEmojiBanlist = {
   penguin: ["🐧"],
   piano: ["🎹"],
   pilot: ["👩‍✈️", "👨‍✈️", "🧑‍✈️"],
-  trombone: ["🎺"],
+  trombone: ["🎺", "📯"],
   tuba: ["🎺"],
   banjo: ["🪕"],
   ukulele: ["🎸"],
