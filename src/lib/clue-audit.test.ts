@@ -749,12 +749,9 @@ describe("clue audit helpers", () => {
     expect(puzzleById.get("paw-patrol")?.answer).toBe("PAW Patrol");
 
     const ariel = puzzleById.get("ariel");
-    expect(ariel?.emojis).toContain("🦀");
-    expect(ariel?.emojis).toContain("🦰");
-    expect(ariel?.emojis).toContain("🔱");
-    expect(ariel?.emojis).toContain("🦵");
+    expect(ariel?.emojis).toBe("🌊🪸🪞🎶");
     expect(ariel?.hint).toContain("voice");
-    expect(ariel?.hint).toContain("human legs");
+    expect(ariel?.hint).toContain("human treasures");
     expect(ariel?.difficulty).toBe("easy");
 
     const gabby = puzzleById.get("gabbys-dollhouse");
@@ -785,7 +782,7 @@ describe("clue audit helpers", () => {
     const merida = puzzleById.get("merida");
     expect(merida?.emojis).not.toContain("🏴");
     expect(merida?.explanation).not.toContain("Scottish setting");
-    expect(merida?.explanation).toContain("Highland landscape");
+    expect(merida?.explanation).toContain("Highlands");
   });
 
   it("keeps audited core facts specific and non-generic", () => {
