@@ -70,3 +70,4 @@
 2026-08-20 04:42: Applied the nine-card Partition B final calibration, stabilized the Line Graph source ID, and extended blind-review regression coverage.
 2026-08-20 04:58: Applied all 20 Partition C final calibrations, preserved reveal metadata, and extended exhaustive blind-review regression coverage.
 2026-08-20 05:08: Applied all eight Partition A final calibrations, recalibrated Rey and Seal to Medium, and extended exhaustive blind-review regression coverage.
+2026-08-20 05:25: Polished Rey's reveal explanation to remove revision-history wording and added a regression guard for repaired-card copy.

@@ -182,7 +182,7 @@ const secondPassARewrites: readonly ExpectedCard[] = [
     difficulty: "medium",
     emojis: "🏜️🪵✨🧑",
     hint: "A human scavenger from Jakku follows a Jedi path after discovering her place in the Force.",
-    explanation: "🏜️ places the character on Jakku; 🪵 gives the carried staff; ✨ represents the Force; and 🧑 distinguishes the human hero from the desert scavenger species suggested by the old clue.",
+    explanation: "🏜️ places Rey on Jakku; 🪵 gives the carried staff; ✨ represents the Force; and 🧑 identifies her as a human hero.",
   },
   {
     id: "pokemon-i-choose-you",

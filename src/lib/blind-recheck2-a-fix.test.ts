@@ -18,7 +18,7 @@ const finalCalibrationManifest = [
     emojis: "🏜️🪵✨🧑",
     hint: "A human scavenger from Jakku follows a Jedi path after discovering her place in the Force.",
     explanation:
-      "🏜️ places the character on Jakku; 🪵 gives the carried staff; ✨ represents the Force; and 🧑 distinguishes the human hero from the desert scavenger species suggested by the old clue.",
+      "🏜️ places Rey on Jakku; 🪵 gives the carried staff; ✨ represents the Force; and 🧑 identifies her as a human hero.",
     details: "Star Wars hero introduced in the sequel trilogy who becomes a Jedi.",
     funFact: "Rey first appears in The Force Awakens, played by Daisy Ridley.",
     tags: ["star-wars", "jedi", "film"],
@@ -165,6 +165,15 @@ describe("partition A blind recheck 2 final calibration", () => {
 
     for (const expected of finalCalibrationManifest) {
       expect(getPuzzle(expected.id)).toMatchObject(expected);
+    }
+  });
+
+  it("keeps repaired explanations free of revision-history prose", () => {
+    const revisionHistoryProse = /\b(?:old|previous|prior|original|earlier)\s+(?:clue|card|version|draft|wording|copy|text)\b/i;
+
+    for (const expected of finalCalibrationManifest) {
+      expect(expected.explanation).not.toMatch(revisionHistoryProse);
+      expect(getPuzzle(expected.id).explanation).not.toMatch(revisionHistoryProse);
     }
   });
 
