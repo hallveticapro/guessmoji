@@ -16,10 +16,10 @@ const repairManifest = [
     categoryId: "star-wars",
     answer: "Rey",
     difficulty: "medium",
-    emojis: "🏜️🪵⚙️🔧🧑",
+    emojis: "🏜️🪵⚔️👩🧭",
     hint: "A human scavenger from Jakku follows a Jedi path after discovering her place in the Force.",
     explanation:
-      "🏜️ places the scavenger on Jakku; 🪵 gives the carried staff; ⚙️ and 🔧 evoke the salvaged machinery and repair work; and 🧑 identifies the human hero.",
+      "🏜️ places the scavenger on Jakku; 🪵 gives the carried staff; ⚔️ signals the Jedi and lightsaber path; 👩 identifies the human heroine; and 🧭 evokes navigating the wasteland.",
     details: "Star Wars hero introduced in the sequel trilogy who becomes a Jedi.",
     funFact: "Rey first appears in The Force Awakens, played by Daisy Ridley.",
     tags: ["star-wars", "jedi", "film"],
@@ -42,10 +42,10 @@ const repairManifest = [
     categoryId: "breakfast",
     answer: "English Muffin",
     difficulty: "easy",
-    emojis: "🍞🫧🔪🔥🔘",
+    emojis: "🍞🫧🔪🔥🟤",
     hint: "A round yeast bread splits open to reveal nooks and a coarse surface for toasting.",
     explanation:
-      "🍞 gives the bread; 🫧 represents the airy nooks; 🔪 shows it split open; 🔥 gives the toasted preparation; and 🔘 supplies the round form.",
+      "🍞 gives the bread base; 🫧 evokes the airy nooks; 🔪 shows the split; 🔥 marks toasting; and 🟤 shows the browned, coarse surface.",
     details: "Type: Bread",
     funFact:
       "English muffins are yeast-raised round breads with a coarse-textured surface, commonly split and toasted.",
@@ -56,10 +56,10 @@ const repairManifest = [
     categoryId: "breakfast",
     answer: "Danish Pastry",
     difficulty: "medium",
-    emojis: "🧈🫧🍯🍓👐",
+    emojis: "🧈🔁🍯🍓👐",
     hint: "A flaky layered bake holds fruit or cream beneath a glaze.",
     explanation:
-      "🧈 evokes buttery pastry; 🫧 gives the airy, flaky layers; 🍯 marks the glaze; 🍓 supplies a fruit filling; and 👐 shows the hand-held pastry.",
+      "🧈 evokes the rich dough; 🔁 shows repeated folds that create flaky layers; 🍯 marks the glaze; 🍓 supplies an optional fruit filling; and 👐 shows the hand-held pastry.",
     details: "Sweet laminated yeast pastry associated with Danish baking and often filled or glazed.",
     funFact:
       "Danish pastry developed from Austrian baking techniques brought to Denmark in the nineteenth century.",
@@ -70,10 +70,10 @@ const repairManifest = [
     categoryId: "breakfast",
     answer: "Biscuit and Gravy",
     difficulty: "easy",
-    emojis: "🫓✂️🫗🌶️🥣",
+    emojis: "🟤✂️🫗🌶️🥣",
     hint: "A Southern morning plate pairs split baked rounds with a warm pepper-seasoned sauce.",
     explanation:
-      "🫓 gives a round baked-bread association for the biscuit; ✂️ shows it split open; 🫗 and 🥣 show gravy poured over it; and 🌶️ supplies the peppered savory seasoning.",
+      "🟤 marks the browned biscuit; ✂️ shows it split open; 🫗 shows gravy poured over it; 🌶️ evokes the peppered savory seasoning; and 🥣 shows the serving bowl.",
     details: "Southern U.S. breakfast of biscuits served with a thick sausage or peppered gravy.",
     funFact:
       "The dish became especially common in the American South because the ingredients were inexpensive and filling.",
