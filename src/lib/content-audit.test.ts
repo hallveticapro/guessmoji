@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { answerEmojiBanlist } from "@/data/answerEmojiBanlist";
+import { auditedDeckCeilings } from "@/data/auditedDeckCeilings";
 import { categories } from "@/data/categories";
 import { expandedPuzzles } from "@/data/expandedPacks";
 import { puzzles } from "@/data/puzzles";
-import { findDirectAnswerEmojiLeaks } from "@/lib/clue-audit";
+import { findDirectAnswerEmojiLeaks, normalizeAnswerForAudit } from "@/lib/clue-audit";
 import { findContentInvariantViolations, getCategoryEmojiUsage } from "@/lib/content-audit";
 import { getPuzzlesByCategoryId } from "@/lib/puzzles";
 import type { Category, Puzzle } from "@/types/puzzle";
@@ -45,6 +46,60 @@ function makePuzzles(count: number, overrides: Partial<Puzzle> = {}): Puzzle[] {
 }
 
 describe("content audit helpers", () => {
+  it("locks every source deck to its audited ceiling and catalog tier", () => {
+    const sourceCategories = categories.filter((category) => category.id !== "random-mix");
+    const sourceCategoryIds = sourceCategories.map((category) => category.id).sort();
+    const auditedCategoryIds = Object.keys(auditedDeckCeilings).sort();
+
+    expect(auditedCategoryIds).toEqual(sourceCategoryIds);
+
+    const tierCounts = { 10: 0, 20: 0, 30: 0 };
+    for (const category of sourceCategories) {
+      const auditedCeiling =
+        auditedDeckCeilings[category.id as keyof typeof auditedDeckCeilings];
+      const sourcePuzzles = getPuzzlesByCategoryId(category.id);
+
+      expect([10, 20, 30]).toContain(auditedCeiling);
+      expect([10, 20, 30]).toContain(sourcePuzzles.length);
+      expect(sourcePuzzles).toHaveLength(auditedCeiling);
+      expect(sourcePuzzles.length % 10).toBe(0);
+      tierCounts[auditedCeiling] += 1;
+    }
+
+    expect(tierCounts).toEqual({ 10: 9, 20: 30, 30: 21 });
+    expect(puzzles).toHaveLength(1320);
+  });
+
+  it("keeps source category, puzzle ID, and normalized-answer invariants intact", () => {
+    const sourceCategoryIds = new Set(
+      categories
+        .filter((category) => category.id !== "random-mix")
+        .map((category) => category.id),
+    );
+    const puzzleIds = new Set<string>();
+    const normalizedAnswersByCategory = new Map<string, Set<string>>();
+
+    for (const puzzle of puzzles) {
+      expect(sourceCategoryIds.has(puzzle.categoryId), `${puzzle.id} category`).toBe(true);
+      expect(puzzleIds.has(puzzle.id), `${puzzle.id} ID`).toBe(false);
+      puzzleIds.add(puzzle.id);
+
+      const normalizedAnswer = normalizeAnswerForAudit(puzzle.answer);
+      if (!normalizedAnswer) {
+        continue;
+      }
+
+      const categoryAnswers =
+        normalizedAnswersByCategory.get(puzzle.categoryId) ?? new Set<string>();
+      expect(categoryAnswers.has(normalizedAnswer), `${puzzle.id} normalized answer`).toBe(false);
+      categoryAnswers.add(normalizedAnswer);
+      normalizedAnswersByCategory.set(puzzle.categoryId, categoryAnswers);
+    }
+
+    expect(puzzleIds).toHaveLength(puzzles.length);
+    expect(findContentInvariantViolations(categories, puzzles)).toEqual([]);
+  });
+
   it("reports category pools whose card count is not a multiple of ten", () => {
     const findings = findContentInvariantViolations(
       [makeCategory()],
@@ -253,8 +308,9 @@ describe("content audit helpers", () => {
 
     for (const category of sourceCategories) {
       const categoryPuzzles = getPuzzlesByCategoryId(category.id);
-      expect(categoryPuzzles.length, `${category.id} count`).toBeGreaterThanOrEqual(10);
-      expect(categoryPuzzles.length % 10, `${category.id} block alignment`).toBe(0);
+      expect(categoryPuzzles, `${category.id} audited count`).toHaveLength(
+        auditedDeckCeilings[category.id as keyof typeof auditedDeckCeilings],
+      );
     }
 
     expect(findContentInvariantViolations(categories, puzzles)).toEqual([]);
@@ -276,8 +332,9 @@ describe("content audit helpers", () => {
 
     for (const categoryId of partitionACategoryIds) {
       const categoryPuzzles = expandedPuzzles.filter((puzzle) => puzzle.categoryId === categoryId);
-      expect(categoryPuzzles.length, `${categoryId} count`).toBeGreaterThanOrEqual(10);
-      expect(categoryPuzzles.length % 10).toBe(0);
+      expect(categoryPuzzles, `${categoryId} audited count`).toHaveLength(
+        auditedDeckCeilings[categoryId as keyof typeof auditedDeckCeilings],
+      );
     }
   });
 
@@ -335,7 +392,13 @@ describe("content audit helpers", () => {
       partitionBCategoryIds.has(puzzle.categoryId),
     );
 
-    expect(partitionBPuzzles.length).toBeGreaterThanOrEqual(10);
+    expect(partitionBPuzzles.length).toBe(
+      [...partitionBCategoryIds].reduce(
+        (total, categoryId) =>
+          total + auditedDeckCeilings[categoryId as keyof typeof auditedDeckCeilings],
+        0,
+      ),
+    );
     expect(
       partitionBPuzzles.every(
         (puzzle) =>
@@ -376,8 +439,9 @@ describe("content audit helpers", () => {
 
     for (const categoryId of partitionBCategoryIds) {
       const categoryPuzzles = expandedPuzzles.filter((puzzle) => puzzle.categoryId === categoryId);
-      expect(categoryPuzzles.length, `${categoryId} count`).toBeGreaterThanOrEqual(10);
-      expect(categoryPuzzles.length % 10).toBe(0);
+      expect(categoryPuzzles, `${categoryId} audited count`).toHaveLength(
+        auditedDeckCeilings[categoryId as keyof typeof auditedDeckCeilings],
+      );
     }
   });
 
@@ -412,14 +476,21 @@ describe("content audit helpers", () => {
       partitionCCategoryIds.has(puzzle.categoryId),
     );
 
-    expect(partitionCPuzzles.length).toBeGreaterThanOrEqual(10);
+    expect(partitionCPuzzles.length).toBe(
+      [...partitionCCategoryIds].reduce(
+        (total, categoryId) =>
+          total + auditedDeckCeilings[categoryId as keyof typeof auditedDeckCeilings],
+        0,
+      ),
+    );
     expect(partitionCPuzzles.every((puzzle) => puzzle.explanation?.trim())).toBe(true);
     expect(findContentInvariantViolations(partitionCCategories, partitionCPuzzles)).toEqual([]);
 
     for (const categoryId of partitionCCategoryIds) {
       const categoryPuzzles = partitionCPuzzles.filter((puzzle) => puzzle.categoryId === categoryId);
-      expect(categoryPuzzles.length, `${categoryId} count`).toBeGreaterThanOrEqual(10);
-      expect(categoryPuzzles.length % 10).toBe(0);
+      expect(categoryPuzzles, `${categoryId} audited count`).toHaveLength(
+        auditedDeckCeilings[categoryId as keyof typeof auditedDeckCeilings],
+      );
     }
   });
 
@@ -437,7 +508,7 @@ describe("content audit helpers", () => {
     expect(idioms?.description).toMatch(/exclude|not include|not a literal phrase/i);
   });
 
-  it("ships the exact balanced Harry Potter card block with complete reveal fields", () => {
+  it("ships the exact audited Harry Potter card block with complete reveal fields", () => {
     const category = categories.find((item) => item.id === "harry-potter");
     const harryPotterCards = expandedPuzzles.filter((puzzle) => puzzle.categoryId === "harry-potter");
     const expectedAnswers = [

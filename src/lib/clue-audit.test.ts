@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { answerEmojiBanlist } from "@/data/answerEmojiBanlist";
+import { auditedDeckCeilings } from "@/data/auditedDeckCeilings";
 import { categories } from "@/data/categories";
 import { expandedPuzzles } from "@/data/expandedPacks";
 import {
@@ -810,7 +811,9 @@ describe("clue audit helpers", () => {
       }
 
       const sourceCount = getPuzzlesByCategoryId(category.id).length;
-      expect(sourceCount, `${category.id} should have source puzzles`).toBeGreaterThan(0);
+      expect(sourceCount, `${category.id} audited source count`).toBe(
+        auditedDeckCeilings[category.id as keyof typeof auditedDeckCeilings],
+      );
     }
   });
 });

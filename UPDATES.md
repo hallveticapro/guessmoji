@@ -1,5 +1,7 @@
 # UPDATES.md
 
+2026-08-20 07:20: Closed the 2026-08-19/20 deck expansion and blind audit with 60 audited source ceilings (1,320 cards), catalog invariant tests, and a 1,299-card normalized Random Mix pool.
+
 2026-08-20 07:01: Recalibrated the three Closure 2 breakfast cards to Hard and added focused hard-card criterion coverage.
 
 2026-08-20 06:47: Applied the four Closure A blind clue repairs and added exact preservation, leak, pair, repetition, and catalog regression coverage.
