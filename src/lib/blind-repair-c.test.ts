@@ -509,10 +509,10 @@ const repairedCards = [
     "id": "amusement-park-mascot",
     "categoryId": "amusement-park",
     "answer": "Mascot",
-    "difficulty": "easy",
-    "emojis": "🎭🏷️🤝📸",
-    "hint": "A costumed representative of a team or place greets visitors and poses for photos.",
-    "explanation": "🎭 gives the costume, 🏷️ gives the represented identity, 🤝 gives the welcome, and 📸 gives the visitor photo moment."
+    "difficulty": "hard",
+    "emojis": "🎭🏷️🏟️📣",
+    "hint": "An officially chosen costumed representative embodies a team, school, or place at public events.",
+    "explanation": "🎭 gives the costume, 🏷️ gives the represented identity, 🏟️ gives the team or place, and 📣 gives public-event cheering; no meet-and-greet scene is required."
   },
   {
     "id": "around-the-house-sofa",
@@ -554,10 +554,10 @@ const repairedCards = [
     "id": "around-the-house-shower",
     "categoryId": "around-the-house",
     "answer": "Shower",
-    "difficulty": "easy",
-    "emojis": "💧⬆️🔧🧼",
-    "hint": "A bathroom fixture sends water down from an overhead spray while someone washes.",
-    "explanation": "💧 gives the water, ⬆️ gives the overhead direction, 🔧 gives the plumbing hardware, and 🧼 gives the washing purpose."
+    "difficulty": "hard",
+    "emojis": "💧⬇️🧍🧼",
+    "hint": "A whole-body bathroom wash under falling water names the activity, not the spray fixture or a plumbing repair.",
+    "explanation": "💧 gives the water, ⬇️ gives falling spray, 🧍 gives the person washing, and 🧼 gives whole-body cleaning; the scene is the activity rather than a repair."
   },
   {
     "id": "around-the-house-toilet",
@@ -599,10 +599,10 @@ const repairedCards = [
     "id": "kitchen-tools-potato-masher",
     "categoryId": "kitchen-tools",
     "answer": "Potato Masher",
-    "difficulty": "medium",
-    "emojis": "🤲⬇️🕳️🍽️",
-    "hint": "A perforated plate presses cooked root vegetables into a soft side dish.",
-    "explanation": "🤲 gives the hand tool, ⬇️ gives the pressing action, 🕳️ gives the perforated plate, and 🍽️ gives the prepared side dish."
+    "difficulty": "hard",
+    "emojis": "🤲🍲⬇️🍽️",
+    "hint": "A hand-held kitchen tool presses cooked vegetables in a bowl into a soft side dish; it flattens them in place instead of forcing food through holes.",
+    "explanation": "🤲 gives the hand-held tool, 🍲 gives the bowl and cooked food, ⬇️ gives downward pressing, and 🍽️ gives the soft side dish; the food is flattened in the bowl, not forced through a strainer."
   },
   {
     "id": "kitchen-tools-pastry-brush",
@@ -935,7 +935,7 @@ const secondPassFinalFields = [
     id: "amusement-park-mascot",
     categoryId: "amusement-park",
     answer: "Mascot",
-    difficulty: "easy",
+    difficulty: "hard",
     details: "Type: Park role",
     funFact: "A mascot gives a place or team a recognizable character for visitors to meet.",
     tags: ["amusement-park", "people", "character"],
@@ -953,9 +953,9 @@ const secondPassFinalFields = [
     id: "around-the-house-shower",
     categoryId: "around-the-house",
     answer: "Shower",
-    difficulty: "easy",
-    details: "Type: Bathroom fixture",
-    funFact: "Shower temperature and pressure can be adjusted for comfort and cleaning.",
+    difficulty: "hard",
+    details: "Type: Bathroom activity",
+    funFact: "Showering combines falling water, soap, and rinsing in a whole-body wash.",
     tags: ["home", "bathroom", "cleaning"],
   },
   {
@@ -980,7 +980,7 @@ const secondPassFinalFields = [
     id: "kitchen-tools-potato-masher",
     categoryId: "kitchen-tools",
     answer: "Potato Masher",
-    difficulty: "medium",
+    difficulty: "hard",
     details: "Type: Prep tool",
     funFact: "A masher’s perforated plate pushes cooked food into a soft texture.",
     tags: ["kitchen", "tools", "prep"],
