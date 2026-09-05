@@ -1,5 +1,7 @@
 # UPDATES.md
 
+2026-09-05: Scoped agent context, validation, and Git publication to the requested task while retaining puzzle and content safeguards.
+
 2026-08-20 07:20: Closed the 2026-08-19/20 deck expansion and blind audit with 60 audited source ceilings (1,320 cards), catalog invariant tests, and a 1,299-card normalized Random Mix pool.
 
 2026-08-20 08:03: Repaired strict-category direct/component emoji audit coverage for Golf Cart, Ruler, and Snow, refreshed final-review regressions, and marked the expansion plan complete through validation.
