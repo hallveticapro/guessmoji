@@ -56,12 +56,10 @@ docker compose ps
 
 ## Workflow
 
-1. Make focused changes.
-2. Run lint, typecheck, tests, and build when practical.
-3. Update `UPDATES.md` after meaningful changes.
-4. Update `TASKS.md` when task status or scope changes.
-5. Commit with a clear message.
-6. Push useful milestones.
+1. Make focused changes and keep them within the requested task.
+2. Run checks that cover the changed behavior; broaden for cross-cutting or release work.
+3. Update `UPDATES.md` after meaningful changes and `TASKS.md` when task status or scope changes.
+4. Commit or push only when the user requests that outcome or the selected release workflow authorizes it.
 
 ## Data Model
 
@@ -83,7 +81,7 @@ thirty-card decks.
 
 Keep default puzzles broadly friendly, recognizable, and free of mature or horror content unless a future opt-in pack is explicitly added. Do not ship generic fallback reveal copy for default puzzles.
 
-Future card additions must update `src/data/answerEmojiBanlist.ts` whenever an answer has a direct emoji representation. Run `src/lib/clue-audit.test.ts` before committing new or changed cards.
+Future card additions must update `src/data/answerEmojiBanlist.ts` whenever an answer has a direct emoji representation. Run `src/lib/clue-audit.test.ts` for new or changed cards before reporting them complete.
 
 Follow `CONTENT_GENERATION_RULES.md` for category scope, answer selection, clue construction, repetition limits, difficulty, reveal copy, safety, automated validation, and clean-context blind review. Quality outranks card-count targets.
 
