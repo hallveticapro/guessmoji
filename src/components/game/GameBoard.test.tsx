@@ -98,10 +98,7 @@ describe("GameBoard", () => {
   });
 
   it("limits a source category to a ten-card round", async () => {
-    const { container, root } = renderGameBoard(
-      categories[0],
-      sourcePuzzles,
-    );
+    const { container, root } = renderGameBoard(categories[0], sourcePuzzles);
 
     await flushEffects();
 
@@ -111,32 +108,34 @@ describe("GameBoard", () => {
   });
 
   it("starts a new source round with cards not seen in the first round", async () => {
-    const { container, root } = renderGameBoard(
-      categories[0],
-      sourcePuzzles,
-    );
+    const { container, root } = renderGameBoard(categories[0], sourcePuzzles);
 
     await flushEffects();
     expect(container.textContent).toContain("1 / 10");
-    const firstRoundIds = await revealRound(container, sourcePuzzles.length / 2);
+    const firstRoundIds = await revealRound(
+      container,
+      sourcePuzzles.length / 2,
+    );
 
     expect(container.textContent).toContain("Category complete");
 
     await act(async () => {
       clickButton(container, "Play Again");
     });
-    const secondRoundIds = await revealRound(container, sourcePuzzles.length / 2);
+    const secondRoundIds = await revealRound(
+      container,
+      sourcePuzzles.length / 2,
+    );
 
-    expect(secondRoundIds.filter((id) => firstRoundIds.includes(id))).toEqual([]);
+    expect(secondRoundIds.filter((id) => firstRoundIds.includes(id))).toEqual(
+      [],
+    );
 
     await unmountGameBoard(root, container);
   });
 
   it("does not consume a source round when the timer changes", async () => {
-    const { container, root } = renderGameBoard(
-      categories[0],
-      sourcePuzzles,
-    );
+    const { container, root } = renderGameBoard(categories[0], sourcePuzzles);
 
     await flushEffects();
     const historyBeforeTimerChange = window.localStorage.getItem(
@@ -162,10 +161,7 @@ describe("GameBoard", () => {
 
   it("keeps the timer stopped when duration changes after revealing an answer", async () => {
     vi.useFakeTimers();
-    const { container, root } = renderGameBoard(
-      categories[0],
-      sourcePuzzles,
-    );
+    const { container, root } = renderGameBoard(categories[0], sourcePuzzles);
 
     try {
       await flushFakeEffects();
@@ -204,10 +200,7 @@ describe("GameBoard", () => {
   });
 
   it("restarts the current source round without consuming another block", async () => {
-    const { container, root } = renderGameBoard(
-      categories[0],
-      sourcePuzzles,
-    );
+    const { container, root } = renderGameBoard(categories[0], sourcePuzzles);
 
     await flushEffects();
     const currentRoundIds = readStoredCategoryIds("pixar");
@@ -252,21 +245,24 @@ describe("GameBoard", () => {
     const thirdRoundIds = readStoredCategoryIds("pixar");
 
     expect(secondRoundIds).toHaveLength(sourcePuzzles.length);
-    expect(secondRoundIds.slice(0, firstRoundIds.length)).toEqual(firstRoundIds);
+    expect(secondRoundIds.slice(0, firstRoundIds.length)).toEqual(
+      firstRoundIds,
+    );
     expect(thirdRoundIds).toEqual(firstRoundIds);
 
     await unmountGameBoard(thirdRender.root, thirdRender.container);
   });
 
   it("keeps the same source round cards when Shuffle is used", async () => {
-    const { container, root } = renderGameBoard(
-      categories[0],
-      sourcePuzzles,
-    );
+    const { container, root } = renderGameBoard(categories[0], sourcePuzzles);
 
     await flushEffects();
     expect(container.textContent).toContain("1 / 10");
-    const originalIds = await revealRound(container, sourcePuzzles.length / 2, false);
+    const originalIds = await revealRound(
+      container,
+      sourcePuzzles.length / 2,
+      false,
+    );
 
     await act(async () => {
       clickButton(container, "Open game settings");
@@ -275,7 +271,11 @@ describe("GameBoard", () => {
       clickButton(container, "Shuffle");
     });
 
-    const shuffledIds = await revealRound(container, sourcePuzzles.length / 2, false);
+    const shuffledIds = await revealRound(
+      container,
+      sourcePuzzles.length / 2,
+      false,
+    );
 
     expect(new Set(shuffledIds)).toEqual(new Set(originalIds));
 
@@ -285,10 +285,7 @@ describe("GameBoard", () => {
   it("recovers from malformed source history storage", async () => {
     window.localStorage.setItem(ROUND_HISTORY_STORAGE_KEY, "not-json");
 
-    const { container, root } = renderGameBoard(
-      categories[0],
-      sourcePuzzles,
-    );
+    const { container, root } = renderGameBoard(categories[0], sourcePuzzles);
 
     await flushEffects();
 
@@ -321,12 +318,122 @@ describe("GameBoard", () => {
 
     await unmountGameBoard(root, container);
   });
+  it("plays a full twelve-card custom deck without reading or writing round history", async () => {
+    const customCategory = {
+      ...categories[0],
+      id: "custom-pack",
+      slug: "custom-pack",
+      name: "My pack",
+    };
+    const customPuzzles = sourcePuzzles.slice(0, 12).map((item) => ({
+      ...item,
+      categoryId: customCategory.id,
+    }));
+    window.localStorage.setItem(ROUND_HISTORY_STORAGE_KEY, "existing history");
+    const readStorage = vi.spyOn(Storage.prototype, "getItem");
+    const writeStorage = vi.spyOn(Storage.prototype, "setItem");
+    const { container, root } = renderGameBoard(
+      customCategory,
+      customPuzzles,
+      undefined,
+      { useRoundHistory: false, rememberCategory: false },
+    );
+
+    try {
+      await flushEffects();
+      expect(container.textContent).toContain("1 / 12");
+      const answers = await revealRound(container, 12);
+      expect(new Set(answers)).toEqual(
+        new Set(customPuzzles.map((item) => item.answer)),
+      );
+      expect(container.textContent).toContain("12 Guessmoji cards played.");
+
+      await act(async () => clickButton(container, "Play Again"));
+      expect(container.textContent).toContain("1 / 12");
+      expect(
+        readStorage.mock.calls.some(
+          ([key]) => key === ROUND_HISTORY_STORAGE_KEY,
+        ),
+      ).toBe(false);
+      expect(
+        writeStorage.mock.calls.some(
+          ([key]) => key === ROUND_HISTORY_STORAGE_KEY,
+        ),
+      ).toBe(false);
+    } finally {
+      await unmountGameBoard(root, container);
+    }
+  });
+
+  it("plays custom cards with both studio exits and preserves the last built-in category", async () => {
+    window.localStorage.setItem("guessmoji:lastCategorySlug", "pixar");
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    const clickButton = async (label: string) => {
+      const button = [...container.querySelectorAll("button")].find(
+        (element) =>
+          element.textContent?.trim() === label ||
+          element.getAttribute("aria-label") === label,
+      );
+      expect(button, label).toBeDefined();
+      await act(async () => button!.click());
+    };
+
+    try {
+      await act(async () => {
+        root.render(
+          <GameBoard
+            category={{
+              ...categories[0],
+              id: "custom-pack",
+              slug: "custom-pack",
+              name: "My pack",
+            }}
+            categories={[]}
+            initialPuzzles={[puzzle]}
+            rememberCategory={false}
+            useRoundHistory={false}
+            returnHref="/studio?pack=example"
+            returnLabel="Back to My Packs"
+          />,
+        );
+      });
+      await act(async () => {
+        await new Promise((resolve) => window.setTimeout(resolve, 0));
+      });
+      expect(container.textContent).not.toContain(puzzle.answer);
+      expect(window.localStorage.getItem("guessmoji:lastCategorySlug")).toBe(
+        "pixar",
+      );
+
+      await clickButton("Hint");
+      expect(container.textContent).toContain(puzzle.hint);
+      expect(container.textContent).not.toContain(puzzle.answer);
+      await clickButton("Reveal");
+      expect(container.textContent).toContain(puzzle.answer);
+      await clickButton("Open game settings");
+      expect(
+        container.querySelector('a[href="/studio?pack=example"]')?.textContent,
+      ).toBe("Back to My Packs");
+      await clickButton("Close settings");
+      await clickButton("Finish");
+      expect(container.textContent).toContain("You finished My pack");
+      expect(
+        container.querySelector('a[href="/studio?pack=example"]')?.textContent,
+      ).toBe("Back to My Packs");
+    } finally {
+      await act(async () => root.unmount());
+      container.remove();
+    }
+  });
 });
 
 function renderGameBoard(
   category: Category,
   initialPuzzles: Puzzle[],
   sessionPuzzleCount?: number,
+  options: { useRoundHistory?: boolean; rememberCategory?: boolean } = {},
 ) {
   const container = document.createElement("div");
   document.body.append(container);
@@ -339,6 +446,7 @@ function renderGameBoard(
         categories={categories}
         initialPuzzles={initialPuzzles}
         sessionPuzzleCount={sessionPuzzleCount}
+        {...options}
       />,
     );
   });
@@ -370,9 +478,9 @@ function readStoredCategoryIds(categoryId: string) {
 }
 
 function readDisplayedTimer(container: HTMLElement) {
-  return Array.from(container.querySelectorAll("p")).find((candidate) =>
-    /^\d+s$/.test(candidate.textContent?.trim() ?? ""),
-  )?.textContent?.trim();
+  return Array.from(container.querySelectorAll("p"))
+    .find((candidate) => /^\d+s$/.test(candidate.textContent?.trim() ?? ""))
+    ?.textContent?.trim();
 }
 
 async function flushEffects() {

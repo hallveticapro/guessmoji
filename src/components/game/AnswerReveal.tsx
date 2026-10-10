@@ -25,7 +25,7 @@ export function AnswerReveal({
         <p className="text-sm font-black uppercase tracking-normal text-[#00778d]">
           Hint
         </p>
-        <p className="mt-2 text-lg font-bold leading-7 text-[#17324d]">
+        <p className="mt-2 text-lg font-bold leading-7 text-[#17324d] [overflow-wrap:anywhere]">
           {puzzle.hint}
         </p>
       </div>
@@ -41,11 +41,11 @@ export function AnswerReveal({
       <p className="text-sm font-black uppercase tracking-normal text-[#8a6500]">
         Answer
       </p>
-      <h2 className="mt-2 text-4xl font-black tracking-normal sm:text-5xl">
+      <h2 className="mt-2 text-4xl font-black tracking-normal [overflow-wrap:anywhere] sm:text-5xl">
         {puzzle.answer}
       </h2>
 
-      <dl className="mt-5 grid gap-x-6 gap-y-3 text-base sm:grid-cols-3">
+      <dl className="mt-5 grid gap-x-6 gap-y-3 text-base [overflow-wrap:anywhere] sm:grid-cols-3">
         <div>
           <dt className="font-black text-slate-700">Category</dt>
           <dd>{categoryName}</dd>
@@ -63,7 +63,7 @@ export function AnswerReveal({
       </dl>
 
       {puzzle.explanation && (
-        <p className="mt-5 text-base leading-7 text-[#435762]">
+        <p className="mt-5 text-base leading-7 text-[#435762] [overflow-wrap:anywhere]">
           {puzzle.explanation}
         </p>
       )}

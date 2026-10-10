@@ -12,6 +12,8 @@ import {
 import { coerceTimerSeconds } from "./timer";
 
 type GameControlsProps = {
+  returnHref?: string;
+  returnLabel?: string;
   canGoPrevious: boolean;
   hasHint: boolean;
   isAnswerVisible: boolean;
@@ -33,6 +35,8 @@ type GameControlsProps = {
 };
 
 export function GameControls({
+  returnHref = "/categories",
+  returnLabel = "Back to Categories",
   canGoPrevious,
   hasHint,
   isAnswerVisible,
@@ -287,11 +291,8 @@ export function GameControls({
                 </button>
               </div>
 
-              <Link
-                href="/categories"
-                className={primarySmallActionClassName}
-              >
-                Back to Categories
+              <Link href={returnHref} className={primarySmallActionClassName}>
+                {returnLabel}
               </Link>
             </div>
           </div>

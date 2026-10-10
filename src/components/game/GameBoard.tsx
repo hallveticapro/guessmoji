@@ -31,6 +31,11 @@ type GameBoardProps = {
   categories: Category[];
   initialPuzzles: Puzzle[];
   sessionPuzzleCount?: number;
+  returnHref?: string;
+  returnLabel?: string;
+  rememberCategory?: boolean;
+  minEmojiFontSize?: number;
+  useRoundHistory?: boolean;
 };
 
 export function GameBoard({
@@ -38,9 +43,14 @@ export function GameBoard({
   categories,
   initialPuzzles,
   sessionPuzzleCount,
+  returnHref = "/categories",
+  returnLabel = "Return to Categories",
+  rememberCategory = true,
+  minEmojiFontSize,
+  useRoundHistory = true,
 }: GameBoardProps) {
   const sourceRoundCount = sessionPuzzleCount ?? SOURCE_CATEGORY_ROUND_COUNT;
-  const isSourceCategory = category.id !== "random-mix";
+  const isSourceCategory = useRoundHistory && category.id !== "random-mix";
   const timerResetCategoryIdRef = useRef<string | null>(null);
   const [puzzles, setPuzzles] = useState(() =>
     getInitialSessionPuzzles(
@@ -62,7 +72,7 @@ export function GameBoard({
     timeRemaining,
   } = useGameTimer();
 
-  useLastCategoryPersistence(category);
+  useLastCategoryPersistence(category, rememberCategory);
 
   const categoryNamesById = useMemo(
     () => new Map(categories.map((item) => [item.id, item.name])),
@@ -88,8 +98,17 @@ export function GameBoard({
 
     const shuffledPuzzles = getRandomizedPuzzles(initialPuzzles);
 
-    return shuffledPuzzles.slice(0, sessionPuzzleCount ?? shuffledPuzzles.length);
-  }, [category.id, initialPuzzles, isSourceCategory, sessionPuzzleCount, sourceRoundCount]);
+    return shuffledPuzzles.slice(
+      0,
+      sessionPuzzleCount ?? shuffledPuzzles.length,
+    );
+  }, [
+    category.id,
+    initialPuzzles,
+    isSourceCategory,
+    sessionPuzzleCount,
+    sourceRoundCount,
+  ]);
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
@@ -283,11 +302,16 @@ export function GameBoard({
   if (isComplete) {
     return (
       <section className="flex flex-1 items-center bg-[radial-gradient(circle_at_top_right,rgba(255,202,66,0.28),transparent_24rem),linear-gradient(145deg,#fffaf0,#eef8f2)] px-5 py-12 text-[#17324d] sm:px-6 lg:px-8">
-        <div className={cx("mx-auto w-full max-w-3xl p-7 text-center", gameCardClassName)}>
+        <div
+          className={cx(
+            "mx-auto w-full max-w-3xl p-7 text-center",
+            gameCardClassName,
+          )}
+        >
           <p className="text-sm font-black uppercase tracking-normal text-[#00778d]">
             Category complete
           </p>
-          <h1 className="mt-3 text-4xl font-black tracking-normal sm:text-5xl">
+          <h1 className="mt-3 text-4xl font-black tracking-normal [overflow-wrap:anywhere] sm:text-5xl">
             You finished {category.name}
           </h1>
           <p className="mt-4 text-lg font-medium leading-8 text-[#435762]">
@@ -302,10 +326,10 @@ export function GameBoard({
               Play Again
             </button>
             <Link
-              href="/categories"
+              href={returnHref}
               className="inline-flex min-h-14 items-center justify-center rounded-full border-2 border-transparent bg-[#17324d] px-7 py-3 text-lg font-black text-white shadow-[0_5px_0_rgba(23,50,77,0.25)] transition hover:-translate-y-0.5 focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-[#8bc9c3]"
             >
-              Return to Categories
+              {returnLabel}
             </Link>
           </div>
         </div>
@@ -318,15 +342,21 @@ export function GameBoard({
       <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-5">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm font-black uppercase tracking-normal text-[#00778d]">
+            <p className="text-sm font-black uppercase tracking-normal text-[#00778d] [overflow-wrap:anywhere]">
               {category.name}
             </p>
             <h1 className="mt-1 text-2xl font-black tracking-normal sm:text-3xl">
               {isAnswerVisible ? "Answer revealed" : "Guess the answer"}
             </h1>
           </div>
-          <div className="flex flex-wrap items-center gap-3" data-print-hidden="true">
-            <ProgressIndicator currentIndex={currentIndex} total={puzzles.length} />
+          <div
+            className="flex flex-wrap items-center gap-3"
+            data-print-hidden="true"
+          >
+            <ProgressIndicator
+              currentIndex={currentIndex}
+              total={puzzles.length}
+            />
             {timerDuration > 0 && (
               <p
                 className="inline-flex min-h-12 items-center justify-center rounded-full border-2 border-[#f0cf74] bg-[#fff6d8] px-5 py-2 text-lg font-black text-[#17324d] shadow-[0_3px_0_#f0cf74]"
@@ -353,7 +383,10 @@ export function GameBoard({
               gameCardClassName,
             )}
           >
-            <EmojiClue emojis={currentPuzzle.emojis} />
+            <EmojiClue
+              emojis={currentPuzzle.emojis}
+              minFontSize={minEmojiFontSize}
+            />
           </div>
 
           <AnswerReveal
@@ -365,6 +398,10 @@ export function GameBoard({
         </div>
 
         <GameControls
+          returnHref={returnHref}
+          returnLabel={
+            returnHref === "/categories" ? "Back to Categories" : returnLabel
+          }
           canGoPrevious={currentIndex > 0}
           hasHint={Boolean(currentPuzzle.hint)}
           isAnswerVisible={isAnswerVisible}
@@ -394,7 +431,9 @@ function isEditableTarget(target: EventTarget | null) {
     return false;
   }
 
-  return Boolean(target.closest("input, textarea, select, [contenteditable='true']"));
+  return Boolean(
+    target.closest("input, textarea, select, [contenteditable='true']"),
+  );
 }
 
 function getInitialSessionPuzzles(

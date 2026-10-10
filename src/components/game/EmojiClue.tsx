@@ -9,9 +9,13 @@ import {
 
 type EmojiClueProps = {
   emojis: string;
+  minFontSize?: number;
 };
 
-export function EmojiClue({ emojis }: EmojiClueProps) {
+export function EmojiClue({
+  emojis,
+  minFontSize = MIN_EMOJI_FONT_SIZE,
+}: EmojiClueProps) {
   const clueRef = useRef<HTMLParagraphElement>(null);
   const [fontSize, setFontSize] = useState(MIN_EMOJI_FONT_SIZE);
 
@@ -42,8 +46,10 @@ export function EmojiClue({ emojis }: EmojiClueProps) {
       }
 
       const fittedSize = Math.max(
-        MIN_EMOJI_FONT_SIZE,
-        Math.floor((maxFontSize * availableWidth * 0.96) / clueElement.scrollWidth),
+        minFontSize,
+        Math.floor(
+          (maxFontSize * availableWidth * 0.96) / clueElement.scrollWidth,
+        ),
       );
 
       clueElement.style.fontSize = `${fittedSize}px`;
@@ -58,7 +64,7 @@ export function EmojiClue({ emojis }: EmojiClueProps) {
     return () => {
       resizeObserver.disconnect();
     };
-  }, [emojis]);
+  }, [emojis, minFontSize]);
 
   return (
     <p
