@@ -571,7 +571,7 @@ Scope: local packs only; no accounts, backend, public pack directory, or generat
 
 Release acceptance (2026-10-10):
 
-- [ ] Integrate the studio with the latest main branch while preserving built-in round history and audited content.
+- [x] Integrate the studio with the latest main branch while preserving built-in round history and audited content; lint, typecheck, all 255 tests, and production build passed on Unraid after integration.
 - [ ] Open a PR, await Codex feedback, address confirmed findings, and satisfy required checks before squash merge.
 - [ ] Check the exact merge revision’s GHCR workflow every 10 minutes through a thread heartbeat; repair failures through reviewed PRs, then deploy the verified immutable image to the existing Unraid Guessmoji service.
 - [ ] Verify running revision, service response, and live studio; pause the heartbeat after success.
