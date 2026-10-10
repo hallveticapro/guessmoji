@@ -39,6 +39,8 @@ Current routes:
 - `/`
 - `/categories`
 - `/play/[categorySlug]`
+- `/studio`
+- `/studio/play?id=<pack-id>`
 
 ## Commands
 
@@ -94,12 +96,20 @@ Follow `CONTENT_GENERATION_RULES.md` for category scope, answer selection, clue 
 - Put secondary controls in the settings dialog when practical.
 - Hide Random Mix category metadata until answer reveal.
 - Keep controls large, high-contrast, and keyboard accessible.
-- Store only safe local browser preferences such as last category and timer length.
 - Start every source category and Random Mix session with exactly 10 cards; source
   sessions prefer unseen cards and reset after the pool is exhausted.
 - Store unseen-card history per category in versioned localStorage. Timer changes,
   restart, and Shuffle do not consume another round; Shuffle only reorders the
   current round.
+- Store safe local browser preferences such as last category and timer length.
+- Custom Pack Studio also stores user-created pack drafts in `guessmoji:customPacks`.
+  Keep these separate from seed categories and Random Mix. Validate versioned JSON
+  imports field by field and give imported copies fresh identities. Incomplete
+  drafts must remain exportable; only saved, complete packs are playable.
+- Keep custom pack reads client-side after hydration. Preserve failed saves in
+  memory across in-app navigation and never overwrite corrupt or conflicting
+  browser data. Both custom game exits return to My Packs, and custom play must
+  not overwrite built-in last-category preferences.
 - Shuffle cards automatically on each category start and keep the Shuffle button available.
 - Timer choices are local only and stop when an answer is revealed.
 
@@ -114,6 +124,9 @@ Follow `CONTENT_GENERATION_RULES.md` for category scope, answer selection, clue 
   `src/components/game/round-history.ts` and
   `src/components/game/round-history-storage.ts`.
 - Shared class helpers live in `src/components/ui/styles.ts`; keep them small and specific.
+- Custom pack validation and limits live in `src/lib/custom-packs.ts`; persistence
+  and in-tab draft recovery live in `src/components/studio/useCustomPacks.ts`.
+  Custom clues allow 1–8 emoji and use a smaller fit floor on narrow screens.
 
 ## Brand And Public Assets
 

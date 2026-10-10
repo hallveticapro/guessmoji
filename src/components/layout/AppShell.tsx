@@ -6,6 +6,7 @@ import { InfoModal } from "@/components/layout/InfoModal";
 const navigationItems = [
   { href: "/", label: "Home" },
   { href: "/categories", label: "Categories" },
+  { href: "/studio", label: "My Packs" },
 ];
 
 export function AppShell({ children }: { children: ReactNode }) {

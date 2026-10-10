@@ -19,6 +19,7 @@ or any database.
 - [Install and Run Locally](#install-and-run-locally)
 - [Controls](#controls)
 - [Category Discovery](#category-discovery)
+- [Custom Pack Studio](#custom-pack-studio)
 - [Puzzle Data](#puzzle-data)
 - [Run the Checks](#run-the-checks)
 - [Docker Compose](#docker-compose)
@@ -63,6 +64,8 @@ rounds, projector use, smartboards, Chromebooks, tablets, and phones.
 - Local browser preferences for last category and timer length.
 - Per-category round history stored safely in local browser storage; timer changes and
   restart do not consume another round.
+- Custom Pack Studio with browser-saved drafts, live card previews, JSON sharing,
+  and immediate play using the same host controls.
 - Static TypeScript seed data with no database requirement.
 - Open Graph, Twitter, Discord, and Facebook-friendly preview image.
 - Dockerfile, Docker Compose, and GitHub Actions workflow for GHCR publishing.
@@ -148,6 +151,38 @@ Every source category has an audited 10-, 20-, or 30-card ceiling; Harry Potter 
 cards. Random Mix pulls from the safe source pool, keeps the first occurrence of each
 normalized answer, and starts a ten-card session without revealing a card's source
 category until the answer is revealed.
+
+## Custom Pack Studio
+
+Open **My Packs** to create a game for your group:
+
+1. Create a pack and give it a name, icon, and optional description.
+2. Add cards with an answer and 1–8 emoji per clue. Choose the difficulty and
+   optionally add a hint and explanation.
+3. Use the live preview to try Hint and Reveal before playing.
+4. Choose **Play pack** when every card is ready. Answers remain hidden until
+   the host reveals them; game settings and the completion screen return to My Packs.
+
+Edits save immediately in this browser, including unfinished drafts. The library
+holds up to 30 packs with up to 100 cards each. Custom packs stay separate from
+the built-in categories and Random Mix.
+
+Use **Export backup** to download a JSON file, including unfinished work. Share
+that file with another host, who can use **Import pack** to add a new copy.
+Imports never replace existing packs. The versioned file format validates field
+lengths, card counts, and difficulty, and accepts files up to 1 MB.
+
+Packs belong to this browser and site address; they do not sync across devices.
+Clearing site data removes saved packs, so keep exported backups. Saving failures
+are shown in the studio, with export, retry, and reload options. Unsaved drafts
+remain available when navigating away and back within the app. Edit in one tab
+at a time: common cross-tab conflicts are detected, but simultaneous writes are
+not an atomic collaboration feature.
+
+If saved data is corrupt or from an unsupported version, Guessmoji preserves it
+and stops saving over it. Export any visible drafts first. Recovery may require
+clearing this site's browser data and importing your backups; **Reload saved
+library** only rereads the existing data and does not repair it.
 
 ## Puzzle Data
 
@@ -325,7 +360,7 @@ If social previews show stale images:
 
 - Do not commit real secrets.
 - The provided `.env` values are safe starter defaults.
-- The MVP stores only non-sensitive browser preferences locally.
+- The app stores browser preferences and user-created pack content locally.
 - There are no accounts, server-side user records, or database credentials in the MVP.
 
 ## Project Structure

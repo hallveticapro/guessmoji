@@ -556,6 +556,26 @@ Do not build all of these in the first pass unless MVP is complete and stable.
 
 ## Custom Puzzle Builder
 
+**Status:** Complete — Custom Pack Studio (2026-10-09), on `codex/custom-pack-studio`; implementation complete; PR review, merge, and deployment authorized on 2026-10-10.
+
+Implementation and acceptance:
+
+- [x] Versioned local library and draft card model, with bounded field-by-field validation and fresh identities on import.
+- [x] Responsive `/studio` library and editor for pack name, description, icon, answer, emoji clue, difficulty, hint, and explanation; live clue/hint/answer preview.
+- [x] Immediate local autosave with visible failure/conflict status; incomplete drafts remain exportable for recovery. Preserve corrupt storage and unsaved work.
+- [x] JSON pack import/export, including incomplete drafts; reject malformed, unsupported, or oversized files without changing the library.
+- [x] `/studio/play?id=…` plays saved, complete packs using existing controls, with both exit paths returning to My Packs and no custom slug written to built-in last-category preferences.
+- [x] Behavioral tests, lint, typecheck, production build, desktop/mobile browser checks and screenshots, and final independent architecture review.
+
+Scope: local packs only; no accounts, backend, public pack directory, or generated seed cards. Release scope now includes PR, Codex review remediation, merge, and scheduled GHCR verification/deployment. Custom packs may contain 1–100 playable cards; curated seed generation rules remain unchanged. Tags and additional reveal metadata are deferred. Validation: lint, typecheck, all 107 tests, and the production build passed in an isolated Unraid job; task-owned remote resources were removed. Desktop/mobile browser checks covered create/edit/reload, preview, export/import, malformed imports, both game exits, built-in playback, missing packs, long content, and failed-save Back/Forward recovery. Final architect review found no remaining material issues. Screenshots and verification logs are in the worktree’s ignored `test-results/studio/` directory.
+
+Release acceptance (2026-10-10):
+
+- [ ] Integrate the studio with the latest main branch while preserving built-in round history and audited content.
+- [ ] Open a PR, await Codex feedback, address confirmed findings, and satisfy required checks before squash merge.
+- [ ] Check the exact merge revision’s GHCR workflow every 10 minutes through a thread heartbeat; repair failures through reviewed PRs, then deploy the verified immutable image to the existing Unraid Guessmoji service.
+- [ ] Verify running revision, service response, and live studio; pause the heartbeat after success.
+
 Teacher can create custom emoji clues.
 
 Fields:
@@ -573,6 +593,8 @@ Start with local browser storage before adding accounts or a database.
 ---
 
 ## Import / Export
+
+**Status:** Complete for versioned local custom packs as part of Custom Pack Studio.
 
 Allow exporting and importing packs as JSON.
 
