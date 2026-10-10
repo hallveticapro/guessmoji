@@ -576,6 +576,8 @@ Release acceptance (2026-10-10):
 - [ ] Check the exact merge revision’s GHCR workflow every 10 minutes through a thread heartbeat; repair failures through reviewed PRs, then deploy the verified immutable image to the existing Unraid Guessmoji service.
 - [ ] Verify running revision, service response, and live studio; pause the heartbeat after success.
 
+Release observation: the unchanged dependency lockfile now reports 17 npm audit findings (3 moderate, 13 high, 1 critical). Dependency remediation is separate from the Studio feature; the previous two-moderate-only note is outdated.
+
 Teacher can create custom emoji clues.
 
 Fields:

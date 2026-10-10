@@ -165,5 +165,5 @@ YYYY-MM-DD HH:mm: Short description of what changed.
 
 - GHCR image is published and anonymously pullable at the configured package path.
 - If the repository owner changes, update `.github/workflows/docker-publish.yml`, `docker-compose.yml`, `TASKS.md`, and this file together. Keep `README.md` generic.
-- `npm audit` reports two moderate findings from Next's bundled PostCSS dependency; the forced fix would downgrade Next to `9.3.3`, so this is an upstream-only deferral.
+- On 2026-10-10, `npm audit` reported 17 findings (3 moderate, 13 high, 1 critical) in the existing lockfile, including Next runtime and development-tool dependencies. Custom Pack Studio does not change dependencies. Reassess supported patch/minor upgrades separately; do not use a forced framework downgrade as a blanket fix.
 - GitHub Actions currently emits known Node.js 20 deprecation annotations for several third-party actions; watch for upstream Node.js 24-compatible updates.
