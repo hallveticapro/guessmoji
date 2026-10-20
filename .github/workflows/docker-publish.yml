@@ -19,9 +19,14 @@ env:
   IMAGE_NAME: ghcr.io/hallveticapro/guessmoji
 
 jobs:
-  build-and-push:
+  quality:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        command: [lint, typecheck, test]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -29,14 +34,21 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint
-        run: npm run lint
+      - name: Run independent quality check
+        run: npm run "${{ matrix.command }}"
 
-      - name: Typecheck
-        run: npm run typecheck
+  build-and-push:
+    if: ${{ always() }}
+    needs: [quality]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require every quality lane
+        env:
+          QUALITY_RESULT: ${{ needs.quality.result }}
+        run: test "$QUALITY_RESULT" = success
 
-      - name: Test
-        run: npm run test
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3

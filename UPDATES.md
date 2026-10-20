@@ -1,5 +1,7 @@
 # UPDATES.md
 
+2026-10-19 21:03: Parallelized isolated CI lint, typecheck, and tests while retaining the fail-closed final image-build check and publication guard; documented timing and runner-usage measurement in docs/ci.md.
+
 2026-09-05: Scoped agent context, validation, and Git publication to the requested task while retaining puzzle and content safeguards.
 
 2026-08-20 07:20: Closed the 2026-08-19/20 deck expansion and blind audit with 60 audited source ceilings (1,320 cards), catalog invariant tests, and a 1,299-card normalized Random Mix pool.
