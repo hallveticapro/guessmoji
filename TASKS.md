@@ -8,6 +8,15 @@ Build a group-friendly web app called **Guessmoji**.
 
 Guessmoji is an emoji-based Pictionary / guessing game. A host selects a category, displays emoji clues one at a time, lets players guess the answer, then reveals the correct answer.
 
+## CI verification update — 2026-10-19
+
+The quality-matrix pilot increased measured wall and runner time. Quality checks
+now share one frozen dependency install and run independently on one runner, with
+all child statuses and failure logs retained, and interrupted children fully
+reaped. Existing image/publication gates
+remain intact. Hosted timing qualification of this revision is pending; see
+`docs/ci.md` for the execution contract and measured pilot costs.
+
 ## Current Scope Update
 
 As of 2026-06-05:

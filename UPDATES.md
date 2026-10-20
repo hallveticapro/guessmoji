@@ -1,5 +1,7 @@
 # UPDATES.md
 
+2026-10-19 21:03: Parallelized isolated CI lint, typecheck, and tests while retaining the fail-closed final image-build check and publication guard; documented timing and runner-usage measurement in docs/ci.md.
+
 2026-09-05: Scoped agent context, validation, and Git publication to the requested task while retaining puzzle and content safeguards.
 
 2026-08-20 07:20: Closed the 2026-08-19/20 deck expansion and blind audit with 60 audited source ceilings (1,320 cards), catalog invariant tests, and a 1,299-card normalized Random Mix pool.
@@ -85,3 +87,4 @@
 2026-08-20 05:25: Polished Rey's reveal explanation to remove revision-history wording and added a regression guard for repaired-card copy.
 2026-10-09 21:25: Added Custom Pack Studio with browser-saved drafts, live preview, validated JSON import/export, custom gameplay, and recovery across navigation; verified 107 tests and production build on Unraid.
 2026-10-10 00:59: Integrated Custom Pack Studio with current audited content and round history; verified 255 tests and production build before PR release.
+2026-10-19 21:41: Replaced repeated CI quality installs with one install and concurrent checks that retain every failure and interruption status.
