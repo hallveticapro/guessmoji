@@ -23,10 +23,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    strategy:
-      fail-fast: false
-      matrix:
-        command: [lint, typecheck, test]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -34,8 +30,61 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run independent quality check
-        run: npm run "${{ matrix.command }}"
+      - name: Run independent quality checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Give each check its own process group so interruption also stops its workers.
+          set -m
+          checks=(lint typecheck test)
+          pids=()
+          statuses=()
+          interrupted=0
+          launching=1
+          log_dir="$(mktemp -d "$RUNNER_TEMP/guessmoji-quality.XXXXXX")"
+          stop_checks() {
+            interrupted="$1"
+            # Keep signals caught during launch so forked children inherit defaults.
+            if (( launching == 0 )); then trap '' INT TERM; fi
+            if (( ${#pids[@]} != 0 )); then
+              for pid in "${pids[@]}"; do
+                kill -TERM -- "-$pid" 2>/dev/null || true
+              done
+            fi
+          }
+          trap 'stop_checks 130' INT
+          trap 'stop_checks 143' TERM
+          for check in "${checks[@]}"; do
+            if (( interrupted != 0 )); then break; fi
+            npm run "$check" >"$log_dir/$check.log" 2>&1 &
+            pids+=("$!")
+            if (( interrupted != 0 )); then stop_checks "$interrupted"; fi
+          done
+          launching=0
+          if (( interrupted != 0 )); then stop_checks "$interrupted"; fi
+          failed=0
+          for index in "${!pids[@]}"; do
+            status=0
+            wait "${pids[$index]}" || status=$?
+            statuses+=("$status")
+            if (( status != 0 )); then failed=1; fi
+          done
+          # A signal can interrupt wait before its child exits; reap every PID again.
+          if (( interrupted != 0 )); then
+            for index in "${!pids[@]}"; do
+              status=0
+              wait "${pids[$index]}" || status=$?
+              statuses[$index]="$status"
+              if (( status != 0 )); then failed=1; fi
+            done
+          fi
+          for index in "${!pids[@]}"; do
+            printf '::group::%s (exit %s)\n' "${checks[$index]}" "${statuses[$index]}"
+            cat "$log_dir/${checks[$index]}.log"
+            printf '::endgroup::\n'
+          done
+          if (( interrupted != 0 )); then exit "$interrupted"; fi
+          exit "$failed"
 
   build-and-push:
     if: ${{ always() }}
